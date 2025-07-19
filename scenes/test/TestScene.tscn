@@ -34,23 +34,6 @@ shape = SubResource("player_shape")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/ObservationArea"]
 
-[node name="InteractionDetector" type="RayCast2D" parent="Player"]
-
-[node name="ObservationCamera" type="Camera2D" parent="Player"]
-enabled = true
-
-[node name="Audio" type="Node2D" parent="Player"]
-
-[node name="Footsteps" type="AudioStreamPlayer2D" parent="Player/Audio"]
-
-[node name="Interaction" type="AudioStreamPlayer2D" parent="Player/Audio"]
-
-[node name="Effects" type="Node2D" parent="Player"]
-
-[node name="MovementParticles" type="GPUParticles2D" parent="Player/Effects"]
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Player"]
-
 [node name="TestCreature" type="CharacterBody2D" parent="." groups=["creatures"]]
 position = Vector2(500, 250)
 script = ExtResource("2_creature")
@@ -63,8 +46,6 @@ modulate = Color(0.8, 0.6, 0.4, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestCreature"]
 shape = SubResource("player_shape")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="TestCreature"]
 
 [node name="TestNPC" type="CharacterBody2D" parent="." groups=["npcs"]]
 position = Vector2(800, 350)
@@ -83,21 +64,13 @@ shape = SubResource("player_shape")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestNPC/InteractionArea"]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="TestNPC"]
-
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="Controls" type="Label" parent="UI"]
 offset_right = 350.0
 offset_bottom = 150.0
-text = "🎮 CONTROLS:
-WASD/Flèches - Bouger
-Shift - Courir
-E - Interagir
-Souris maintenue - Observer
-Échap - Quitter"
+text = "WASD - Bouger\nE - Interagir\nSouris - Observer"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 14
 
 [node name="Info" type="Label" parent="UI"]
 anchors_preset = 1
@@ -105,11 +78,5 @@ anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -300.0
 offset_bottom = 100.0
-text = "🔧 TEST SCENE v1.0
-🔵 Joueur (bleu)
-🟤 Maurice le Rat
-🟡 Madame Simnel
-
-Tous les systèmes connectés!"
+text = "TEST SCENE\nJoueur bleu\nCreature brune\nNPC jaune"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 12

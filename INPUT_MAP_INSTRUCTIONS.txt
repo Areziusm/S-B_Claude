@@ -1,0 +1,33 @@
+# INPUT MAP CONFIGURATION
+# ======================
+
+Dans Godot, aller dans: Project > Project Settings > Input Map
+
+Ajouter ces actions:
+
+1. move_left
+   - Touche: A  
+   - Touche: Flèche Gauche
+
+2. move_right
+   - Touche: D
+   - Touche: Flèche Droite
+
+3. move_up
+   - Touche: W
+   - Touche: Flèche Haut
+
+4. move_down
+   - Touche: S
+   - Touche: Flèche Bas
+
+5. interact
+   - Touche: E
+
+6. observe  
+   - Bouton: Clic Gauche Souris
+
+7. run
+   - Touche: Shift Gauche
+
+Après configuration, sauvegarder le projet.

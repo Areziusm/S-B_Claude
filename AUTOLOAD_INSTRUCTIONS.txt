@@ -1,7 +1,7 @@
-# 🔧 CONFIGURATION AUTOLOADS - Instructions
-# ========================================
+# CONFIGURATION AUTOLOADS
+# ========================
 
-Dans Godot, aller dans: Project Settings > AutoLoad
+Dans Godot: Project Settings > AutoLoad
 
 SUPPRIMER tous les AutoLoads existants qui causent des erreurs.
 
@@ -9,37 +9,37 @@ AJOUTER ces AutoLoads dans l'ordre:
 
 1. Name: Game
    Path: res://scripts/managers/GameManager.gd
-   ✅ Enable
+   Enable: ✅
 
 2. Name: Data  
    Path: res://scripts/managers/DataManager.gd
-   ✅ Enable
+   Enable: ✅
 
 3. Name: Observation
    Path: res://scripts/managers/ObservationManager.gd
-   ✅ Enable
+   Enable: ✅
 
 4. Name: Dialogue
    Path: res://scripts/managers/DialogueManager.gd
-   ✅ Enable
+   Enable: ✅
 
 5. Name: Quest
    Path: res://scripts/managers/QuestManager.gd
-   ✅ Enable
+   Enable: ✅
 
 6. Name: UI
    Path: res://scripts/stubs/UIManager.gd
-   ✅ Enable
+   Enable: ✅
 
 7. Name: Audio
    Path: res://scripts/stubs/AudioManager.gd
-   ✅ Enable
+   Enable: ✅
 
-ATTENTION: 
-- Utilisez exactement ces noms (Game, Data, etc.)
-- PAS les noms complets (GameManager, DataManager, etc.)
-- Cela évite les conflits avec les class_name
+IMPORTANT:
+- Utilisez exactement ces noms courts
+- PAS GameManager, DataManager, etc. (conflit avec class_name)
 
-Après configuration, faire: Project > Reload Current Project
-
-Puis tester: Run TestScene.tscn
+Après configuration:
+1. Project > Reload Current Project
+2. Run TestScene.tscn
+3. Test gameplay!
