@@ -1,7 +1,9 @@
+# ============================================================================
 # 🔮 ObservationManager.gd - Système Unique du Jeu
-# STATUS: 🔄 IN_PROGRESS | ROADMAP: Mois 1, Semaine 1-2 - Core Architecture
+# ============================================================================
+# STATUS: ✅ FINALISÉ | ROADMAP: Mois 1, Semaine 1-2 - Core Architecture
 # PRIORITY: 🔴 CRITICAL - Cœur du gameplay unique
-# DEPENDENCIES: GameManager (à venir)
+# DEPENDENCIES: GameManager, DataManager
 
 class_name ObservationManager
 extends Node
@@ -29,15 +31,25 @@ signal magic_disruption_changed(old_level: float, new_level: float)
 ## Émis pour mise à jour du carnet magique
 signal notebook_entry_added(creature_id: String, entry_data: Dictionary)
 
+## Signal pour communication avec autres managers
+signal manager_initialized()
+
 # ============================================================================
 # CONFIGURATION & DONNÉES
 # ============================================================================
 
-## Configuration système chargée depuis JSON
-@export var config_file_path: String = "res://data/observation_config.json"
-var observation_config: Dictionary = {}
+## Configuration système par défaut (fallback si JSON absent)
+var default_config: Dictionary = {
+	"evolution_thresholds": [0, 3, 7, 12, 20],
+	"magic_amplification_max": 5.0,
+	"cascade_base_chance": 0.15,
+	"notebook_auto_entries": true,
+	"evolution_animations": true,
+	"disruption_decay_rate": 0.01
+}
 
-## Base de données des créatures
+## Données chargées depuis DataManager
+var observation_config: Dictionary = {}
 var creature_database: Dictionary = {}
 var observed_creatures: Dictionary = {}
 
@@ -46,11 +58,13 @@ var magic_amplification: float = 1.0
 var total_observations: int = 0
 var magic_disruption_level: float = 0.0
 
-## Constantes d'équilibrage
-const MAX_OBSERVATION_LEVEL: int = 5
-const BASE_EVOLUTION_THRESHOLD: int = 3
-const MAGIC_AMPLIFICATION_RATE: float = 0.1
-const CASCADE_PROBABILITY_BASE: float = 0.15
+## Cache pour optimisation
+var evolution_cache: Dictionary = {}
+var ability_cache: Dictionary = {}
+
+## Flags système
+var system_initialized: bool = false
+var debug_mode: bool = false
 
 # ============================================================================
 # ÉTATS D'ÉVOLUTION DES CRÉATURES
@@ -77,115 +91,152 @@ enum ObservationType {
 
 func _ready() -> void:
 	"""Initialisation du système d'observation"""
-	load_configuration()
+	if debug_mode:
+		print("🔮 ObservationManager: Démarrage initialisation...")
+	
+	# Attendre que DataManager soit prêt
+	await ensure_datamanager_ready()
+	
+	# Charger configuration et données
+	load_system_configuration()
 	load_creature_database()
+	
+	# Configuration initiale
 	setup_magic_amplification()
 	connect_to_game_systems()
 	
-	print("🔮 ObservationManager: Système initialisé")
+	# Finalisation
+	system_initialized = true
+	manager_initialized.emit()
+	
+	if debug_mode:
+		print("🔮 ObservationManager: Système initialisé avec succès")
 
-func load_configuration() -> void:
-	"""Charge la configuration depuis le fichier JSON"""
-	if FileAccess.file_exists(config_file_path):
-		var file = FileAccess.open(config_file_path, FileAccess.READ)
-		var json_text = file.get_as_text()
-		file.close()
-		
-		var json = JSON.new()
-		var parse_result = json.parse(json_text)
-		
-		if parse_result == OK:
-			observation_config = json.data
-			print("✅ Configuration chargée: ", observation_config.size(), " paramètres")
+func ensure_datamanager_ready() -> void:
+	"""S'assure que DataManager est prêt avant de continuer"""
+	# Attendre DataManager via GameManager
+	if not get_node_or_null("/root/DataManager"):
+		# Attendre que GameManager initialise DataManager
+		if get_node_or_null("/root/GameManager"):
+			await get_node("/root/GameManager").manager_ready
 		else:
-			print("❌ Erreur parsing config JSON:", json.get_error_message())
-			load_default_configuration()
-	else:
-		print("⚠️ Fichier config non trouvé, chargement config par défaut")
-		load_default_configuration()
+			await get_tree().process_frame
+	
+	# Attendre que toutes les données soient chargées
+	var data_manager = get_node_or_null("/root/DataManager")
+	if data_manager and not data_manager.loading_complete:
+		await data_manager.all_data_loaded
 
-func load_default_configuration() -> void:
-	"""Configuration par défaut si fichier absent"""
-	observation_config = {
-		"evolution_thresholds": [0, 3, 7, 12, 20],
-		"magic_amplification_max": 5.0,
-		"cascade_base_chance": 0.15,
-		"notebook_auto_entries": true,
-		"evolution_animations": true
-	}
+func load_system_configuration() -> void:
+	"""Charge la configuration depuis DataManager ou utilise les défauts"""
+	var data_manager = get_node_or_null("/root/DataManager")
+	
+	if data_manager and data_manager.game_config.has("observation_system"):
+		observation_config = data_manager.game_config["observation_system"]
+		if debug_mode:
+			print("✅ Configuration observation chargée depuis DataManager")
+	else:
+		observation_config = default_config.duplicate()
+		if debug_mode:
+			print("⚠️ Configuration par défaut utilisée pour observation")
 
 func load_creature_database() -> void:
-	"""Charge la base de données des créatures depuis JSON"""
-	# TODO: Implémenter chargement depuis creature_database.json
-	# Pour l'instant, données de test
-	setup_test_creatures()
+	"""Charge la base de données des créatures depuis DataManager"""
+	var data_manager = get_node_or_null("/root/DataManager")
+	
+	if data_manager and not data_manager.creatures_db.is_empty():
+		creature_database = data_manager.creatures_db
+		if debug_mode:
+			print("✅ Base créatures chargée:", creature_database.size(), "espèces")
+	else:
+		# Fallback avec données de test minimales
+		setup_fallback_creatures()
+		if debug_mode:
+			print("⚠️ Données créatures fallback utilisées")
 
-func setup_test_creatures() -> void:
-	"""Données de test pour validation système"""
+func setup_fallback_creatures() -> void:
+	"""Données de test minimales si JSON absent"""
 	creature_database = {
+		"rat_maurice": {
+			"name": "Maurice le Rat Parlant",
+			"base_species": "rat",
+			"evolution_stages": [
+				{"name": "Rat Ordinaire", "description": "Un rat comme les autres"},
+				{"name": "Rat Conscient", "description": "Commence à réfléchir..."},
+				{"name": "Rat Éduqué", "description": "Lit des livres maintenant"},
+				{"name": "Rat Magique", "description": "Maîtrise des sorts mineurs"},
+				{"name": "Rat Légendaire", "description": "Maurice, Leader des Rats"}
+			],
+			"magic_affinity": 0.8,
+			"observation_difficulty": 1.2
+		},
 		"pigeon_ankh": {
 			"name": "Pigeon d'Ankh-Morpork",
-			"latin_name": "Columba ankhmorporkensis",
-			"base_intelligence": 2,
+			"base_species": "pigeon",
 			"evolution_stages": [
-				{"name": "Pigeon Normal", "description": "Pigeon urbain standard"},
-				{"name": "Pigeon Observateur", "description": "Regard plus intelligent"},
-				{"name": "Pigeon Organisé", "description": "Vol en formation militaire"},
-				{"name": "Pigeon Messager", "description": "Service postal efficace"},
-				{"name": "Pigeon Stratège", "description": "Coordination urbaine complexe"}
-			]
-		},
-		"cat_street": {
-			"name": "Chat de Gouttière",
-			"latin_name": "Felis streeticus",
-			"base_intelligence": 4,
-			"evolution_stages": [
-				{"name": "Chat Standard", "description": "Félin urbain indépendant"},
-				{"name": "Chat Attentif", "description": "Écoute les conversations"},
-				{"name": "Chat Espion", "description": "Surveillance stratégique"},
-				{"name": "Chat Réseau", "description": "Communication inter-féline"},
-				{"name": "Chat Maître-Espion", "description": "Réseau de renseignement"}
-			]
-		},
-		"rat_maurice": {
-			"name": "Rat Intelligent",
-			"latin_name": "Rattus sapiens",
-			"base_intelligence": 6,
-			"unique": true,
-			"evolution_stages": [
-				{"name": "Rat Parlant", "description": "Communication basique"},
-				{"name": "Rat Éduqué", "description": "Monocle et vocabulaire"},
-				{"name": "Rat Bureaucrate", "description": "Compréhension administrative"},
-				{"name": "Rat Conseiller", "description": "Sagesse et diplomatie"},
-				{"name": "Rat Philosophe", "description": "Insights métaphysiques"}
-			]
+				{"name": "Pigeon Urbain", "description": "Survit dans la grande ville"},
+				{"name": "Pigeon Débrouillard", "description": "Évite habilement les dangers"},
+				{"name": "Pigeon Navigateur", "description": "Connaît tous les raccourcis"},
+				{"name": "Pigeon Messager", "description": "Transporte des messages magiques"},
+				{"name": "Pigeon Impérial", "description": "Pigeon personnel du Patricien"}
+			],
+			"magic_affinity": 0.3,
+			"observation_difficulty": 0.8
 		}
 	}
 
+func setup_magic_amplification() -> void:
+	"""Configure le système d'amplification magique"""
+	magic_amplification = 1.0
+	magic_disruption_level = 0.0
+	
+	# Timer pour décroissance naturelle de la perturbation
+	var decay_timer = Timer.new()
+	decay_timer.wait_time = 1.0
+	decay_timer.timeout.connect(_decay_magic_disruption)
+	add_child(decay_timer)
+	decay_timer.start()
+
+func connect_to_game_systems() -> void:
+	"""Connecte l'ObservationManager aux autres systèmes"""
+	# Connexion avec QuestManager pour quêtes d'observation
+	var quest_manager = get_node_or_null("/root/QuestManager")
+	if quest_manager:
+		creature_evolved.connect(quest_manager._on_creature_evolved)
+		magic_cascade_triggered.connect(quest_manager._on_magic_cascade)
+	
+	# Connexion avec GameManager pour événements globaux
+	var game_manager = get_node_or_null("/root/GameManager")
+	if game_manager:
+		magic_disruption_changed.connect(game_manager._on_magic_disruption_changed)
+
 # ============================================================================
-# SYSTÈME D'OBSERVATION PRINCIPAL
+# API PRINCIPALE - OBSERVATION DES CRÉATURES
 # ============================================================================
 
-func observe_creature(creature_id: String, observation_type: ObservationType = ObservationType.ACTIVE, observer_position: Vector2 = Vector2.ZERO) -> Dictionary:
+func observe_creature(creature_id: String, observation_type: ObservationType, observer_position: Vector2 = Vector2.ZERO) -> Dictionary:
 	"""
-	Fonction principale d'observation des créatures
-	Retourne les données d'observation pour mise à jour UI
+	Fonction principale d'observation d'une créature
+	Retourne un dictionnaire avec toutes les données d'observation
 	"""
-	
-	# Validation de la créature
-	if not creature_database.has(creature_id):
-		print("❌ Créature inconnue: ", creature_id)
+	if not system_initialized:
+		push_error("🔮 ObservationManager: Système non initialisé!")
 		return {}
 	
-	# Initialisation des données d'observation si première fois
+	if not creature_database.has(creature_id):
+		push_warning("🔮 Créature inconnue: " + creature_id)
+		return {}
+	
+	# Initialiser les données de créature si première observation
 	if not observed_creatures.has(creature_id):
 		initialize_creature_observation(creature_id)
 	
-	# Augmentation du compteur d'observations
+	# Traitement de l'observation
 	var creature_data = observed_creatures[creature_id]
-	creature_data.observation_count += 1
-	creature_data.last_observation_time = Time.get_unix_time_from_system()
-	creature_data.observation_types.append(observation_type)
+	var old_stage = creature_data.current_stage
+	
+	# Mise à jour des données d'observation
+	update_observation_data(creature_id, observation_type, creature_data)
 	
 	# Calcul de l'intensité d'observation
 	var observation_intensity = calculate_observation_intensity(observation_type, creature_data)
@@ -202,6 +253,11 @@ func observe_creature(creature_id: String, observation_type: ObservationType = O
 	# Émission des signaux
 	creature_observed.emit(creature_id, observation_result)
 	
+	# Vérification si évolution a eu lieu
+	if creature_data.current_stage != old_stage:
+		creature_evolved.emit(creature_id, old_stage, creature_data.current_stage)
+		update_evolution_cache(creature_id, creature_data.current_stage)
+	
 	# Mise à jour du carnet si configuré
 	if observation_config.get("notebook_auto_entries", true):
 		update_notebook_entry(creature_id, observation_result)
@@ -211,12 +267,15 @@ func observe_creature(creature_id: String, observation_type: ObservationType = O
 	
 	total_observations += 1
 	
-	print("🔍 Observation: ", creature_id, " (", observation_intensity, " intensité)")
+	if debug_mode:
+		print("🔍 Observation: ", creature_id, " (intensité: ", observation_intensity, ")")
 	
 	return observation_result
 
 func initialize_creature_observation(creature_id: String) -> void:
 	"""Initialise les données d'observation pour une nouvelle créature"""
+	var creature_info = creature_database.get(creature_id, {})
+	
 	observed_creatures[creature_id] = {
 		"observation_count": 0,
 		"current_stage": EvolutionStage.STAGE_0_NORMAL,
@@ -225,8 +284,23 @@ func initialize_creature_observation(creature_id: String) -> void:
 		"last_observation_time": 0,
 		"observation_types": [],
 		"special_events": [],
-		"magic_affinity": 0.0
+		"magic_affinity": creature_info.get("magic_affinity", 0.5),
+		"observation_difficulty": creature_info.get("observation_difficulty", 1.0),
+		"total_observation_intensity": 0.0
 	}
+	
+	if debug_mode:
+		print("🆕 Nouvelle créature initialisée: ", creature_id)
+
+func update_observation_data(creature_id: String, observation_type: ObservationType, creature_data: Dictionary) -> void:
+	"""Met à jour les données d'observation d'une créature"""
+	creature_data.observation_count += 1
+	creature_data.last_observation_time = Time.get_unix_time_from_system()
+	creature_data.observation_types.append(observation_type)
+	
+	# Garder seulement les 10 derniers types d'observation
+	if creature_data.observation_types.size() > 10:
+		creature_data.observation_types = creature_data.observation_types.slice(-10)
 
 func calculate_observation_intensity(obs_type: ObservationType, creature_data: Dictionary) -> float:
 	"""Calcule l'intensité d'une observation selon le type et l'historique"""
@@ -243,158 +317,84 @@ func calculate_observation_intensity(obs_type: ObservationType, creature_data: D
 		ObservationType.SCIENTIFIC:
 			base_intensity = 3.0
 	
-	# Bonus d'amplification magique globale
-	base_intensity *= magic_amplification
+	# Bonus de familiarité (plus on observe, plus on découvre)
+	var familiarity_bonus = min(creature_data.observation_count * 0.1, 1.0)
 	
-	# Diminution si observation répétitive (évite le spam)
-	if creature_data.observation_count > 5:
-		var repetition_penalty = 1.0 / (1.0 + (creature_data.observation_count - 5) * 0.1)
-		base_intensity *= repetition_penalty
+	# Facteur de difficulté de la créature
+	var difficulty_factor = creature_data.get("observation_difficulty", 1.0)
 	
-	# Bonus pour créatures uniques (comme Maurice)
-	var creature_info = creature_database.get(creature_data.get("creature_id", ""))
-	if creature_info and creature_info.get("unique", false):
-		base_intensity *= 1.5
+	# Amplification magique globale
+	var magic_factor = magic_amplification
 	
-	return base_intensity
+	# Calcul final
+	var final_intensity = base_intensity * (1.0 + familiarity_bonus) * difficulty_factor * magic_factor
+	
+	# Stockage pour historique
+	creature_data.total_observation_intensity += final_intensity
+	
+	return final_intensity
 
-# ============================================================================
-# SYSTÈME D'ÉVOLUTION DES CRÉATURES
-# ============================================================================
+func update_magic_amplification(observation_intensity: float) -> void:
+	"""Met à jour l'amplification magique globale"""
+	var amplification_rate = observation_config.get("magic_amplification_rate", 0.1)
+	var max_amplification = observation_config.get("magic_amplification_max", 5.0)
+	
+	# Augmentation de l'amplification basée sur l'intensité
+	var amplification_increase = observation_intensity * amplification_rate * 0.01
+	magic_amplification = min(magic_amplification + amplification_increase, max_amplification)
+	
+	# Augmentation de la perturbation magique
+	var old_disruption = magic_disruption_level
+	var disruption_increase = observation_intensity * 0.02
+	magic_disruption_level = min(magic_disruption_level + disruption_increase, 1.0)
+	
+	if abs(magic_disruption_level - old_disruption) > 0.01:
+		magic_disruption_changed.emit(old_disruption, magic_disruption_level)
 
 func check_evolution_threshold(creature_id: String, creature_data: Dictionary) -> void:
-	"""Vérifie si la créature peut évoluer vers le stade suivant"""
+	"""Vérifie si une créature doit évoluer"""
 	var current_stage = creature_data.current_stage
 	
 	if current_stage >= EvolutionStage.STAGE_4_LEGENDARY:
 		return  # Déjà au maximum
 	
 	var evolution_thresholds = observation_config.get("evolution_thresholds", [0, 3, 7, 12, 20])
-	var next_stage = current_stage + 1
+	var observation_count = creature_data.observation_count
 	
+	var next_stage = current_stage + 1
 	if next_stage < evolution_thresholds.size():
-		var threshold = evolution_thresholds[next_stage]
+		var required_observations = evolution_thresholds[next_stage]
 		
-		if creature_data.observation_count >= threshold:
+		if observation_count >= required_observations:
 			trigger_evolution(creature_id, creature_data, next_stage)
 
 func trigger_evolution(creature_id: String, creature_data: Dictionary, new_stage: int) -> void:
-	"""Déclenche l'évolution d'une créature vers un nouveau stade"""
+	"""Déclenche l'évolution d'une créature"""
 	var old_stage = creature_data.current_stage
 	creature_data.current_stage = new_stage
-	creature_data.evolution_progress = 1.0
+	creature_data.evolution_progress = 0.0
 	
-	# Ajout d'événement spécial
-	creature_data.special_events.append({
+	# Ajouter événement spécial dans l'historique
+	var evolution_event = {
 		"type": "evolution",
-		"from_stage": old_stage,
-		"to_stage": new_stage,
-		"timestamp": Time.get_unix_time_from_system()
-	})
-	
-	# Augmentation de l'affinité magique
-	creature_data.magic_affinity += 0.2 * new_stage
-	
-	# Émission du signal d'évolution
-	creature_evolved.emit(creature_id, old_stage, new_stage)
-	
-	# Animation si configurée
-	if observation_config.get("evolution_animations", true):
-		play_evolution_animation(creature_id, old_stage, new_stage)
-	
-	print("✨ ÉVOLUTION: ", creature_id, " → Stade ", new_stage)
-
-func play_evolution_animation(creature_id: String, old_stage: int, new_stage: int) -> void:
-	"""Joue l'animation d'évolution (placeholder pour l'instant)"""
-	# TODO: Intégration avec système d'animation
-	print("🎬 Animation évolution: ", creature_id, " (", old_stage, "→", new_stage, ")")
-
-# ============================================================================
-# SYSTÈME D'AMPLIFICATION MAGIQUE
-# ============================================================================
-
-func update_magic_amplification(observation_intensity: float) -> void:
-	"""Met à jour l'amplification magique globale"""
-	var old_amplification = magic_amplification
-	var increment = observation_intensity * MAGIC_AMPLIFICATION_RATE
-	
-	# Augmentation avec plafond
-	var max_amplification = observation_config.get("magic_amplification_max", 5.0)
-	magic_amplification = min(magic_amplification + increment, max_amplification)
-	
-	# Mise à jour du niveau de perturbation
-	var old_disruption = magic_disruption_level
-	magic_disruption_level = (magic_amplification - 1.0) / (max_amplification - 1.0)
-	
-	# Émission signal si changement significatif
-	if abs(old_disruption - magic_disruption_level) > 0.05:
-		magic_disruption_changed.emit(old_disruption, magic_disruption_level)
-
-func setup_magic_amplification() -> void:
-	"""Configuration initiale de l'amplification magique"""
-	magic_amplification = 1.0
-	magic_disruption_level = 0.0
-
-# ============================================================================
-# SYSTÈME DE CASCADE MAGIQUE
-# ============================================================================
-
-func roll_magic_cascade(epicenter: Vector2, intensity: float) -> void:
-	"""Calcule la probabilité et déclenche éventuellement une cascade magique"""
-	var base_chance = observation_config.get("cascade_base_chance", CASCADE_PROBABILITY_BASE)
-	var cascade_chance = base_chance * intensity * magic_amplification
-	
-	# Bonus selon le niveau de perturbation global
-	cascade_chance *= (1.0 + magic_disruption_level)
-	
-	if randf() < cascade_chance:
-		trigger_magic_cascade(epicenter, intensity)
-
-func trigger_magic_cascade(epicenter: Vector2, intensity: float) -> void:
-	"""Déclenche un événement de cascade magique"""
-	print("💥 CASCADE MAGIQUE! Position: ", epicenter, " Intensité: ", intensity)
-	
-	# Émission du signal pour les autres systèmes
-	magic_cascade_triggered.emit(epicenter, intensity)
-	
-	# Effets locaux (à implémenter avec les autres systèmes)
-	apply_cascade_effects(epicenter, intensity)
-
-func apply_cascade_effects(epicenter: Vector2, intensity: float) -> void:
-	"""Applique les effets d'une cascade magique"""
-	# TODO: Intégration avec systèmes météo, environnement, NPCs
-	# Pour l'instant, log pour validation
-	print("🌊 Effets cascade appliqués - Intensité: ", intensity)
-
-# ============================================================================
-# INTERFACE CARNET MAGIQUE
-# ============================================================================
-
-func update_notebook_entry(creature_id: String, observation_data: Dictionary) -> void:
-	"""Met à jour le carnet magique avec nouvelles observations"""
-	var entry_data = {
-		"creature_id": creature_id,
-		"observation_count": observation_data.get("observation_count", 0),
-		"current_stage": observation_data.get("current_stage", 0),
 		"timestamp": Time.get_unix_time_from_system(),
-		"new_info": observation_data.get("discoveries", [])
+		"old_stage": old_stage,
+		"new_stage": new_stage,
+		"observation_count": creature_data.observation_count
 	}
+	creature_data.special_events.append(evolution_event)
 	
-	notebook_entry_added.emit(creature_id, entry_data)
-
-# ============================================================================
-# GÉNÉRATION DONNÉES D'OBSERVATION
-# ============================================================================
+	if debug_mode:
+		print("🎉 Évolution! ", creature_id, ": Stage ", old_stage, " → ", new_stage)
 
 func generate_observation_data(creature_id: String, creature_data: Dictionary, intensity: float) -> Dictionary:
-	"""Génère les données complètes d'observation pour l'interface"""
-	var creature_info = creature_database.get(creature_id, {})
+	"""Génère les données complètes d'observation pour retour"""
 	var current_stage = creature_data.current_stage
+	var creature_info = creature_database.get(creature_id, {})
 	
 	var observation_result = {
 		"creature_id": creature_id,
 		"creature_name": creature_info.get("name", "Créature Inconnue"),
-		"latin_name": creature_info.get("latin_name", "Specialis unknownus"),
 		"observation_count": creature_data.observation_count,
 		"current_stage": current_stage,
 		"stage_name": get_stage_name(creature_id, current_stage),
@@ -402,10 +402,17 @@ func generate_observation_data(creature_id: String, creature_data: Dictionary, i
 		"magic_affinity": creature_data.magic_affinity,
 		"evolution_progress": calculate_evolution_progress(creature_data),
 		"discoveries": generate_discoveries(creature_id, creature_data, intensity),
-		"special_abilities": get_current_abilities(creature_id, current_stage)
+		"special_abilities": get_current_abilities(creature_id, current_stage),
+		"observation_intensity": intensity,
+		"global_magic_level": magic_amplification,
+		"disruption_level": magic_disruption_level
 	}
 	
 	return observation_result
+
+# ============================================================================
+# UTILITAIRES & GETTERS
+# ============================================================================
 
 func get_stage_name(creature_id: String, stage: int) -> String:
 	"""Retourne le nom du stade d'évolution actuel"""
@@ -446,52 +453,103 @@ func calculate_evolution_progress(creature_data: Dictionary) -> float:
 	
 	return 1.0
 
-func generate_discoveries(creature_id: String, creature_data: Dictionary, intensity: float) -> Array:
-	"""Génère les nouvelles découvertes basées sur l'observation"""
+func generate_discoveries(creature_id: String, creature_data: Dictionary, intensity: float) -> Array[String]:
+	"""Génère des découvertes basées sur l'observation"""
 	var discoveries = []
+	var stage = creature_data.current_stage
 	
-	# Nouvelles découvertes selon l'intensité et le nombre d'observations
+	# Découvertes basiques selon le stade
+	match stage:
+		EvolutionStage.STAGE_0_NORMAL:
+			discoveries.append("Comportement naturel observé")
+		EvolutionStage.STAGE_1_AWARE:
+			discoveries.append("Signes de conscience accrue")
+		EvolutionStage.STAGE_2_ENHANCED:
+			discoveries.append("Capacités améliorées détectées")
+		EvolutionStage.STAGE_3_MAGICAL:
+			discoveries.append("Propriétés magiques manifestes")
+		EvolutionStage.STAGE_4_LEGENDARY:
+			discoveries.append("Forme légendaire atteinte")
+	
+	# Découvertes bonus basées sur l'intensité
 	if intensity > 2.0:
-		discoveries.append("Comportement inhabituel détecté")
-	
-	if creature_data.observation_count == 1:
-		discoveries.append("Première observation documentée")
-	elif creature_data.observation_count == 5:
-		discoveries.append("Patterns comportementaux établis")
-	elif creature_data.observation_count == 10:
-		discoveries.append("Adaptation évidente à l'observation")
-	
-	# Découvertes spéciales selon l'affinité magique
-	if creature_data.magic_affinity > 1.0:
-		discoveries.append("Aura magique détectable")
+		discoveries.append("Détails fins perceptibles")
+	if intensity > 3.0:
+		discoveries.append("Patterns comportementaux uniques")
 	
 	return discoveries
 
-func get_current_abilities(creature_id: String, stage: int) -> Array:
-	"""Retourne les capacités spéciales actuelles de la créature"""
-	# TODO: Système de capacités évolutives complet
-	var abilities = []
+func get_current_abilities(creature_id: String, stage: int) -> Array[String]:
+	"""Retourne les capacités actuelles de la créature"""
+	# Utiliser le cache si disponible
+	var cache_key = creature_id + "_" + str(stage)
+	if ability_cache.has(cache_key):
+		return ability_cache[cache_key]
 	
+	var abilities = []
+	var creature_info = creature_database.get(creature_id, {})
+	
+	# Capacités par stade (exemple générique)
 	match stage:
+		EvolutionStage.STAGE_0_NORMAL:
+			abilities = ["Survie de base"]
 		EvolutionStage.STAGE_1_AWARE:
-			abilities.append("Conscience accrue")
+			abilities = ["Survie de base", "Conscience élevée"]
 		EvolutionStage.STAGE_2_ENHANCED:
-			abilities.append("Capacités améliorées")
+			abilities = ["Survie de base", "Conscience élevée", "Capacités renforcées"]
 		EvolutionStage.STAGE_3_MAGICAL:
-			abilities.append("Propriétés magiques")
+			abilities = ["Survie de base", "Conscience élevée", "Capacités renforcées", "Magie mineure"]
 		EvolutionStage.STAGE_4_LEGENDARY:
-			abilities.append("Pouvoirs légendaires")
+			abilities = ["Survie de base", "Conscience élevée", "Capacités renforcées", "Magie mineure", "Pouvoirs légendaires"]
+	
+	# Capacités spécifiques depuis la base de données
+	if creature_info.has("abilities"):
+		var creature_abilities = creature_info["abilities"]
+		if creature_abilities.has(str(stage)):
+			abilities.extend(creature_abilities[str(stage)])
+	
+	# Mettre en cache
+	ability_cache[cache_key] = abilities
 	
 	return abilities
 
-# ============================================================================
-# CONNECTION AUX AUTRES SYSTÈMES
-# ============================================================================
+func update_notebook_entry(creature_id: String, observation_data: Dictionary) -> void:
+	"""Met à jour une entrée du carnet magique"""
+	var entry_data = {
+		"creature_id": creature_id,
+		"timestamp": Time.get_unix_time_from_system(),
+		"stage": observation_data.current_stage,
+		"discoveries": observation_data.discoveries,
+		"observation_count": observation_data.observation_count
+	}
+	
+	notebook_entry_added.emit(creature_id, entry_data)
 
-func connect_to_game_systems() -> void:
-	"""Connecte l'ObservationManager aux autres systèmes du jeu"""
-	# TODO: Connexions avec GameManager, UIManager, etc.
-	print("🔗 Connexions systèmes à implémenter")
+func roll_magic_cascade(epicenter: Vector2, intensity: float) -> void:
+	"""Lance les dés pour un événement magique en cascade"""
+	var base_chance = observation_config.get("cascade_base_chance", 0.15)
+	var cascade_chance = base_chance * intensity * magic_disruption_level
+	
+	if randf() < cascade_chance:
+		var cascade_intensity = intensity * magic_amplification * randf_range(0.5, 1.5)
+		magic_cascade_triggered.emit(epicenter, cascade_intensity)
+		
+		if debug_mode:
+			print("✨ Cascade magique déclenchée! Intensité:", cascade_intensity)
+
+func update_evolution_cache(creature_id: String, stage: int) -> void:
+	"""Met à jour le cache d'évolution"""
+	evolution_cache[creature_id] = stage
+
+func _decay_magic_disruption() -> void:
+	"""Décroissance naturelle de la perturbation magique"""
+	if magic_disruption_level > 0.0:
+		var old_level = magic_disruption_level
+		var decay_rate = observation_config.get("disruption_decay_rate", 0.01)
+		magic_disruption_level = max(0.0, magic_disruption_level - decay_rate)
+		
+		if abs(magic_disruption_level - old_level) > 0.001:
+			magic_disruption_changed.emit(old_level, magic_disruption_level)
 
 # ============================================================================
 # API PUBLIQUE POUR AUTRES SYSTÈMES
@@ -511,6 +569,10 @@ func get_total_observations() -> int:
 	"""Retourne le nombre total d'observations effectuées"""
 	return total_observations
 
+func get_observed_creatures() -> Dictionary:
+	"""Retourne la liste de toutes les créatures observées"""
+	return observed_creatures.duplicate()
+
 func force_evolution(creature_id: String, target_stage: int) -> bool:
 	"""Force l'évolution d'une créature (pour debug/events spéciaux)"""
 	if not observed_creatures.has(creature_id):
@@ -529,7 +591,36 @@ func reset_observations() -> void:
 	magic_amplification = 1.0
 	magic_disruption_level = 0.0
 	total_observations = 0
-	print("🔄 Observations reset")
+	evolution_cache.clear()
+	ability_cache.clear()
+	
+	if debug_mode:
+		print("🔄 Observations reset")
+
+# ============================================================================
+# SYSTÈME DE SAUVEGARDE
+# ============================================================================
+
+func get_save_data() -> Dictionary:
+	"""Retourne les données à sauvegarder"""
+	return {
+		"observed_creatures": observed_creatures,
+		"magic_amplification": magic_amplification,
+		"magic_disruption_level": magic_disruption_level,
+		"total_observations": total_observations,
+		"evolution_cache": evolution_cache
+	}
+
+func apply_save_data(save_data: Dictionary) -> void:
+	"""Applique les données de sauvegarde"""
+	observed_creatures = save_data.get("observed_creatures", {})
+	magic_amplification = save_data.get("magic_amplification", 1.0)
+	magic_disruption_level = save_data.get("magic_disruption_level", 0.0)
+	total_observations = save_data.get("total_observations", 0)
+	evolution_cache = save_data.get("evolution_cache", {})
+	
+	if debug_mode:
+		print("🔮 Données d'observation restaurées")
 
 # ============================================================================
 # DEBUG & VALIDATION
@@ -537,45 +628,73 @@ func reset_observations() -> void:
 
 func _input(event: InputEvent) -> void:
 	"""Commandes debug (à retirer en production)"""
-	if OS.is_debug_build():
-		if event.is_action_pressed("debug_observe"):
-			# Test observation sur Maurice
-			observe_creature("rat_maurice", ObservationType.DETAILED, Vector2(100, 100))
-		elif event.is_action_pressed("debug_reset"):
-			reset_observations()
+	if not debug_mode or not OS.is_debug_build():
+		return
+		
+	if event.is_action_pressed("debug_observe_maurice"):
+		observe_creature("rat_maurice", ObservationType.DETAILED, Vector2(100, 100))
+	elif event.is_action_pressed("debug_force_evolution"):
+		force_evolution("rat_maurice", EvolutionStage.STAGE_3_MAGICAL)
+	elif event.is_action_pressed("debug_reset_observations"):
+		reset_observations()
+	elif event.is_action_pressed("debug_print_status"):
+		print_debug_info()
 
 func print_debug_info() -> void:
 	"""Affiche les informations de debug du système"""
 	print("=== OBSERVATION MANAGER DEBUG ===")
+	print("Système initialisé: ", system_initialized)
 	print("Total observations: ", total_observations)
 	print("Magic amplification: ", magic_amplification)
 	print("Disruption level: ", magic_disruption_level)
-	print("Creatures observées: ", observed_creatures.size())
+	print("Créatures observées: ", observed_creatures.size())
+	print("Créatures en base: ", creature_database.size())
 	
 	for creature_id in observed_creatures:
 		var data = observed_creatures[creature_id]
-		print("- ", creature_id, ": Stade ", data.current_stage, " (", data.observation_count, " obs)")
+		print("- ", creature_id, ": Stage ", data.current_stage, " (", data.observation_count, " obs)")
+
+func validate_system_integrity() -> bool:
+	"""Valide l'intégrité du système d'observation"""
+	var is_valid = true
+	
+	# Vérifier que les créatures observées existent dans la base
+	for creature_id in observed_creatures:
+		if not creature_database.has(creature_id):
+			push_error("🔮 Créature observée absente de la base: " + creature_id)
+			is_valid = false
+	
+	# Vérifier que les stades d'évolution sont valides
+	for creature_id in observed_creatures:
+		var creature_data = observed_creatures[creature_id]
+		var stage = creature_data.current_stage
+		if stage < 0 or stage > EvolutionStage.STAGE_4_LEGENDARY:
+			push_error("🔮 Stade d'évolution invalide pour " + creature_id + ": " + str(stage))
+			is_valid = false
+	
+	if is_valid and debug_mode:
+		print("✅ Intégrité système observation validée")
+	
+	return is_valid
 
 # ============================================================================
 # NOTES DE DÉVELOPPEMENT
 # ============================================================================
 
-## TODO PRIORITAIRES:
-## 1. Intégration avec GameManager pour singleton
-## 2. Chargement creature_database.json depuis fichier
-## 3. Connexion avec NotebookUI pour interface
-## 4. Système d'animations d'évolution
-## 5. Tests unitaires complets
+## FONCTIONNALITÉS COMPLÉTÉES:
+## ✅ Architecture complète avec signaux event-driven
+## ✅ Intégration DataManager pour chargement JSON
+## ✅ Système d'évolution par observation
+## ✅ Amplification magique globale
+## ✅ Perturbation magique avec décroissance
+## ✅ Cache d'optimisation pour performances
+## ✅ Système de sauvegarde complet
+## ✅ API publique pour autres managers
+## ✅ Validation et debug intégrés
 
-## EXTENSIONS FUTURES (DLC):
-## - Nouvelles espèces et évolutions
-## - Mécaniques d'observation régionales
-## - Interactions inter-créatures
-## - Système de breeding/hybridation
-## - Pouvoirs d'observation du joueur
-
-## OPTIMISATIONS:
-## - Cache des calculs intensifs
-## - Système de pooling pour créatures
-## - Sauvegarde incrémentale des observations
-## - Compression des données historiques
+## PROCHAINES ÉTAPES POSSIBLES:
+## 🔜 Interface UI pour carnet magique
+## 🔜 Animations d'évolution
+## 🔜 Effets visuels pour cascades magiques
+## 🔜 Système de récompenses d'observation
+## 🔜 Mécaniques avancées (observation en groupe, équipement)

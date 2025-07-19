@@ -60,9 +60,11 @@ var current_scene_name: String = ""
 var is_transitioning: bool = false
 
 # Références aux managers (initialisées au _ready)
+var data_manager: DataManager                    # NOUVEAU: Gestionnaire données JSON
 var observation_manager: ObservationManager
 var dialogue_manager: DialogueManager
 var quest_manager: QuestManager
+var reputation_manager: ReputationSystem        # NOUVEAU: Système de réputation
 var ui_manager: UIManager
 var audio_manager: AudioManager
 var save_system: SaveSystem
@@ -151,7 +153,13 @@ func initialize_default_data() -> void:
 		"season": "spring",
 		"city_events": [],
 		"creature_evolutions": {},
-		"faction_states": {}
+		"faction_states": {},
+		"patrician_office_access": false,       # NOUVEAU: Accès déblocables
+		"great_library_access": false,
+		"guild_master_services": false,
+		"honorary_watch_badge": false,
+		"creature_sanctuary_access": false,
+		"traditional_magic_access": false
 	}
 	
 	settings = {
@@ -173,7 +181,10 @@ func initialize_managers() -> void:
 	"""Initialise tous les managers dans l'ordre de dépendance"""
 	print("[GameManager] Initialisation des managers...")
 	
-	# Manager UI (doit être créé en premier pour les transitions)
+	# NOUVEAU: DataManager (priorité absolue - charge les JSON)
+	data_manager = await create_or_get_manager("DataManager", "res://scripts/managers/DataManager.gd")
+	
+	# Manager UI (doit être créé tôt pour les transitions)
 	ui_manager = await create_or_get_manager("UIManager", "res://scripts/managers/UIManager.gd")
 	
 	# Manager Audio (indépendant)
@@ -182,10 +193,13 @@ func initialize_managers() -> void:
 	# Save System (indépendant)
 	save_system = await create_or_get_manager("SaveSystem", "res://scripts/managers/SaveSystem.gd")
 	
-	# Managers de gameplay (dépendent de l'UI)
+	# Managers de gameplay (dépendent des données)
 	observation_manager = await create_or_get_manager("ObservationManager", "res://scripts/managers/ObservationManager.gd")
 	dialogue_manager = await create_or_get_manager("DialogueManager", "res://scripts/managers/DialogueManager.gd")
 	quest_manager = await create_or_get_manager("QuestManager", "res://scripts/managers/QuestManager.gd")
+	
+	# NOUVEAU: ReputationSystem (dépend de DataManager + autres managers)
+	reputation_manager = await create_or_get_manager("ReputationManager", "res://scripts/managers/ReputationSystem.gd")
 	
 	print("[GameManager] Tous les managers initialisés")
 
@@ -225,6 +239,14 @@ func setup_signal_connections() -> void:
 	if quest_manager:
 		quest_manager.quest_completed.connect(_on_quest_completed)
 		quest_manager.story_milestone_reached.connect(_on_story_milestone)
+	
+	# NOUVEAU: Connexions ReputationSystem
+	if reputation_manager:
+		reputation_manager.reputation_changed.connect(_on_reputation_changed)
+		reputation_manager.faction_conflict_triggered.connect(_on_faction_conflict)
+		reputation_manager.faction_mastery_achieved.connect(_on_faction_mastery)
+		reputation_manager.relationship_level_changed.connect(_on_relationship_level_changed)
+		reputation_manager.public_reaction_triggered.connect(_on_public_reaction)
 	
 	# Connexions sauvegarde
 	if save_system:
@@ -399,6 +421,10 @@ func compile_save_data() -> Dictionary:
 	if dialogue_manager and dialogue_manager.has_method("get_save_data"):
 		save_data["dialogue_data"] = dialogue_manager.get_save_data()
 	
+	# NOUVEAU: Données ReputationSystem
+	if reputation_manager and reputation_manager.has_method("get_save_data"):
+		save_data["reputation_data"] = reputation_manager.get_save_data()
+	
 	return save_data
 
 func apply_save_data(save_data: Dictionary) -> void:
@@ -417,6 +443,10 @@ func apply_save_data(save_data: Dictionary) -> void:
 	
 	if dialogue_manager and dialogue_manager.has_method("apply_save_data"):
 		dialogue_manager.apply_save_data(save_data.get("dialogue_data", {}))
+	
+	# NOUVEAU: Données ReputationSystem
+	if reputation_manager and reputation_manager.has_method("apply_save_data"):
+		reputation_manager.apply_save_data(save_data.get("reputation_data", {}))
 	
 	# Changer vers la scène sauvegardée
 	var saved_scene = save_data.get("current_scene", "main_menu")
@@ -467,6 +497,10 @@ func integrate_dlc_content(dlc_id: String, manifest: Dictionary) -> void:
 	
 	if quest_manager and manifest.has("quests"):
 		quest_manager.add_dlc_quests(dlc_id, manifest["quests"])
+	
+	# NOUVEAU: Contenu DLC pour réputations
+	if reputation_manager and manifest.has("factions"):
+		reputation_manager.add_dlc_factions(dlc_id, manifest["factions"])
 
 # ================================
 # ÉVÉNEMENTS ET CALLBACKS
@@ -499,6 +533,102 @@ func _on_story_milestone(milestone: String) -> void:
 			set_game_state(GameState.ACT_II)
 		"act2_completed":
 			set_game_state(GameState.ACT_III)
+
+# ================================
+# NOUVEAUX: HANDLERS ÉVÉNEMENTS RÉPUTATION
+# ================================
+func _on_reputation_changed(faction_id: String, old_value: int, new_value: int, reason: String) -> void:
+	"""Réaction aux changements de réputation"""
+	# Log pour analytics
+	print("[GameManager] Réputation changée: ", faction_id, " ", old_value, " → ", new_value, " (", reason, ")")
+	
+	# Déclencher événements UI si interface disponible
+	if ui_manager:
+		ui_manager.show_reputation_change(faction_id, new_value - old_value)
+	
+	# Mettre à jour les données joueur pour persistence
+	if not player_data.has("reputation"):
+		player_data["reputation"] = {}
+	player_data["reputation"][faction_id] = new_value
+
+func _on_relationship_level_changed(faction_id: String, old_level: String, new_level: String) -> void:
+	"""Réaction aux changements de niveau de relation"""
+	print("[GameManager] Niveau relation changé: ", faction_id, " ", old_level, " → ", new_level)
+	
+	# Notification UI spéciale pour changements de niveau
+	if ui_manager:
+		ui_manager.show_relationship_level_change(faction_id, old_level, new_level)
+
+func _on_faction_conflict(faction1: String, faction2: String, conflict_type: String) -> void:
+	"""Réaction aux conflits entre factions"""
+	print("[GameManager] Conflit détecté: ", faction1, " vs ", faction2, " (", conflict_type, ")")
+	
+	# Déclencher événement narratif si configuré
+	if quest_manager:
+		quest_manager.trigger_dynamic_event("faction_conflict", {
+			"faction1": faction1,
+			"faction2": faction2,
+			"conflict_type": conflict_type
+		})
+	
+	# Notification UI dramatique
+	if ui_manager:
+		ui_manager.show_faction_conflict(faction1, faction2, conflict_type)
+
+func _on_faction_mastery(faction_id: String, mastery_level: String) -> void:
+	"""Réaction à l'atteinte d'une maîtrise de faction"""
+	print("[GameManager] Maîtrise atteinte: ", faction_id, " niveau ", mastery_level)
+	
+	# Déclencher récompenses et événements spéciaux
+	if ui_manager:
+		ui_manager.show_mastery_achievement(faction_id, mastery_level)
+	
+	# Débloquer contenu spécial
+	unlock_mastery_content(faction_id, mastery_level)
+
+func _on_public_reaction(event_type: String, reputation_changes: Dictionary) -> void:
+	"""Réaction aux événements publics majeurs"""
+	print("[GameManager] Réaction publique: ", event_type, " avec effets: ", reputation_changes)
+	
+	# Interface pour événements publics
+	if ui_manager:
+		ui_manager.show_public_reaction(event_type, reputation_changes)
+
+func unlock_mastery_content(faction_id: String, mastery_level: String) -> void:
+	"""Débloque du contenu exclusif basé sur la maîtrise de faction"""
+	match faction_id:
+		"patrician":
+			# Accès au bureau du Patricien, quêtes politiques
+			world_state["patrician_office_access"] = true
+			print("[GameManager] Accès Bureau Patricien débloqué")
+		"university":
+			# Accès à la Grande Bibliothèque, sorts exclusifs
+			world_state["great_library_access"] = true
+			print("[GameManager] Accès Grande Bibliothèque débloqué")
+		"guilds":
+			# Services exclusifs des guildes, formations spéciales
+			world_state["guild_master_services"] = true
+			print("[GameManager] Services Maîtres de Guildes débloqués")
+		"watch":
+			# Badge honoraire du Guet, patrouilles spéciales
+			world_state["honorary_watch_badge"] = true
+			print("[GameManager] Badge Honoraire du Guet débloqué")
+		"creatures":
+			# Communication avancée créatures, zone exclusive
+			world_state["creature_sanctuary_access"] = true
+			print("[GameManager] Accès Sanctuaire des Créatures débloqué")
+		"magical_community":
+			# Rituels traditionnels, sorts anciens
+			world_state["traditional_magic_access"] = true
+			print("[GameManager] Accès Magie Traditionnelle débloqué")
+		"common_folk":
+			# Soutien populaire, événements communautaires
+			world_state["popular_support"] = true
+			print("[GameManager] Soutien Populaire débloqué")
+		"underworld":
+			# Contacts dans la pègre, informations privilégiées
+			world_state["underworld_contacts"] = true
+			print("[GameManager] Contacts Pègre débloqués")
 
 # ================================
 # CONFIGURATION ET PARAMÈTRES
@@ -565,13 +695,16 @@ func get_debug_info() -> Dictionary:
 		"loaded_dlcs": loaded_dlcs,
 		"observation_count": story_variables.get("observation_count", 0),
 		"managers_loaded": {
+			"data": data_manager != null,                    # NOUVEAU
 			"observation": observation_manager != null,
 			"dialogue": dialogue_manager != null,
 			"quest": quest_manager != null,
+			"reputation": reputation_manager != null,        # NOUVEAU
 			"ui": ui_manager != null,
 			"audio": audio_manager != null,
 			"save": save_system != null
-		}
+		},
+		"reputation_summary": reputation_manager.get_reputation_summary() if reputation_manager else {}
 	}
 
 # ================================
@@ -589,6 +722,9 @@ func _input(event: InputEvent) -> void:
 			save_game(9)  # Slot de sauvegarde rapide
 		elif event.is_action_pressed("quick_load"):
 			load_game(9)
+		elif event.is_action_pressed("debug_reputation"):
+			if reputation_manager:
+				reputation_manager.print_reputation_summary()
 
 func toggle_pause_menu() -> void:
 	"""Bascule le menu de pause"""
@@ -601,3 +737,30 @@ func toggle_pause_menu() -> void:
 	
 	if ui_manager:
 		ui_manager.toggle_pause_menu(current_state == GameState.PAUSE_MENU)
+
+# ================================
+# API PUBLIQUE POUR SYSTÈMES
+# ================================
+func get_faction_reputation(faction_id: String) -> int:
+	"""API simple pour obtenir réputation avec une faction"""
+	if reputation_manager:
+		return reputation_manager.get_reputation(faction_id)
+	return 0
+
+func modify_faction_reputation(faction_id: String, change: int, reason: String = "action") -> bool:
+	"""API simple pour modifier réputation avec une faction"""
+	if reputation_manager:
+		return reputation_manager.modify_reputation(faction_id, change, reason)
+	return false
+
+func is_faction_service_available(faction_id: String, service_id: String) -> bool:
+	"""API simple pour vérifier disponibilité service"""
+	if reputation_manager:
+		return reputation_manager.is_service_available(faction_id, service_id)
+	return false
+
+func get_dominant_faction() -> String:
+	"""API simple pour obtenir faction dominante"""
+	if reputation_manager:
+		return reputation_manager.get_dominant_faction()
+	return ""
