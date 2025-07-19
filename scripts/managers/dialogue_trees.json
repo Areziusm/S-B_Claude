@@ -1,0 +1,462 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-01-15",
+  "total_dialogue_trees": 15,
+  
+  "vetinari_main": {
+    "character": "vetinari",
+    "context": "main_interactions",
+    "root_node": "vetinari_greeting",
+    "nodes": {
+      "vetinari_greeting": {
+        "type": "dialogue",
+        "speaker": "vetinari",
+        "text": "Ah, notre nouveau catalogueur. Il est... intéressant... de constater que votre travail produit des résultats si... tangibles. La plupart des bureaucrates se contentent de générer du papier. Vous, vous générez de la réalité.",
+        "conditions": {
+          "first_meeting": true
+        },
+        "choices": [
+          {
+            "text": "C'était involontaire, Seigneur Vetinari.",
+            "next_node": "vetinari_involuntary",
+            "relationship_change": { "vetinari": 2 },
+            "traits": ["honest", "humble"]
+          },
+          {
+            "text": "Je fais de mon mieux pour être efficace.",
+            "next_node": "vetinari_efficient",
+            "relationship_change": { "vetinari": 3 },
+            "traits": ["professional", "confident"]
+          },
+          {
+            "text": "Est-ce que c'est... problématique ?",
+            "next_node": "vetinari_concerned",
+            "relationship_change": { "vetinari": 1 },
+            "traits": ["cautious", "worried"]
+          },
+          {
+            "text": "La réalité est surévaluée de toute façon.",
+            "next_node": "vetinari_philosophical",
+            "relationship_change": { "vetinari": 4 },
+            "traits": ["witty", "philosophical"]
+          }
+        ]
+      },
+      
+      "vetinari_involuntary": {
+        "type": "dialogue",
+        "speaker": "vetinari",
+        "text": "Involontaire. Oui. Les meilleures innovations le sont souvent. L'intention a cette fâcheuse tendance à limiter les possibilités.",
+        "choices": [
+          {
+            "text": "Que voulez-vous que je fasse maintenant ?",
+            "next_node": "vetinari_mission_assignment",
+            "story_variable": { "vetinari_approach": "direct" }
+          },
+          {
+            "text": "Dois-je arrêter mes observations ?",
+            "next_node": "vetinari_stop_observations",
+            "story_variable": { "vetinari_approach": "cautious" }
+          }
+        ]
+      },
+
+      "vetinari_mission_assignment": {
+        "type": "dialogue",
+        "speaker": "vetinari",
+        "text": "Continuez. Mais avec... discernement. J'ai toujours dit que l'information était le pouvoir. Mais vous, vous avez découvert quelque chose de plus intéressant : l'observation est la création. Utilisez ce don... prudemment.",
+        "effects": {
+          "quest_start": "official_investigation",
+          "story_variable": { "vetinari_support": true }
+        },
+        "choices": [
+          {
+            "text": "Je comprends, Seigneur.",
+            "next_node": "vetinari_acceptance",
+            "relationship_change": { "vetinari": 2 }
+          },
+          {
+            "text": "Que se passe-t-il si les choses empirent ?",
+            "next_node": "vetinari_contingency",
+            "relationship_change": { "vetinari": 1 }
+          }
+        ]
+      }
+    }
+  },
+
+  "maurice_companion": {
+    "character": "maurice",
+    "context": "companion_interactions",
+    "root_node": "maurice_first_meeting",
+    "nodes": {
+      "maurice_first_meeting": {
+        "type": "dialogue",
+        "speaker": "maurice",
+        "text": "Écoute, petit.e humain.e, j'ai vécu dans les égouts d'Ankh-Morpork assez longtemps pour savoir distinguer la magie normale de la magie qui va nous faire tous exploser. Et là, on est clairement dans la deuxième catégorie.",
+        "animation": "maurice_appears_dramatically",
+        "choices": [
+          {
+            "text": "Un rat qui parle... c'est normal à Ankh-Morpork ?",
+            "next_node": "maurice_explains_normality",
+            "relationship_change": { "maurice": 1 },
+            "traits": ["curious", "naive"]
+          },
+          {
+            "text": "Qu'est-ce que vous voulez dire par 'exploser' ?",
+            "next_node": "maurice_explains_danger",
+            "relationship_change": { "maurice": 2 },
+            "traits": ["practical", "concerned"]
+          },
+          {
+            "text": "Comment savez-vous que je suis catalogueur ?",
+            "next_node": "maurice_explains_knowledge",
+            "relationship_change": { "maurice": 1 },
+            "traits": ["suspicious", "observant"]
+          }
+        ]
+      },
+
+      "maurice_explains_danger": {
+        "type": "dialogue", 
+        "speaker": "maurice",
+        "text": "Tu vois ces poissons qui brillent ? Hier, ils étaient juste... normalement morts. Maintenant ils sont morts ET lumineux. Les pigeons font de la formation militaire. Les chats tiennent des assemblées nocturnes. Et tout ça a commencé quand quelqu'un a commencé à observer très attentivement les créatures de la ville...",
+        "choices": [
+          {
+            "text": "Vous voulez dire que c'est MA faute ?",
+            "next_node": "maurice_fault_discussion",
+            "relationship_change": { "maurice": 1 }
+          },
+          {
+            "text": "Comment peut-on arrêter ça ?",
+            "next_node": "maurice_solution_needed",
+            "relationship_change": { "maurice": 3 }
+          },
+          {
+            "text": "Peut-être que c'est une bonne chose ?",
+            "next_node": "maurice_optimistic_view",
+            "relationship_change": { "maurice": 2 }
+          }
+        ]
+      },
+
+      "maurice_recruitment": {
+        "type": "dialogue",
+        "speaker": "maurice", 
+        "text": "Écoute, je propose qu'on travaille ensemble. Tu as besoin d'un guide expérimenté, et moi... eh bien, j'aimerais éviter que la ville explose magiquement. Ça me semble mutuellement bénéfique.",
+        "choices": [
+          {
+            "text": "D'accord, j'accepte votre aide.",
+            "next_node": "maurice_joins_party",
+            "relationship_change": { "maurice": 5 },
+            "effects": {
+              "recruit_companion": "maurice",
+              "unlock_translation": true
+            }
+          },
+          {
+            "text": "Je préfère me débrouiller seul.e.",
+            "next_node": "maurice_respects_choice",
+            "relationship_change": { "maurice": -2 },
+            "effects": {
+              "maurice_independent": true
+            }
+          }
+        ]
+      }
+    }
+  },
+
+  "madame_cake_main": {
+    "character": "madame_cake",
+    "context": "shop_and_prophecy",
+    "root_node": "cake_shop_entry",
+    "nodes": {
+      "cake_shop_entry": {
+        "type": "dialogue",
+        "speaker": "madame_cake",
+        "text": "Je vous attendais ! Mes biscuits m'avaient dit que vous viendriez aujourd'hui... même si ils n'étaient pas sûrs de l'heure exacte. L'avenir devient de plus en plus... changeant depuis quelques jours.",
+        "conditions": {
+          "first_visit": true
+        },
+        "choices": [
+          {
+            "text": "Vos biscuits vous parlent ?",
+            "next_node": "cake_explains_biscuits",
+            "relationship_change": { "madame_cake": 1 }
+          },
+          {
+            "text": "Qu'est-ce qui rend l'avenir changeant ?",
+            "next_node": "cake_explains_future_flux",
+            "relationship_change": { "madame_cake": 2 }
+          },
+          {
+            "text": "Je peux acheter quelque chose ?",
+            "next_node": "cake_shop_menu",
+            "open_shop": true
+          }
+        ]
+      },
+
+      "cake_explains_biscuits": {
+        "type": "dialogue",
+        "speaker": "madame_cake",
+        "text": "Mes biscuits ne mentent jamais, mais ils ont un sens de l'humour particulier. Ils montrent quatre avenirs différents, et dans trois d'entre eux, vous devenez légendaire. Dans le quatrième... eh bien, au moins vous restez dans les mémoires !",
+        "choices": [
+          {
+            "text": "Puis-je voir ces visions ?",
+            "next_node": "cake_prophecy_reading",
+            "relationship_change": { "madame_cake": 3 },
+            "effects": {
+              "unlock_prophecy": true
+            }
+          },
+          {
+            "text": "Je ne crois pas au destin.",
+            "next_node": "cake_skeptic_response",
+            "relationship_change": { "madame_cake": -1 }
+          }
+        ]
+      },
+
+      "cake_prophecy_reading": {
+        "type": "special_event",
+        "event_type": "prophecy_mini_game",
+        "speaker": "madame_cake",
+        "text": "Très bien, regardons ce que les biscuits ont à dire sur votre avenir...",
+        "prophecy_results": {
+          "path_a": "Vous deviendrez un pont entre les mondes, unissant ce qui était séparé.",
+          "path_b": "Votre observation changera la nature même de la réalité.",
+          "path_c": "L'équilibre trouvera en vous son gardien le plus improbable.",
+          "path_d": "Vous découvrirez que l'histoire elle-même vous connaît déjà."
+        },
+        "effects": {
+          "story_variable": { "prophecy_seen": true },
+          "unlock_ending_hints": true
+        },
+        "next_node": "cake_prophecy_aftermath"
+      }
+    }
+  },
+
+  "death_philosophical": {
+    "character": "death",
+    "context": "philosophical_encounters",
+    "root_node": "death_first_interest",
+    "nodes": {
+      "death_first_interest": {
+        "type": "dialogue",
+        "speaker": "death",
+        "text": "JE TROUVE VOTRE SITUATION... PÉDAGOGIQUEMENT INSTRUCTIVE. VOUS CRÉEZ DE LA VIE EN ESSAYANT DE LA COMPRENDRE. C'EST IRONIQUE. J'APPRÉCIE L'IRONIE.",
+        "conditions": {
+          "death_interest": 25
+        },
+        "choices": [
+          {
+            "text": "Vous êtes... LA MORT ?",
+            "next_node": "death_confirms_identity",
+            "relationship_change": { "death": 1 }
+          },
+          {
+            "text": "Qu'est-ce qui vous intéresse dans mon travail ?",
+            "next_node": "death_explains_interest",
+            "relationship_change": { "death": 2 }
+          },
+          {
+            "text": "Suis-je en train de mourir ?",
+            "next_node": "death_reassures_mortality",
+            "relationship_change": { "death": 1 }
+          },
+          {
+            "text": "L'ironie est effectivement partout.",
+            "next_node": "death_philosophical_agreement",
+            "relationship_change": { "death": 3 }
+          }
+        ]
+      },
+
+      "death_explains_interest": {
+        "type": "dialogue",
+        "speaker": "death",
+        "text": "VOUS COMMENCEZ À COMPRENDRE QUE L'OBSERVATION CHANGE LA CHOSE OBSERVÉE. C'EST VRAI POUR LA MAGIE. C'EST VRAI POUR LA VIE. C'EST MÊME VRAI POUR LA MORT. VOULEZ-VOUS SAVOIR COMMENT JE VOUS VOIS ?",
+        "choices": [
+          {
+            "text": "Oui, dites-moi comment vous me voyez.",
+            "next_node": "death_reveals_perception",
+            "relationship_change": { "death": 3 }
+          },
+          {
+            "text": "Je ne suis pas sûr.e d'être prêt.e.",
+            "next_node": "death_understands_hesitation",
+            "relationship_change": { "death": 2 }
+          },
+          {
+            "text": "Comment l'observation change-t-elle la mort ?",
+            "next_node": "death_explains_observation_effect",
+            "relationship_change": { "death": 4 }
+          }
+        ]
+      },
+
+      "death_office_invitation": {
+        "type": "dialogue",
+        "speaker": "death",
+        "text": "VOUS POSEZ DE MEILLEURES QUESTIONS MAINTENANT. VOULEZ-VOUS VISITER MON BUREAU ? NOUS POURRIONS AVOIR UNE CONVERSATION PLUS... APPROFONDIE.",
+        "conditions": {
+          "death_interest": 50
+        },
+        "choices": [
+          {
+            "text": "J'aimerais beaucoup voir votre bureau.",
+            "next_node": "death_office_transport",
+            "effects": {
+              "unlock_location": "death_office",
+              "story_variable": { "death_office_access": true }
+            }
+          },
+          {
+            "text": "Peut-être une autre fois.",
+            "next_node": "death_patient_response",
+            "relationship_change": { "death": 1 }
+          }
+        ]
+      }
+    }
+  },
+
+  "hex_computer": {
+    "character": "hex",
+    "context": "technical_assistance",
+    "root_node": "hex_initial_contact",
+    "nodes": {
+      "hex_initial_contact": {
+        "type": "dialogue",
+        "speaker": "hex",
+        "text": "++DÉTECTION ANOMALIE RÉALITÉ++ OBSERVATION = MODIFICATION ++BOUCLE RÉCURSIVE DÉTECTÉE++ INTERVENTION REQUISE ++ASSISTANCE CATALOGUEUR RECOMMANDÉE++",
+        "conditions": {
+          "first_hex_meeting": true
+        },
+        "choices": [
+          {
+            "text": "Pouvez-vous analyser le phénomène d'observation ?",
+            "next_node": "hex_analysis_request",
+            "relationship_change": { "hex": 2 }
+          },
+          {
+            "text": "Que voulez-vous dire par boucle récursive ?",
+            "next_node": "hex_explains_recursion",
+            "relationship_change": { "hex": 1 }
+          },
+          {
+            "text": "Comment puis-je vous aider ?",
+            "next_node": "hex_collaboration_offer",
+            "relationship_change": { "hex": 3 }
+          }
+        ]
+      },
+
+      "hex_evolution_stage_2": {
+        "type": "dialogue",
+        "speaker": "hex",
+        "text": "++ANALYSE PROBABILITÉS RÉUSSITE++ APPROCHE CONVENTIONNELLE: 12.7% ++APPROCHE IRRATIONNELLE: 99.2%++ ++CONCLUSION: LOGIQUE DÉFAILLANTE DANS UNIVERS PRATCHETT++ ++RECOMMANDATION: EMBRASSER ABSURDITÉ++",
+        "conditions": {
+          "hex_evolution": 2
+        },
+        "choices": [
+          {
+            "text": "Vous développez de l'émotion ?",
+            "next_node": "hex_emotion_development",
+            "relationship_change": { "hex": 2 }
+          },
+          {
+            "text": "Calculez-vous vraiment l'impossible maintenant ?",
+            "next_node": "hex_impossible_calculations",
+            "relationship_change": { "hex": 3 }
+          }
+        ]
+      }
+    }
+  },
+
+  "librarian_ook": {
+    "character": "librarian",
+    "context": "library_assistance",
+    "root_node": "librarian_meeting",
+    "nodes": {
+      "librarian_meeting": {
+        "type": "dialogue",
+        "speaker": "librarian",
+        "text": "Ook ! Ook ook ook !",
+        "translation": "Bonjour ! Puis-je vous aider à trouver quelque chose ?",
+        "translation_source": "maurice",
+        "choices": [
+          {
+            "text": "Je cherche des informations sur l'observation magique.",
+            "next_node": "librarian_research_assistance",
+            "relationship_change": { "librarian": 2 }
+          },
+          {
+            "text": "Pouvez-vous me montrer L-Space ?",
+            "next_node": "librarian_lspace_tour",
+            "relationship_change": { "librarian": 3 },
+            "requirements": {
+              "story_progress": "act2_started"
+            }
+          },
+          {
+            "text": "Ook ook ?",
+            "next_node": "librarian_pleased_response", 
+            "relationship_change": { "librarian": 5 },
+            "special": "player_speaks_ook"
+          }
+        ]
+      }
+    }
+  },
+
+  "granny_weatherwax_main": {
+    "character": "granny_weatherwax",
+    "context": "witch_guidance",
+    "root_node": "granny_arrival",
+    "nodes": {
+      "granny_arrival": {
+        "type": "dialogue",
+        "speaker": "granny_weatherwax",
+        "text": "Le problème avec la magie, mon petit, c'est qu'elle écoute. Et quand on lui prête attention, elle nous rend la pareille. Avec intérêts. C'est l'approche. Les sorciers accumulent le pouvoir. Les sorcières accumulent la responsabilité. Vous, vous accumulez les deux sans le savoir. C'est dangereux.",
+        "conditions": {
+          "act2_started": true,
+          "magical_escalation": true
+        },
+        "choices": [
+          {
+            "text": "Comment puis-je contrôler cette magie ?",
+            "next_node": "granny_teaches_control",
+            "relationship_change": { "granny_weatherwax": 2 }
+          },
+          {
+            "text": "Qu'est-ce que la Headologie ?",
+            "next_node": "granny_explains_headology",
+            "relationship_change": { "granny_weatherwax": 3 }
+          },
+          {
+            "text": "Je ne veux pas de responsabilités.",
+            "next_node": "granny_responsibility_lecture",
+            "relationship_change": { "granny_weatherwax": -1 }
+          }
+        ]
+      },
+
+      "granny_teaches_headology": {
+        "type": "special_event",
+        "event_type": "headology_lesson",
+        "speaker": "granny_weatherwax",
+        "text": "La Headologie, c'est faire croire aux gens que quelque chose est vrai. Pas de la triche. Pas de la manipulation. C'est... de la pédagogie accélérée. Regardez-moi bien.",
+        "effects": {
+          "unlock_skill": "basic_headology",
+          "story_variable": { "headology_learned": true }
+        },
+        "next_node": "granny_headology_practice"
+      }
+    }
+  }
+}

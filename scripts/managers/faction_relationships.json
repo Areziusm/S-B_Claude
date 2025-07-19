@@ -1,0 +1,605 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "format_version": "base_game",
+    "total_factions": 8,
+    "reputation_range": [-100, 100],
+    "relationship_matrix": "8x8",
+    "dynamic_relationships": true,
+    "player_influence": "high",
+    "expansion_ready": true,
+    "dependencies": ["character_data", "quest_templates"]
+  },
+  "faction_system": {
+    "reputation_scale": {
+      "hostile": [-100, -51],
+      "unfriendly": [-50, -21],
+      "neutral": [-20, 20],
+      "friendly": [21, 50],
+      "allied": [51, 80],
+      "devoted": [81, 100]
+    },
+    "reputation_effects": {
+      "hostile": {
+        "services": "refused",
+        "prices": "+50%",
+        "quests": "sabotage only",
+        "dialogue": "aggressive",
+        "combat": "likely"
+      },
+      "unfriendly": {
+        "services": "limited",
+        "prices": "+25%",
+        "quests": "basic only",
+        "dialogue": "cold",
+        "combat": "possible"
+      },
+      "neutral": {
+        "services": "standard",
+        "prices": "normal",
+        "quests": "standard",
+        "dialogue": "professional",
+        "combat": "defensive only"
+      },
+      "friendly": {
+        "services": "expanded",
+        "prices": "-15%",
+        "quests": "including personal",
+        "dialogue": "warm",
+        "combat": "protective"
+      },
+      "allied": {
+        "services": "exclusive access",
+        "prices": "-30%",
+        "quests": "important missions",
+        "dialogue": "intimate",
+        "combat": "active support"
+      },
+      "devoted": {
+        "services": "everything available",
+        "prices": "-50%",
+        "quests": "leadership roles",
+        "dialogue": "family-like",
+        "combat": "die for player"
+      }
+    }
+  },
+  "factions": {
+    "patrician": {
+      "id": "FAC001",
+      "name": "Administration Patricienne",
+      "description": "Le gouvernement officiel d'Ankh-Morpork sous Lord Vetinari",
+      "leadership": "lord_vetinari",
+      "headquarters": "patrician_palace",
+      "primary_goals": ["stabilité_urbaine", "efficacité_administrative", "ordre_contrôlé"],
+      "values": ["ordre", "efficacité", "pragmatisme", "stabilité"],
+      "services": {
+        "legal_documentation": {
+          "access_level": "neutral",
+          "price_modifier": 1.0,
+          "description": "Permis, licenses, documents officiels"
+        },
+        "city_information": {
+          "access_level": "friendly",
+          "price_modifier": 0.8,
+          "description": "Informations officielles sur la ville"
+        },
+        "political_protection": {
+          "access_level": "allied",
+          "price_modifier": 0.5,
+          "description": "Protection légale et politique"
+        },
+        "administrative_rank": {
+          "access_level": "devoted",
+          "price_modifier": 0.0,
+          "description": "Poste administratif officiel"
+        }
+      },
+      "reputation_modifiers": {
+        "law_abiding": +5,
+        "efficient_solutions": +8,
+        "bureaucratic_compliance": +3,
+        "chaos_creation": -10,
+        "guild_conflicts": -5,
+        "public_disturbance": -8
+      },
+      "starting_reputation": 50,
+      "recruitment_quest": "bureaucratic_census",
+      "mastery_benefits": ["legal_immunity", "city_resources_access", "information_network"]
+    },
+    "university": {
+      "id": "FAC002",
+      "name": "Université Invisible",
+      "description": "Institution magique d'enseignement et de recherche",
+      "leadership": "mustrum_ridcully",
+      "headquarters": "unseen_university",
+      "primary_goals": ["recherche_magique", "éducation", "préservation_savoir"],
+      "values": ["connaissance", "curiosité", "tradition_magique", "sécurité_expérimentation"],
+      "services": {
+        "magical_education": {
+          "access_level": "neutral",
+          "price_modifier": 1.0,
+          "description": "Cours de magie et formations"
+        },
+        "research_access": {
+          "access_level": "friendly",
+          "price_modifier": 0.9,
+          "description": "Accès aux laboratoires et bibliothèques"
+        },
+        "magical_consultation": {
+          "access_level": "allied",
+          "price_modifier": 0.7,
+          "description": "Conseils d'experts magiques"
+        },
+        "arcane_secrets": {
+          "access_level": "devoted",
+          "price_modifier": 0.3,
+          "description": "Connaissances magiques secrètes"
+        }
+      },
+      "reputation_modifiers": {
+        "magical_research": +10,
+        "knowledge_sharing": +8,
+        "creature_study": +12,
+        "magical_accidents": -5,
+        "anti_intellectual": -8,
+        "dangerous_experiments": -10
+      },
+      "starting_reputation": 25,
+      "recruitment_quest": "observation_mastery",
+      "mastery_benefits": ["advanced_magic_access", "research_funding", "academic_status"]
+    },
+    "guilds": {
+      "id": "FAC003",
+      "name": "Confédération des Guildes",
+      "description": "Union des guildes professionnelles d'Ankh-Morpork",
+      "leadership": "rotating_council",
+      "headquarters": "guilds_quarter",
+      "primary_goals": ["protection_métiers", "profit", "influence_économique"],
+      "values": ["professionalisme", "profit", "tradition_métier", "monopole_services"],
+      "sub_factions": {
+        "thieves_guild": {
+          "leader": "mr_boggis",
+          "specialty": "security_services",
+          "reputation_independent": true
+        },
+        "assassins_guild": {
+          "leader": "lord_downey",
+          "specialty": "discrete_elimination",
+          "reputation_independent": true
+        },
+        "merchants_guild": {
+          "leader": "chairman_merchants",
+          "specialty": "commerce_regulation",
+          "reputation_independent": true
+        }
+      },
+      "services": {
+        "professional_training": {
+          "access_level": "neutral",
+          "price_modifier": 1.1,
+          "description": "Formation dans les métiers"
+        },
+        "guild_membership": {
+          "access_level": "friendly",
+          "price_modifier": 0.8,
+          "description": "Adhésion aux guildes"
+        },
+        "exclusive_services": {
+          "access_level": "allied",
+          "price_modifier": 0.6,
+          "description": "Services exclusifs des guildes"
+        },
+        "guild_leadership": {
+          "access_level": "devoted",
+          "price_modifier": 0.4,
+          "description": "Postes de direction dans les guildes"
+        }
+      },
+      "reputation_modifiers": {
+        "business_success": +8,
+        "guild_cooperation": +10,
+        "economic_stability": +6,
+        "guild_competition": -8,
+        "business_disruption": -12,
+        "anti_guild_actions": -15
+      },
+      "starting_reputation": 10,
+      "mastery_benefits": ["trade_privileges", "economic_influence", "guild_resources"]
+    },
+    "common_folk": {
+      "id": "FAC004",
+      "name": "Citoyens Ordinaires",
+      "description": "La population générale d'Ankh-Morpork",
+      "leadership": "none",
+      "headquarters": "distributed",
+      "primary_goals": ["vie_paisible", "sécurité_famille", "prospérité_modeste"],
+      "values": ["simplicité", "sécurité", "tradition", "bon_sens"],
+      "services": {
+        "local_information": {
+          "access_level": "neutral",
+          "price_modifier": 0.9,
+          "description": "Nouvelles et potins locaux"
+        },
+        "community_support": {
+          "access_level": "friendly",
+          "price_modifier": 0.8,
+          "description": "Aide et soutien communautaire"
+        },
+        "popular_backing": {
+          "access_level": "allied",
+          "price_modifier": 0.7,
+          "description": "Soutien populaire dans les conflits"
+        },
+        "folk_hero_status": {
+          "access_level": "devoted",
+          "price_modifier": 0.5,
+          "description": "Statut de héros populaire"
+        }
+      },
+      "reputation_modifiers": {
+        "helping_citizens": +8,
+        "solving_problems": +10,
+        "protecting_innocents": +12,
+        "causing_trouble": -8,
+        "endangering_public": -15,
+        "snobbish_behavior": -5
+      },
+      "starting_reputation": 20,
+      "mastery_benefits": ["popular_support", "grassroots_information", "community_resources"]
+    },
+    "creatures": {
+      "id": "FAC005",
+      "name": "Alliance des Créatures Évoluées",
+      "description": "Réseau des créatures urbaines ayant développé une intelligence",
+      "leadership": "maurice_rat",
+      "headquarters": "underground_network",
+      "primary_goals": ["reconnaissance_droits", "évolution_paisible", "coexistence"],
+      "values": ["évolution", "liberté", "reconnaissance", "coopération"],
+      "services": {
+        "animal_communication": {
+          "access_level": "neutral",
+          "price_modifier": 0.8,
+          "description": "Traduction et médiation avec animaux"
+        },
+        "urban_intelligence": {
+          "access_level": "friendly",
+          "price_modifier": 0.7,
+          "description": "Réseau d'information animal"
+        },
+        "creature_evolution_guidance": {
+          "access_level": "allied",
+          "price_modifier": 0.5,
+          "description": "Aide à l'évolution contrôlée"
+        },
+        "interspecies_diplomacy": {
+          "access_level": "devoted",
+          "price_modifier": 0.3,
+          "description": "Représentation diplomatique inter-espèces"
+        }
+      },
+      "reputation_modifiers": {
+        "creature_observation": +10,
+        "evolution_support": +15,
+        "animal_rights": +12,
+        "creature_exploitation": -20,
+        "evolution_interference": -15,
+        "animal_cruelty": -25
+      },
+      "starting_reputation": 30,
+      "recruitment_quest": "maurice_companion_chain",
+      "mastery_benefits": ["creature_alliance", "evolution_mastery", "animal_network"]
+    },
+    "watch": {
+      "id": "FAC006",
+      "name": "Watch d'Ankh-Morpork",
+      "description": "Force de police urbaine dirigée par Vimes",
+      "leadership": "sam_vimes",
+      "headquarters": "watch_house",
+      "primary_goals": ["maintien_ordre", "protection_citoyens", "justice"],
+      "values": ["justice", "protection", "courage", "intégrité"],
+      "services": {
+        "legal_assistance": {
+          "access_level": "neutral",
+          "price_modifier": 1.0,
+          "description": "Aide légale et protection"
+        },
+        "investigation_support": {
+          "access_level": "friendly",
+          "price_modifier": 0.9,
+          "description": "Assistance dans les enquêtes"
+        },
+        "watch_backup": {
+          "access_level": "allied",
+          "price_modifier": 0.6,
+          "description": "Support actif du Watch"
+        },
+        "deputy_status": {
+          "access_level": "devoted",
+          "price_modifier": 0.0,
+          "description": "Statut de député du Watch"
+        }
+      },
+      "reputation_modifiers": {
+        "law_enforcement_help": +10,
+        "crime_prevention": +8,
+        "justice_served": +12,
+        "criminal_activity": -15,
+        "obstructing_justice": -12,
+        "vigilante_actions": -8
+      },
+      "starting_reputation": 15,
+      "mastery_benefits": ["legal_authority", "watch_resources", "crime_fighting_tools"]
+    },
+    "magical_community": {
+      "id": "FAC007",
+      "name": "Communauté Magique Indépendante",
+      "description": "Sorcières, alchimistes et praticiens magiques hors université",
+      "leadership": "granny_weatherwax",
+      "headquarters": "distributed",
+      "primary_goals": ["pratique_libre", "sagesse_traditionnelle", "équilibre_naturel"],
+      "values": ["sagesse", "tradition", "libre_pratique", "responsabilité"],
+      "services": {
+        "traditional_healing": {
+          "access_level": "neutral",
+          "price_modifier": 0.9,
+          "description": "Soins traditionnels et herboristerie"
+        },
+        "magical_wisdom": {
+          "access_level": "friendly",
+          "price_modifier": 0.8,
+          "description": "Conseils et sagesse magique"
+        },
+        "headology_training": {
+          "access_level": "allied",
+          "price_modifier": 0.6,
+          "description": "Formation en Headologie"
+        },
+        "witch_recognition": {
+          "access_level": "devoted",
+          "price_modifier": 0.0,
+          "description": "Reconnaissance comme praticien légitime"
+        }
+      },
+      "reputation_modifiers": {
+        "magical_responsibility": +12,
+        "traditional_respect": +10,
+        "wisdom_seeking": +8,
+        "magical_recklessness": -15,
+        "tradition_disrespect": -10,
+        "magical_abuse": -20
+      },
+      "starting_reputation": 0,
+      "recruitment_quest": "headology_understanding",
+      "mastery_benefits": ["traditional_magic", "wisdom_access", "natural_balance"]
+    },
+    "underworld": {
+      "id": "FAC008",
+      "name": "Pègre d'Ankh-Morpork",
+      "description": "Réseau criminel non-officiel et contrebandiers",
+      "leadership": "distributed",
+      "headquarters": "shades_district",
+      "primary_goals": ["profit_illégal", "liberté_action", "survie"],
+      "values": ["liberté", "profit", "discrétion", "loyauté_groupe"],
+      "services": {
+        "black_market_access": {
+          "access_level": "neutral",
+          "price_modifier": 1.5,
+          "description": "Accès aux biens illégaux"
+        },
+        "underground_information": {
+          "access_level": "friendly",
+          "price_modifier": 1.2,
+          "description": "Informations du milieu criminel"
+        },
+        "criminal_assistance": {
+          "access_level": "allied",
+          "price_modifier": 1.0,
+          "description": "Aide pour activités illégales"
+        },
+        "underworld_leadership": {
+          "access_level": "devoted",
+          "price_modifier": 0.8,
+          "description": "Position de pouvoir dans la pègre"
+        }
+      },
+      "reputation_modifiers": {
+        "criminal_cooperation": +8,
+        "underworld_favors": +10,
+        "silence_keeping": +12,
+        "law_cooperation": -15,
+        "betraying_criminals": -20,
+        "exposing_operations": -25
+      },
+      "starting_reputation": -10,
+      "mastery_benefits": ["criminal_network", "illegal_resources", "underground_power"]
+    }
+  },
+  "inter_faction_relationships": {
+    "relationship_matrix": {
+      "patrician": {
+        "university": 60,
+        "guilds": 45,
+        "common_folk": 30,
+        "creatures": 20,
+        "watch": 80,
+        "magical_community": 40,
+        "underworld": -30
+      },
+      "university": {
+        "patrician": 60,
+        "guilds": 25,
+        "common_folk": 10,
+        "creatures": 70,
+        "watch": 35,
+        "magical_community": 55,
+        "underworld": -20
+      },
+      "guilds": {
+        "patrician": 45,
+        "university": 25,
+        "common_folk": 50,
+        "creatures": -10,
+        "watch": 20,
+        "magical_community": 15,
+        "underworld": 40
+      },
+      "common_folk": {
+        "patrician": 30,
+        "university": 10,
+        "guilds": 50,
+        "creatures": 35,
+        "watch": 70,
+        "magical_community": 45,
+        "underworld": -40
+      },
+      "creatures": {
+        "patrician": 20,
+        "university": 70,
+        "guilds": -10,
+        "common_folk": 35,
+        "watch": 25,
+        "magical_community": 60,
+        "underworld": 10
+      },
+      "watch": {
+        "patrician": 80,
+        "university": 35,
+        "guilds": 20,
+        "common_folk": 70,
+        "creatures": 25,
+        "magical_community": 30,
+        "underworld": -60
+      },
+      "magical_community": {
+        "patrician": 40,
+        "university": 55,
+        "guilds": 15,
+        "common_folk": 45,
+        "creatures": 60,
+        "watch": 30,
+        "underworld": -10
+      },
+      "underworld": {
+        "patrician": -30,
+        "university": -20,
+        "guilds": 40,
+        "common_folk": -40,
+        "creatures": 10,
+        "watch": -60,
+        "magical_community": -10
+      }
+    },
+    "conflict_chains": {
+      "guilds_vs_creatures": {
+        "description": "Créatures évoluées perturbent business traditionnel",
+        "trigger": "creature_evolution_threshold",
+        "escalation_stages": ["complaints", "protests", "sabotage", "open_conflict"],
+        "resolution_options": ["mediation", "economic_adaptation", "suppression", "integration"]
+      },
+      "university_vs_magical_community": {
+        "description": "Conflit entre magie académique vs traditionnelle",
+        "trigger": "magical_philosophy_differences",
+        "escalation_stages": ["debate", "rivalry", "resource_competition", "magical_duel"],
+        "resolution_options": ["academic_recognition", "traditional_respect", "synthesis", "separation"]
+      },
+      "watch_vs_underworld": {
+        "description": "Conflit traditionnel forces ordre vs crime",
+        "trigger": "crime_threshold",
+        "escalation_stages": ["investigation", "raids", "gang_war", "martial_law"],
+        "resolution_options": ["enforcement", "corruption", "legalization", "elimination"]
+      }
+    }
+  },
+  "reputation_events": {
+    "faction_quests": {
+      "completion_bonus": "+25 reputation primary faction",
+      "allied_faction_bonus": "+10 reputation allied factions",
+      "opposed_faction_penalty": "-15 reputation opposed factions",
+      "public_perception": "variable based on quest nature"
+    },
+    "public_actions": {
+      "hero_moment": {
+        "trigger": "save_multiple_lives",
+        "effects": {
+          "common_folk": +20,
+          "watch": +15,
+          "patrician": +10,
+          "all_other": +5
+        }
+      },
+      "scandal": {
+        "trigger": "public_embarrassment",
+        "effects": {
+          "all_factions": "-10 to -25",
+          "reputation_decay": "accelerated for 1 week"
+        }
+      },
+      "innovation": {
+        "trigger": "solve_major_problem_creatively",
+        "effects": {
+          "university": +20,
+          "creatures": +15,
+          "patrician": +10
+        }
+      }
+    },
+    "story_milestones": {
+      "alliance_choice_act1": {
+        "chosen_faction": "+50 reputation",
+        "rejected_factions": "-20 reputation",
+        "neutral_factions": "no change"
+      },
+      "major_crisis_resolution": {
+        "successful_resolution": "+30 all positive factions",
+        "failed_resolution": "-20 all factions",
+        "controversial_resolution": "mixed effects"
+      }
+    }
+  },
+  "reputation_mechanics": {
+    "gain_rates": {
+      "quest_completion": "instant",
+      "helpful_actions": "instant",
+      "consistent_behavior": "gradual daily bonus",
+      "relationship_building": "slow but steady"
+    },
+    "loss_rates": {
+      "betrayal": "instant massive loss",
+      "harmful_actions": "instant",
+      "neglect": "slow decay over time",
+      "conflicting_loyalties": "gradual erosion"
+    },
+    "recovery_options": {
+      "redemption_quests": "available for negative reputation",
+      "public_service": "slow reputation recovery",
+      "faction_mediation": "third party assistance",
+      "time_healing": "very slow natural recovery"
+    },
+    "special_modifiers": {
+      "consistency_bonus": "+20% gains for consistent behavior",
+      "faction_conflict_penalty": "-50% gains when factions oppose",
+      "story_context_modifier": "varies by narrative situation",
+      "player_level_scaling": "higher level = slower reputation changes"
+    }
+  },
+  "endgame_effects": {
+    "faction_mastery_rewards": {
+      "multiple_mastery": "diplomatic_genius_status",
+      "single_dedication": "faction_champion_status",
+      "balanced_approach": "universal_mediator_status",
+      "conflict_resolution": "peacemaker_legend_status"
+    },
+    "story_ending_influence": {
+      "restoration_path": "patrician + watch support required",
+      "amplification_path": "university + creatures support required",
+      "balance_path": "magical_community + common_folk support required",
+      "transcendence_path": "mixed high reputation all factions required"
+    },
+    "legacy_effects": {
+      "new_game_plus": "reputation bonuses carry over",
+      "world_state": "faction relationships permanently changed",
+      "npc_memories": "special dialogue acknowledging past relationship"
+    }
+  }
+}

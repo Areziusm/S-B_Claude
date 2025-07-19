@@ -1,0 +1,364 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "format_version": "base_game",
+    "total_templates": 45,
+    "procedural_variants": 200,
+    "expansion_ready": true,
+    "dependencies": ["character_data", "faction_relationships", "economy_data"]
+  },
+  "template_categories": {
+    "story_main": {
+      "description": "Quêtes d'histoire principale",
+      "auto_generation": false,
+      "xp_multiplier": 2.0,
+      "reputation_impact": "high"
+    },
+    "faction_primary": {
+      "description": "Quêtes majeures de faction",
+      "auto_generation": false,
+      "xp_multiplier": 1.5,
+      "reputation_impact": "high"
+    },
+    "citizen_standard": {
+      "description": "Quêtes citoyennes standard",
+      "auto_generation": true,
+      "xp_multiplier": 1.0,
+      "reputation_impact": "medium"
+    },
+    "creature_observation": {
+      "description": "Quêtes d'observation spécialisées",
+      "auto_generation": true,
+      "xp_multiplier": 1.2,
+      "reputation_impact": "low"
+    },
+    "exploration_discovery": {
+      "description": "Découverte de lieux secrets",
+      "auto_generation": true,
+      "xp_multiplier": 1.3,
+      "reputation_impact": "medium"
+    },
+    "emergent_consequence": {
+      "description": "Quêtes émergentes des actions joueur",
+      "auto_generation": true,
+      "xp_multiplier": 1.1,
+      "reputation_impact": "variable"
+    }
+  },
+  "quest_templates": {
+    "investigate_creature_reports": {
+      "id": "CT001",
+      "category": "creature_observation",
+      "title_template": "Enquête sur {creature_type} Étranges",
+      "description_template": "Des rapports font état de {creature_type} aux comportements inhabituels près de {location}. Investiguer et documenter.",
+      "difficulty": "easy",
+      "estimated_duration": "15-30min",
+      "requirements": {
+        "level_min": 1,
+        "skills": [],
+        "items": ["observation_journal"],
+        "reputation": {}
+      },
+      "objectives": {
+        "primary": [
+          {
+            "type": "observe_creature",
+            "target": "{creature_id}",
+            "count": 3,
+            "description": "Observer {count} {creature_type}"
+          },
+          {
+            "type": "return_to_npc",
+            "target": "{quest_giver}",
+            "description": "Rapporter vos observations"
+          }
+        ],
+        "optional": [
+          {
+            "type": "discover_evolution",
+            "target": "{creature_id}",
+            "description": "Déclencher une évolution",
+            "xp_bonus": 50
+          }
+        ]
+      },
+      "rewards": {
+        "xp": "50 + (player_level * 5)",
+        "currency": "2-5 AM_dollars",
+        "items": [],
+        "reputation": {
+          "university": 5,
+          "common_folk": 2
+        }
+      },
+      "generation_params": {
+        "creature_pool": ["pigeon_ankh_morpork", "cat_gutter", "rat_common"],
+        "location_pool": ["dolly_sisters", "shades", "merchants_quarter"],
+        "npc_pool": ["concerned_citizen", "market_vendor", "watch_member"]
+      }
+    },
+    "guild_initiation": {
+      "id": "GI001",
+      "category": "faction_primary",
+      "title_template": "Initiation à la Guilde des {guild_name}",
+      "description_template": "La Guilde des {guild_name} vous propose un test d'initiation pour évaluer vos compétences.",
+      "difficulty": "medium",
+      "estimated_duration": "45-60min",
+      "requirements": {
+        "level_min": 5,
+        "skills": ["{guild_primary_skill}"],
+        "reputation": {
+          "{guild_faction}": 25
+        }
+      },
+      "objectives": {
+        "primary": [
+          {
+            "type": "skill_test",
+            "skill": "{guild_primary_skill}",
+            "difficulty": 15,
+            "description": "Démontrer votre maîtrise de {skill_name}"
+          },
+          {
+            "type": "complete_trial",
+            "target": "{guild_trial_type}",
+            "description": "Réussir l'épreuve de la guilde"
+          }
+        ],
+        "secondary": [
+          {
+            "type": "impress_examiner",
+            "target": "{guild_examiner}",
+            "description": "Impressionner l'examinateur",
+            "reputation_bonus": 10
+          }
+        ]
+      },
+      "rewards": {
+        "xp": "100 + (player_level * 10)",
+        "currency": "10-25 AM_dollars",
+        "items": ["{guild_novice_equipment}"],
+        "reputation": {
+          "{guild_faction}": 25
+        },
+        "unlocks": ["guild_advanced_services", "guild_exclusive_quests"]
+      },
+      "generation_params": {
+        "guild_options": {
+          "thieves": {
+            "primary_skill": "stealth",
+            "trial_type": "pickpocket_test",
+            "examiner": "guild_instructor_thieves"
+          },
+          "merchants": {
+            "primary_skill": "negotiation",
+            "trial_type": "trading_challenge",
+            "examiner": "guild_instructor_merchants"
+          },
+          "assassins": {
+            "primary_skill": "precision",
+            "trial_type": "stealth_elimination",
+            "examiner": "guild_instructor_assassins"
+          }
+        }
+      }
+    },
+    "citizen_favor": {
+      "id": "CF001",
+      "category": "citizen_standard",
+      "title_template": "Service pour {npc_name}",
+      "description_template": "{npc_name} a besoin d'aide avec {problem_type}. Une récompense est proposée.",
+      "difficulty": "easy",
+      "estimated_duration": "10-20min",
+      "requirements": {
+        "level_min": 1
+      },
+      "objectives": {
+        "primary": [
+          {
+            "type": "{task_type}",
+            "target": "{task_target}",
+            "count": "{task_count}",
+            "description": "{task_description}"
+          }
+        ]
+      },
+      "rewards": {
+        "xp": "25 + (player_level * 3)",
+        "currency": "1-8 AM_dollars",
+        "reputation": {
+          "common_folk": 3
+        }
+      },
+      "generation_params": {
+        "task_types": {
+          "delivery": {
+            "description": "Livrer {item} à {target_npc}",
+            "target_pool": ["local_npcs"],
+            "difficulty": "trivial"
+          },
+          "fetch": {
+            "description": "Récupérer {count} {item} pour {npc_name}",
+            "target_pool": ["common_items", "creature_drops"],
+            "difficulty": "easy"
+          },
+          "escort": {
+            "description": "Escorter {npc_name} jusqu'à {destination}",
+            "target_pool": ["nearby_locations"],
+            "difficulty": "easy"
+          },
+          "investigation": {
+            "description": "Enquêter sur {mystery} pour {npc_name}",
+            "target_pool": ["local_mysteries"],
+            "difficulty": "medium"
+          }
+        }
+      }
+    },
+    "creature_evolution_study": {
+      "id": "CES001",
+      "category": "creature_observation",
+      "title_template": "Étude Évolutive : {creature_name}",
+      "description_template": "L'Université Invisible demande une étude approfondie de l'évolution des {creature_name} sous observation magique.",
+      "difficulty": "medium",
+      "estimated_duration": "30-45min",
+      "requirements": {
+        "level_min": 3,
+        "skills": ["observation"],
+        "items": ["enhanced_observation_tools"]
+      },
+      "objectives": {
+        "primary": [
+          {
+            "type": "observe_evolution_stages",
+            "target": "{creature_id}",
+            "stages": [1, 2, 3],
+            "description": "Observer les 3 premiers stades d'évolution"
+          },
+          {
+            "type": "document_changes",
+            "count": 5,
+            "description": "Documenter 5 changements comportementaux"
+          },
+          {
+            "type": "submit_report",
+            "target": "university_research_desk",
+            "description": "Soumettre le rapport d'étude"
+          }
+        ],
+        "optional": [
+          {
+            "type": "discover_rare_mutation",
+            "target": "{creature_id}",
+            "description": "Déclencher une mutation rare (1% chance)",
+            "xp_bonus": 200
+          }
+        ]
+      },
+      "rewards": {
+        "xp": "75 + (creature_rarity * 25)",
+        "currency": "5-15 AM_dollars",
+        "items": ["research_notes", "observation_enhancement"],
+        "reputation": {
+          "university": 15,
+          "patrician": 5
+        }
+      }
+    },
+    "economic_disruption": {
+      "id": "ED001",
+      "category": "emergent_consequence",
+      "title_template": "Crise Économique : {economic_sector}",
+      "description_template": "Vos observations ont perturbé le secteur {economic_sector}. Les guildes demandent une intervention.",
+      "difficulty": "hard",
+      "estimated_duration": "60-90min",
+      "trigger_conditions": {
+        "creature_evolution_count": ">= 10",
+        "economic_disruption_threshold": ">= 50",
+        "affected_npcs": ">= 5"
+      },
+      "objectives": {
+        "primary": [
+          {
+            "type": "mediate_conflict",
+            "participants": ["{affected_guild}", "creature_representatives"],
+            "description": "Médiation entre guilde et créatures évoluées"
+          },
+          {
+            "type": "find_compromise",
+            "options": ["economic_adaptation", "creature_relocation", "new_regulations"],
+            "description": "Trouver une solution acceptable"
+          }
+        ],
+        "branching": [
+          {
+            "condition": "compromise_type == 'economic_adaptation'",
+            "objective": {
+              "type": "establish_new_trade",
+              "description": "Établir nouveaux accords commerciaux"
+            }
+          },
+          {
+            "condition": "compromise_type == 'creature_relocation'",
+            "objective": {
+              "type": "relocate_creatures",
+              "description": "Négocier relocalisation des créatures"
+            }
+          }
+        ]
+      },
+      "rewards": {
+        "xp": "150 + (complexity_factor * 50)",
+        "currency": "20-50 AM_dollars",
+        "reputation": {
+          "affected_guild": "variable (-20 to +30)",
+          "creatures": "variable (-10 to +25)",
+          "patrician": 10
+        },
+        "consequences": {
+          "economic_rebalance": true,
+          "new_services_unlocked": true,
+          "future_quest_modifications": true
+        }
+      }
+    }
+  },
+  "procedural_generation": {
+    "daily_refresh_rate": 3,
+    "max_active_procedural": 10,
+    "difficulty_scaling": {
+      "base_difficulty": "player_level / 5",
+      "random_variance": 0.2,
+      "story_progression_modifier": 0.1
+    },
+    "reward_scaling": {
+      "xp_base": "25 * difficulty_multiplier",
+      "currency_base": "difficulty_multiplier * economic_inflation",
+      "reputation_base": "5 * faction_importance"
+    },
+    "location_restrictions": {
+      "prologue": ["dolly_sisters"],
+      "act1": ["dolly_sisters", "university", "patrician_palace", "guilds_quarter"],
+      "act2": ["all_ankh_morpork", "port_ankh"],
+      "act3": ["all_regions"]
+    }
+  },
+  "quest_chains": {
+    "maurice_companion": {
+      "id": "MC001",
+      "chain_length": 8,
+      "template_sequence": ["first_meeting", "trust_building", "revelation", "partnership", "crisis", "loyalty_test", "evolution", "bond_completion"],
+      "requirements": {
+        "story_progression": "prologue_complete"
+      }
+    },
+    "guild_mastery": {
+      "id": "GM001",
+      "chain_length": 12,
+      "template_sequence": ["initiation", "basic_training", "first_assignment", "skill_development", "intermediate_test", "specialized_mission", "reputation_building", "advanced_training", "mastework_challenge", "leadership_opportunity", "guild_reform", "mastery_achievement"],
+      "requirements": {
+        "faction_reputation": ">= 50"
+      }
+    }
+  }
+}

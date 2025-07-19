@@ -1,0 +1,521 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "format_version": "base_game",
+    "max_level": 100,
+    "prestige_levels": 50,
+    "skill_trees": 6,
+    "total_skills": 312,
+    "expansion_ready": true,
+    "balancing_philosophy": "horizontal_progression_focus"
+  },
+  "level_progression": {
+    "xp_table": {
+      "formula": "base_xp * (level^1.2) + (level * level_modifier)",
+      "base_xp": 100,
+      "level_modifier": 25,
+      "calculated_values": {
+        "1": 0,
+        "2": 125,
+        "3": 280,
+        "4": 470,
+        "5": 695,
+        "10": 2180,
+        "15": 4520,
+        "20": 7680,
+        "25": 11720,
+        "30": 16680,
+        "40": 28960,
+        "50": 45000,
+        "60": 65280,
+        "75": 105625,
+        "90": 165480,
+        "100": 230000
+      },
+      "prestige_multiplier": 1.5
+    },
+    "level_rewards": {
+      "skill_points_per_level": 2,
+      "attribute_points_per_level": 1,
+      "milestone_rewards": {
+        "5": {
+          "reward_type": "ability_unlock",
+          "description": "Première spécialisation disponible"
+        },
+        "10": {
+          "reward_type": "multiclass_unlock",
+          "description": "Multiclassage débloqué"
+        },
+        "20": {
+          "reward_type": "advanced_abilities",
+          "description": "Compétences avancées"
+        },
+        "25": {
+          "reward_type": "region_access",
+          "description": "Nouvelles régions disponibles"
+        },
+        "50": {
+          "reward_type": "mastery_path",
+          "description": "Voies de maîtrise"
+        },
+        "75": {
+          "reward_type": "legendary_skills",
+          "description": "Compétences légendaires"
+        },
+        "100": {
+          "reward_type": "prestige_access",
+          "description": "Système de prestige"
+        }
+      }
+    }
+  },
+  "skill_trees": {
+    "observation_specialist": {
+      "id": "ST001",
+      "name": "Spécialiste de l'Observation",
+      "description": "Maîtrise de l'art d'observer et cataloguer les créatures",
+      "primary_attribute": "perception",
+      "secondary_attribute": "intelligence",
+      "max_tier": 5,
+      "skills": {
+        "enhanced_observation": {
+          "id": "OS001",
+          "name": "Observation Améliorée",
+          "tier": 1,
+          "max_rank": 5,
+          "cost_per_rank": [1, 1, 2, 2, 3],
+          "prerequisites": [],
+          "effects": {
+            "observation_range": "+10% per rank",
+            "observation_speed": "+15% per rank",
+            "detail_accuracy": "+5% per rank"
+          },
+          "description": "Améliore la portée et précision des observations"
+        },
+        "creature_empathy": {
+          "id": "OS002",
+          "name": "Empathie Créature",
+          "tier": 2,
+          "max_rank": 3,
+          "cost_per_rank": [2, 3, 4],
+          "prerequisites": ["enhanced_observation:3"],
+          "effects": {
+            "creature_reaction": "+20% per rank",
+            "evolution_trigger_chance": "+10% per rank",
+            "hostile_creature_calm": "+15% per rank"
+          },
+          "description": "Établit une connexion empathique avec les créatures"
+        },
+        "mass_observation": {
+          "id": "OS003",
+          "name": "Observation de Masse",
+          "tier": 3,
+          "max_rank": 3,
+          "cost_per_rank": [3, 4, 5],
+          "prerequisites": ["creature_empathy:2"],
+          "effects": {
+            "simultaneous_targets": "+1 per rank",
+            "group_evolution_chance": "+25% per rank"
+          },
+          "description": "Permet d'observer plusieurs créatures simultanément"
+        },
+        "evolutionary_prediction": {
+          "id": "OS004",
+          "name": "Prédiction Évolutive",
+          "tier": 4,
+          "max_rank": 3,
+          "cost_per_rank": [5, 6, 7],
+          "prerequisites": ["mass_observation:2"],
+          "effects": {
+            "evolution_preview": "voir prochaine évolution",
+            "rare_mutation_chance": "+5% per rank",
+            "evolution_guidance": "influencer direction évolution"
+          },
+          "description": "Prédit et influence les évolutions futures"
+        },
+        "reality_observer": {
+          "id": "OS005",
+          "name": "Observateur de Réalité",
+          "tier": 5,
+          "max_rank": 1,
+          "cost_per_rank": [10],
+          "prerequisites": ["evolutionary_prediction:3"],
+          "effects": {
+            "reality_perception": "voir distorsions magiques",
+            "causality_trace": "comprendre liens cause-effet",
+            "narrative_awareness": "perception méta-narrative"
+          },
+          "description": "Maîtrise ultime de l'observation universelle"
+        }
+      }
+    },
+    "diplomatic_network": {
+      "id": "ST002",
+      "name": "Réseau Diplomatique",
+      "description": "Art de la négociation et construction de relations",
+      "primary_attribute": "charisma",
+      "secondary_attribute": "intelligence",
+      "skills": {
+        "silver_tongue": {
+          "id": "DN001",
+          "name": "Langue d'Argent",
+          "tier": 1,
+          "max_rank": 5,
+          "effects": {
+            "dialogue_options": "+1 per rank",
+            "persuasion_success": "+15% per rank",
+            "reputation_gain": "+10% per rank"
+          }
+        },
+        "faction_mediator": {
+          "id": "DN002",
+          "name": "Médiateur de Faction",
+          "tier": 2,
+          "max_rank": 3,
+          "prerequisites": ["silver_tongue:3"],
+          "effects": {
+            "faction_conflict_resolution": "+25% per rank",
+            "reputation_loss_reduction": "+20% per rank",
+            "neutral_ground_access": "déblocage zones neutres"
+          }
+        },
+        "information_broker": {
+          "id": "DN003",
+          "name": "Courtier en Information",
+          "tier": 3,
+          "max_rank": 3,
+          "prerequisites": ["faction_mediator:2"],
+          "effects": {
+            "rumor_accuracy": "+30% per rank",
+            "secret_discovery": "+1 per rank per day",
+            "information_value": "+50% selling price per rank"
+          }
+        }
+      }
+    },
+    "magical_scholar": {
+      "id": "ST003",
+      "name": "Érudit Magique",
+      "description": "Maîtrise de la théorie et pratique magique",
+      "primary_attribute": "intelligence",
+      "secondary_attribute": "wisdom",
+      "skills": {
+        "octarine_manipulation": {
+          "id": "MS001",
+          "name": "Manipulation Octarine",
+          "tier": 1,
+          "max_rank": 5,
+          "effects": {
+            "spell_power": "+20% per rank",
+            "chaos_magic_control": "+10% per rank",
+            "mana_efficiency": "+15% per rank"
+          }
+        },
+        "headology_basics": {
+          "id": "MS002",
+          "name": "Bases de Headologie",
+          "tier": 2,
+          "max_rank": 3,
+          "prerequisites": ["octarine_manipulation:2"],
+          "effects": {
+            "psychological_influence": "+25% per rank",
+            "belief_manipulation": "déblocage capacités",
+            "witch_approval": "+10 toutes sorcières per rank"
+          }
+        },
+        "narrative_magic": {
+          "id": "MS003",
+          "name": "Magie Narrative",
+          "tier": 4,
+          "max_rank": 3,
+          "prerequisites": ["headology_basics:3"],
+          "effects": {
+            "story_influence": "modification probabilités événements",
+            "dramatic_timing": "+50% critical moments",
+            "genre_awareness": "résistance clichés"
+          }
+        }
+      }
+    },
+    "urban_survivor": {
+      "id": "ST004",
+      "name": "Survivant Urbain",
+      "description": "Navigation et survie dans Ankh-Morpork",
+      "primary_attribute": "dexterity",
+      "secondary_attribute": "constitution",
+      "skills": {
+        "street_knowledge": {
+          "id": "US001",
+          "name": "Connaissance des Rues",
+          "tier": 1,
+          "max_rank": 5,
+          "effects": {
+            "navigation_speed": "+20% per rank",
+            "shortcut_discovery": "+1 per rank",
+            "danger_avoidance": "+15% per rank"
+          }
+        },
+        "guild_connections": {
+          "id": "US002",
+          "name": "Connections de Guilde",
+          "tier": 2,
+          "max_rank": 3,
+          "prerequisites": ["street_knowledge:3"],
+          "effects": {
+            "guild_service_discount": "+15% per rank",
+            "black_market_access": "déblocage services",
+            "guild_protection": "réduction hostilité"
+          }
+        }
+      }
+    },
+    "combat_specialist": {
+      "id": "ST005",
+      "name": "Spécialiste Combat",
+      "description": "Maîtrise des arts martiaux et tactiques",
+      "primary_attribute": "strength",
+      "secondary_attribute": "dexterity",
+      "skills": {
+        "tactical_combat": {
+          "id": "CS001",
+          "name": "Combat Tactique",
+          "tier": 1,
+          "max_rank": 5,
+          "effects": {
+            "initiative_bonus": "+2 per rank",
+            "action_points": "+0.5 per rank",
+            "critical_chance": "+5% per rank"
+          }
+        },
+        "non_lethal_methods": {
+          "id": "CS002",
+          "name": "Méthodes Non-Létales",
+          "tier": 2,
+          "max_rank": 3,
+          "prerequisites": ["tactical_combat:2"],
+          "effects": {
+            "subdue_chance": "+30% per rank",
+            "negotiation_in_combat": "déblocage options",
+            "reputation_preservation": "pas de malus pour violence"
+          }
+        }
+      }
+    },
+    "entrepreneur": {
+      "id": "ST006",
+      "name": "Entrepreneur",
+      "description": "Commerce, artisanat et gestion économique",
+      "primary_attribute": "intelligence",
+      "secondary_attribute": "charisma",
+      "skills": {
+        "merchant_savvy": {
+          "id": "EN001",
+          "name": "Sens du Commerce",
+          "tier": 1,
+          "max_rank": 5,
+          "effects": {
+            "buy_price_reduction": "+10% per rank",
+            "sell_price_increase": "+10% per rank",
+            "market_trend_prediction": "+1 day per rank"
+          }
+        },
+        "crafting_mastery": {
+          "id": "EN002",
+          "name": "Maîtrise Artisanale",
+          "tier": 2,
+          "max_rank": 5,
+          "prerequisites": ["merchant_savvy:2"],
+          "effects": {
+            "crafting_speed": "+25% per rank",
+            "quality_chance": "+15% per rank",
+            "resource_efficiency": "+10% per rank"
+          }
+        },
+        "business_empire": {
+          "id": "EN003",
+          "name": "Empire Commercial",
+          "tier": 4,
+          "max_rank": 3,
+          "prerequisites": ["crafting_mastery:4"],
+          "effects": {
+            "passive_income": "+50 AM_dollars/day per rank",
+            "business_expansion": "nouvelles propriétés",
+            "economic_influence": "modification prix marché"
+          }
+        }
+      }
+    }
+  },
+  "attributes": {
+    "primary_attributes": {
+      "strength": {
+        "name": "Force",
+        "description": "Force physique et résistance",
+        "base_value": 10,
+        "max_value": 100,
+        "affects": ["carry_capacity", "melee_damage", "physical_intimidation"]
+      },
+      "dexterity": {
+        "name": "Dextérité",
+        "description": "Agilité et précision",
+        "base_value": 10,
+        "max_value": 100,
+        "affects": ["initiative", "dodge_chance", "stealth", "crafting_precision"]
+      },
+      "constitution": {
+        "name": "Constitution",
+        "description": "Santé et endurance",
+        "base_value": 10,
+        "max_value": 100,
+        "affects": ["health_points", "stamina", "poison_resistance", "fatigue_resistance"]
+      },
+      "intelligence": {
+        "name": "Intelligence",
+        "description": "Capacité de raisonnement et mémoire",
+        "base_value": 10,
+        "max_value": 100,
+        "affects": ["skill_points", "magic_power", "observation_detail", "puzzle_solving"]
+      },
+      "wisdom": {
+        "name": "Sagesse",
+        "description": "Intuition et bon sens",
+        "base_value": 10,
+        "max_value": 100,
+        "affects": ["magic_resistance", "insight", "animal_empathy", "danger_sense"]
+      },
+      "charisma": {
+        "name": "Charisme",
+        "description": "Force de personnalité et leadership",
+        "base_value": 10,
+        "max_value": 100,
+        "affects": ["dialogue_options", "reputation_gain", "price_negotiation", "leadership"]
+      },
+      "perception": {
+        "name": "Perception",
+        "description": "Capacité d'observation et de détection",
+        "base_value": 10,
+        "max_value": 100,
+        "affects": ["observation_range", "secret_detection", "creature_behavior_reading", "detail_accuracy"]
+      }
+    },
+    "derived_stats": {
+      "health_points": "constitution * 5 + level * 2",
+      "magic_points": "intelligence * 3 + wisdom * 2 + level",
+      "stamina_points": "constitution * 3 + strength + dexterity",
+      "initiative": "dexterity / 2 + perception / 3",
+      "carry_capacity": "strength * 2 + constitution",
+      "observation_power": "perception * 2 + intelligence + wisdom / 2"
+    }
+  },
+  "difficulty_scaling": {
+    "combat_encounters": {
+      "easy": "player_level * 0.8",
+      "medium": "player_level * 1.0",
+      "hard": "player_level * 1.3",
+      "boss": "player_level * 1.8",
+      "legendary": "player_level * 2.5"
+    },
+    "skill_checks": {
+      "trivial": 5,
+      "easy": "5 + (player_level / 4)",
+      "medium": "10 + (player_level / 3)",
+      "hard": "15 + (player_level / 2)",
+      "very_hard": "20 + (player_level / 1.5)",
+      "legendary": "25 + player_level"
+    },
+    "observation_requirements": {
+      "common_creatures": "perception / 2",
+      "uncommon_creatures": "perception * 0.75",
+      "rare_creatures": "perception * 1.0",
+      "legendary_creatures": "perception * 1.5",
+      "unique_creatures": "perception * 2.0"
+    }
+  },
+  "progression_rewards": {
+    "xp_sources": {
+      "quest_completion": {
+        "main_story": "base_reward * 2.0",
+        "faction_major": "base_reward * 1.5",
+        "citizen_standard": "base_reward * 1.0",
+        "discovery": "base_reward * 1.2",
+        "emergency": "base_reward * 1.1"
+      },
+      "creature_observation": {
+        "first_observation": "25 + (creature_rarity * 15)",
+        "evolution_trigger": "50 + (evolution_stage * 20)",
+        "rare_mutation": 200,
+        "complete_species_study": "100 + (creature_rarity * 50)"
+      },
+      "social_interactions": {
+        "dialogue_success": "5 + (complexity / 2)",
+        "relationship_milestone": "25 + (relationship_level * 5)",
+        "faction_rank_up": "100 + (rank * 25)",
+        "conflict_resolution": "75 + (complexity * 10)"
+      },
+      "exploration": {
+        "location_discovery": "20 + (location_importance * 10)",
+        "secret_finding": "15 + (secret_rarity * 20)",
+        "map_completion": "50 + (area_size * 5)"
+      },
+      "combat": {
+        "victory": "enemy_level * 10",
+        "non_lethal_victory": "enemy_level * 15",
+        "creative_solution": "enemy_level * 20",
+        "boss_victory": "boss_level * 50"
+      }
+    },
+    "bonus_multipliers": {
+      "consecutive_days_played": "1.0 + (days / 10) * 0.05",
+      "difficulty_setting": {
+        "easy": 0.8,
+        "normal": 1.0,
+        "hard": 1.3,
+        "legendary": 1.8
+      },
+      "story_progression": {
+        "prologue": 1.2,
+        "act1": 1.0,
+        "act2": 0.9,
+        "act3": 0.8
+      },
+      "creativity_bonus": "1.0 + (unique_solutions / 100)"
+    }
+  },
+  "prestige_system": {
+    "unlock_level": 100,
+    "prestige_levels": 50,
+    "benefits_per_level": {
+      "skill_point_bonus": 1,
+      "xp_bonus": "2%",
+      "starting_reputation": 5,
+      "exclusive_abilities": "every 10 levels"
+    },
+    "prestige_paths": {
+      "master_observer": {
+        "requirement": "complete all observation skill trees",
+        "bonus": "start with enhanced observation tools"
+      },
+      "diplomatic_legend": {
+        "requirement": "achieve max reputation with all factions",
+        "bonus": "start with universal respect"
+      },
+      "magical_theorist": {
+        "requirement": "master all magical skill trees",
+        "bonus": "start with advanced magical knowledge"
+      },
+      "urban_legend": {
+        "requirement": "discover all secrets in Ankh-Morpork",
+        "bonus": "start with complete city knowledge"
+      }
+    }
+  },
+  "balancing_constants": {
+    "xp_curve_smoothness": 1.2,
+    "skill_cost_progression": 1.15,
+    "attribute_improvement_cost": "current_value * 10",
+    "difficulty_ramp": "gradual_with_spikes",
+    "player_power_ceiling": "horizontal_progression_focus",
+    "economic_inflation_rate": 0.02,
+    "reputation_decay_rate": -0.1
+  }
+}

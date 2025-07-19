@@ -1,0 +1,569 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-01-15",
+  "total_creatures": 52,
+  
+  "pigeon_urban": {
+    "id": "pigeon_urban",
+    "name": "Pigeon Urbain d'Ankh-Morpork",
+    "latin_name": "Columba ankhmorporkensis",
+    "category": "urban_common",
+    "rarity": "common",
+    "habitat": "urban",
+    "base_stats": {
+      "health": 15,
+      "intelligence": 3,
+      "agility": 7,
+      "charm": 2,
+      "magic_affinity": 1
+    },
+    "physical_description": {
+      "size": "medium",
+      "color": "gray_blue",
+      "wingspan": 60,
+      "weight": 300,
+      "distinctive_features": ["intelligent_eyes", "coordinated_flight"]
+    },
+    "behavior": {
+      "normal": ["group_foraging", "roof_perching", "bread_seeking"],
+      "social": "flocking",
+      "intelligence_level": "basic",
+      "communication": ["coo", "wing_flap", "head_bob"]
+    },
+    "evolutions": {
+      "stage_1": {
+        "name": "Pigeon Organisé",
+        "requirements": {
+          "observation_count": 3,
+          "time_observed": 60,
+          "environment": "street"
+        },
+        "changes": {
+          "intelligence": "+2",
+          "behavior": ["formation_flight", "strategic_positioning"],
+          "new_abilities": ["simple_tool_use"],
+          "visual_changes": ["more_alert_posture", "coordinated_group_behavior"]
+        },
+        "description": "Le pigeon commence à montrer des signes d'organisation collective.",
+        "dialogue": ["Roucou... direction ouest!", "Formation triangle!"]
+      },
+      "stage_2": {
+        "name": "Pigeon Messager",
+        "requirements": {
+          "observation_count": 8,
+          "player_interaction": true,
+          "items_carried": 1
+        },
+        "changes": {
+          "intelligence": "+3",
+          "agility": "+2",
+          "behavior": ["message_delivery", "route_optimization"],
+          "new_abilities": ["message_carrying", "address_recognition"],
+          "equipment": ["tiny_satchel"]
+        },
+        "description": "Le pigeon développe la capacité de livrer des messages avec précision.",
+        "dialogue": ["Message pour M. Johnson!", "Livraison expresse!"]
+      },
+      "stage_3": {
+        "name": "Pigeon Syndicaliste",
+        "requirements": {
+          "observation_count": 15,
+          "social_interactions": 5,
+          "economic_activity": true
+        },
+        "changes": {
+          "intelligence": "+5",
+          "charm": "+4",
+          "behavior": ["wage_negotiation", "strike_organization"],
+          "new_abilities": ["collective_bargaining", "protest_coordination"],
+          "equipment": ["union_badge", "tiny_picket_sign"]
+        },
+        "description": "Le pigeon devient conscient de ses droits et forme un syndicat.",
+        "dialogue": ["Nous exigeons de meilleures graines!", "Solidarité aviaire!"]
+      },
+      "stage_4": {
+        "name": "Pigeon Gestionnaire",
+        "requirements": {
+          "observation_count": 25,
+          "leadership_displayed": true,
+          "economic_success": true
+        },
+        "changes": {
+          "intelligence": "+7",
+          "charm": "+6",
+          "magic_affinity": "+3",
+          "behavior": ["business_management", "route_optimization", "quality_control"],
+          "new_abilities": ["logistics_planning", "staff_management", "customer_service"],
+          "equipment": ["tiny_clipboard", "reading_glasses", "business_suit"]
+        },
+        "description": "Le pigeon évolue en gestionnaire d'une entreprise de messagerie prospère.",
+        "dialogue": ["Nos délais de livraison sont excellents!", "Service client impeccable!"]
+      }
+    },
+    "observation_data": {
+      "default_entries": [
+        "Pigeon urbain standard observé. Comportement de groupe typique.",
+        "Formation de vol inhabituelle notée. Intelligence supérieure à la moyenne ?",
+        "Coordination remarquable entre individus. Possible communication complexe."
+      ],
+      "special_triggers": {
+        "feeding": "Stratégie d'approche calculée observée.",
+        "threat": "Système d'alerte efficace entre individus.",
+        "weather": "Adaptation comportementale selon conditions météo."
+      }
+    }
+  },
+
+  "maurice": {
+    "id": "maurice",
+    "name": "Maurice le Rat Érudit",
+    "latin_name": "Rattus rattus sapiens",
+    "category": "unique_companion",
+    "rarity": "legendary",
+    "habitat": "urban_underground",
+    "base_stats": {
+      "health": 25,
+      "intelligence": 12,
+      "agility": 8,
+      "charm": 9,
+      "magic_affinity": 6
+    },
+    "physical_description": {
+      "size": "medium",
+      "color": "brown_gray",
+      "length": 20,
+      "weight": 250,
+      "distinctive_features": ["monocle", "upright_posture", "expressive_whiskers"]
+    },
+    "behavior": {
+      "normal": ["careful_observation", "strategic_thinking", "protective_instincts"],
+      "social": "solitary_but_helpful",
+      "intelligence_level": "genius",
+      "communication": ["fluent_human_speech", "rat_translation", "sarcastic_commentary"]
+    },
+    "evolutions": {
+      "stage_1": {
+        "name": "Maurice le Bureaucrate",
+        "requirements": {
+          "story_trigger": "first_official_observation",
+          "observation_count": 1,
+          "environment": "official"
+        },
+        "changes": {
+          "intelligence": "+2",
+          "charm": "+1",
+          "behavior": ["form_completion", "regulatory_compliance"],
+          "new_abilities": ["bureaucratic_navigation", "paperwork_assistance"],
+          "equipment": ["tiny_briefcase", "official_ID", "reading_glasses"],
+          "visual_changes": ["more_formal_posture", "occasional_tie"]
+        },
+        "description": "Maurice développe une compréhension bureaucratique après catalogage officiel.",
+        "dialogue": ["Les implications fiscales sont fascinantes!", "Avez-vous rempli le formulaire 27-B?"]
+      },
+      "stage_2": {
+        "name": "Maurice le Conseiller",
+        "requirements": {
+          "observation_count": 10,
+          "player_relationship": 50,
+          "story_progress": "act1_started"
+        },
+        "changes": {
+          "intelligence": "+3",
+          "charm": "+3",
+          "magic_affinity": "+2",
+          "behavior": ["strategic_advice", "risk_assessment"],
+          "new_abilities": ["future_planning", "danger_prediction"],
+          "equipment": ["crystal_monocle", "wisdom_scroll"]
+        },
+        "description": "Maurice devient un conseiller expérimenté avec des capacités prédictives.",
+        "dialogue": ["Je sens que cette décision aura des conséquences...", "Mon expérience suggère..."]
+      }
+    },
+    "unique_properties": {
+      "is_companion": true,
+      "can_translate": true,
+      "story_essential": true,
+      "dialogue_extensive": true
+    }
+  },
+
+  "cat_street": {
+    "id": "cat_street",
+    "name": "Chat de Gouttière Standard",
+    "latin_name": "Felis streeticus",
+    "category": "urban_common",
+    "rarity": "common",
+    "habitat": "urban_alleys",
+    "base_stats": {
+      "health": 20,
+      "intelligence": 6,
+      "agility": 9,
+      "charm": 4,
+      "magic_affinity": 2
+    },
+    "evolutions": {
+      "stage_1": {
+        "name": "Chat Observateur",
+        "requirements": {
+          "observation_count": 2,
+          "stealth_bonus": true
+        },
+        "changes": {
+          "intelligence": "+2",
+          "new_abilities": ["strategic_positioning", "information_gathering"]
+        }
+      },
+      "stage_2": {
+        "name": "Chat Espion",
+        "requirements": {
+          "observation_count": 6,
+          "night_activity": true
+        },
+        "changes": {
+          "intelligence": "+3",
+          "agility": "+2",
+          "new_abilities": ["surveillance_network", "coded_meowing"]
+        }
+      },
+      "stage_3": {
+        "name": "Chat Maître-Espion",
+        "requirements": {
+          "observation_count": 12,
+          "intelligence_network": true
+        },
+        "changes": {
+          "intelligence": "+5",
+          "charm": "+3",
+          "new_abilities": ["network_coordination", "intel_analysis"],
+          "equipment": ["tiny_radio", "spy_collar"]
+        }
+      }
+    }
+  },
+
+  "cockroach_philosopher": {
+    "id": "cockroach_philosopher",
+    "name": "Cafard Philosophe",
+    "latin_name": "Blatta pensanta",
+    "category": "urban_magical",
+    "rarity": "uncommon",
+    "habitat": "kitchens_libraries",
+    "base_stats": {
+      "health": 5,
+      "intelligence": 8,
+      "agility": 6,
+      "charm": 1,
+      "magic_affinity": 7
+    },
+    "evolutions": {
+      "stage_1": {
+        "name": "Cafard Méditatif",
+        "requirements": {
+          "observation_count": 3,
+          "quiet_environment": true
+        },
+        "changes": {
+          "intelligence": "+3",
+          "behavior": ["contemplative_poses", "ethical_considerations"]
+        }
+      },
+      "stage_2": {
+        "name": "Cafard Éthicien",
+        "requirements": {
+          "observation_count": 8,
+          "moral_choices_witnessed": 3
+        },
+        "changes": {
+          "intelligence": "+5",
+          "charm": "+3",
+          "new_abilities": ["moral_guidance", "ethical_debate"]
+        }
+      }
+    }
+  },
+
+  "butterfly_quantum": {
+    "id": "butterfly_quantum",
+    "name": "Papillon Quantum Météo",
+    "latin_name": "Lepidoptera quantumensis",
+    "category": "magical_minor",
+    "rarity": "rare",
+    "habitat": "gardens_parks",
+    "base_stats": {
+      "health": 8,
+      "intelligence": 4,
+      "agility": 10,
+      "charm": 8,
+      "magic_affinity": 9
+    },
+    "evolutions": {
+      "stage_1": {
+        "name": "Papillon Coloriste",
+        "requirements": {
+          "observation_count": 2,
+          "emotional_state": "positive"
+        },
+        "changes": {
+          "charm": "+2",
+          "magic_affinity": "+1",
+          "new_abilities": ["emotion_color_display", "mood_synchronization"]
+        }
+      },
+      "stage_2": {
+        "name": "Papillon Météorologue",
+        "requirements": {
+          "observation_count": 6,
+          "weather_changes_witnessed": 3
+        },
+        "changes": {
+          "intelligence": "+3",
+          "magic_affinity": "+3",
+          "new_abilities": ["weather_prediction", "micro_climate_control"]
+        }
+      },
+      "stage_3": {
+        "name": "Papillon Maître du Temps",
+        "requirements": {
+          "observation_count": 12,
+          "magical_research": true
+        },
+        "changes": {
+          "intelligence": "+5",
+          "magic_affinity": "+5",
+          "new_abilities": ["weather_control", "atmospheric_manipulation"],
+          "equipment": ["tiny_weather_station", "cloud_compass"]
+        }
+      }
+    }
+  },
+
+  "spider_news": {
+    "id": "spider_news",
+    "name": "Araignée Tisseuse de Nouvelles",
+    "latin_name": "Aranea informaticus",
+    "category": "urban_magical",
+    "rarity": "uncommon",
+    "habitat": "corners_crevices",
+    "base_stats": {
+      "health": 3,
+      "intelligence": 7,
+      "agility": 8,
+      "charm": 2,
+      "magic_affinity": 6
+    },
+    "evolutions": {
+      "stage_1": {
+        "name": "Araignée Scribe",
+        "requirements": {
+          "observation_count": 4,
+          "written_material_nearby": true
+        },
+        "changes": {
+          "intelligence": "+2",
+          "new_abilities": ["text_weaving", "letter_formation"]
+        }
+      },
+      "stage_2": {
+        "name": "Araignée Journaliste",
+        "requirements": {
+          "observation_count": 9,
+          "news_events_witnessed": 5
+        },
+        "changes": {
+          "intelligence": "+4",
+          "charm": "+2",
+          "new_abilities": ["news_gathering", "headline_creation"]
+        }
+      }
+    }
+  },
+
+  "dragon_swamp_mini": {
+    "id": "dragon_swamp_mini",
+    "name": "Dragon des Marais Miniature",
+    "latin_name": "Draco palustris minimus",
+    "category": "legendary_activated",
+    "rarity": "legendary",
+    "habitat": "swamps_hidden",
+    "base_stats": {
+      "health": 40,
+      "intelligence": 10,
+      "agility": 7,
+      "charm": 3,
+      "magic_affinity": 12
+    },
+    "evolutions": {
+      "stage_1": {
+        "name": "Dragon Domestique",
+        "requirements": {
+          "observation_count": 1,
+          "peaceful_approach": true
+        },
+        "changes": {
+          "charm": "+3",
+          "new_abilities": ["tea_brewing", "gentle_fire_breathing"]
+        }
+      },
+      "stage_2": {
+        "name": "Dragon Barista",
+        "requirements": {
+          "observation_count": 8,
+          "tea_service_performed": 10
+        },
+        "changes": {
+          "intelligence": "+3",
+          "charm": "+4",
+          "new_abilities": ["perfect_temperature_control", "flavor_enhancement"],
+          "equipment": ["tiny_apron", "tea_service_set"]
+        }
+      }
+    }
+  },
+
+  "hybrid_cat_pigeon": {
+    "id": "hybrid_cat_pigeon",
+    "name": "Chat-Pigeon (Chageon)",
+    "latin_name": "Felis-Columba hybridus",
+    "category": "hybrid_creation",
+    "rarity": "mythical",
+    "habitat": "created_by_observation",
+    "base_stats": {
+      "health": 25,
+      "intelligence": 8,
+      "agility": 10,
+      "charm": 6,
+      "magic_affinity": 8
+    },
+    "creation_requirements": {
+      "simultaneous_observation": ["cat_street", "pigeon_urban"],
+      "magic_amplification": 3.0,
+      "observation_overlap_time": 30
+    },
+    "evolutions": {
+      "stage_1": {
+        "name": "Chageon Espion Aérien",
+        "requirements": {
+          "observation_count": 5,
+          "aerial_missions": 3
+        },
+        "changes": {
+          "agility": "+3",
+          "intelligence": "+2",
+          "new_abilities": ["aerial_surveillance", "stealth_flight"]
+        }
+      }
+    },
+    "unique_properties": {
+      "is_hybrid": true,
+      "flight_capable": true,
+      "independent_attitude": true,
+      "creation_only": true
+    }
+  },
+
+  "death_horse": {
+    "id": "death_horse",
+    "name": "Binky",
+    "latin_name": "Equus mortalis",
+    "category": "unique_special",
+    "rarity": "cosmic",
+    "habitat": "everywhere_nowhere",
+    "base_stats": {
+      "health": 999,
+      "intelligence": 15,
+      "agility": 12,
+      "charm": 8,
+      "magic_affinity": 20
+    },
+    "evolutions": {
+      "stage_1": {
+        "name": "Binky Observé",
+        "requirements": {
+          "death_interest": 75,
+          "philosophical_achievement": true
+        },
+        "changes": {
+          "charm": "+5",
+          "new_abilities": ["dimensional_travel", "temporal_stability"]
+        }
+      }
+    },
+    "unique_properties": {
+      "is_mount": true,
+      "dimensional_travel": true,
+      "death_associated": true,
+      "story_essential": true
+    }
+  },
+
+  "book_wandering": {
+    "id": "book_wandering",
+    "name": "Livre Vagabond",
+    "latin_name": "Librus ambulans",
+    "category": "environment_specific",
+    "rarity": "rare",
+    "habitat": "libraries_lspace",
+    "base_stats": {
+      "health": 15,
+      "intelligence": 11,
+      "agility": 4,
+      "charm": 6,
+      "magic_affinity": 10
+    },
+    "evolutions": {
+      "stage_1": {
+        "name": "Livre Sociable",
+        "requirements": {
+          "observation_count": 3,
+          "reader_interaction": true
+        },
+        "changes": {
+          "charm": "+3",
+          "new_abilities": ["story_sharing", "reader_attraction"]
+        }
+      },
+      "stage_2": {
+        "name": "Livre Mentor",
+        "requirements": {
+          "observation_count": 8,
+          "wisdom_shared": 5
+        },
+        "changes": {
+          "intelligence": "+4",
+          "charm": "+2",
+          "new_abilities": ["knowledge_transfer", "learning_acceleration"]
+        }
+      }
+    }
+  },
+
+  "clock_nostalgic": {
+    "id": "clock_nostalgic",
+    "name": "Horloge Nostalgique",
+    "latin_name": "Tempus melancholicus",
+    "category": "environment_specific",
+    "rarity": "uncommon",
+    "habitat": "old_buildings",
+    "base_stats": {
+      "health": 30,
+      "intelligence": 6,
+      "agility": 1,
+      "charm": 7,
+      "magic_affinity": 8
+    },
+    "evolutions": {
+      "stage_1": {
+        "name": "Horloge Mémorielle",
+        "requirements": {
+          "observation_count": 4,
+          "emotional_resonance": true
+        },
+        "changes": {
+          "intelligence": "+2",
+          "charm": "+3",
+          "new_abilities": ["memory_display", "temporal_glimpses"]
+        }
+      }
+    }
+  }
+}

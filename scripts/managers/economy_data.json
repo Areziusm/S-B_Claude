@@ -1,0 +1,493 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "format_version": "base_game",
+    "currency_system": "ankh_morpork_dollars",
+    "inflation_enabled": true,
+    "dynamic_pricing": true,
+    "regional_variations": true,
+    "expansion_ready": true,
+    "dependencies": ["character_data", "faction_relationships"]
+  },
+  "currency": {
+    "primary": {
+      "name": "Dollar Ankh-Morporkien",
+      "symbol": "AM$",
+      "abbreviation": "AMD",
+      "base_unit": "dollar",
+      "subdivisions": {
+        "penny": {
+          "value": 0.01,
+          "name": "pence",
+          "symbol": "p"
+        },
+        "shilling": {
+          "value": 0.12,
+          "name": "shilling",
+          "symbol": "s"
+        }
+      }
+    },
+    "regional_currencies": {
+      "lancre": {
+        "name": "Couronne de Lancre",
+        "exchange_rate": 0.95,
+        "stability": "high"
+      },
+      "uberwald": {
+        "name": "Gulden Sombre",
+        "exchange_rate": 1.15,
+        "stability": "medium"
+      },
+      "klatch": {
+        "name": "Dinar du Désert",
+        "exchange_rate": 0.87,
+        "stability": "low"
+      }
+    },
+    "starting_money": {
+      "prologue": 5.0,
+      "new_game_plus": 25.0,
+      "debug_mode": 9999.0
+    }
+  },
+  "economic_factors": {
+    "magic_inflation": {
+      "description": "Plus il y a de magie, plus les prix augmentent",
+      "formula": "base_price * (1 + magic_intensity * 0.1)",
+      "max_modifier": 2.5,
+      "affected_categories": ["magical_items", "services", "food", "crafting_materials"]
+    },
+    "observation_economy": {
+      "description": "Les créatures évoluées créent nouveaux services",
+      "creature_services": {
+        "pigeon_mail": {
+          "unlock_condition": "pigeon_evolution >= 3",
+          "price": "0.25 per message",
+          "efficiency": "90% delivery rate"
+        },
+        "cat_surveillance": {
+          "unlock_condition": "cat_evolution >= 2",
+          "price": "2.0 per day",
+          "service": "area monitoring"
+        },
+        "rat_information": {
+          "unlock_condition": "rat_network_established",
+          "price": "1.0 per rumor",
+          "accuracy": "75% + maurice_relationship"
+        }
+      }
+    },
+    "guild_monopolies": {
+      "thieves_guild": {
+        "services": ["lockpicking", "security_testing", "item_recovery"],
+        "price_control": "medium",
+        "reputation_discount": "up_to_50%"
+      },
+      "assassins_guild": {
+        "services": ["precision_elimination", "discrete_messaging", "etiquette_lessons"],
+        "price_control": "high",
+        "reputation_discount": "up_to_30%"
+      },
+      "merchants_guild": {
+        "services": ["trade_permits", "price_information", "bulk_purchasing"],
+        "price_control": "variable",
+        "reputation_discount": "up_to_40%"
+      }
+    },
+    "seasonal_fluctuations": {
+      "hogswatch": {
+        "food_prices": "+25%",
+        "gift_items": "+50%",
+        "services": "-10%"
+      },
+      "soul_cake_days": {
+        "magical_items": "+30%",
+        "food_prices": "+15%",
+        "entertainment": "+20%"
+      },
+      "summer_sales": {
+        "all_items": "-15%",
+        "clothing": "-30%",
+        "travel_services": "+10%"
+      }
+    }
+  },
+  "item_categories": {
+    "basic_necessities": {
+      "description": "Nourriture, vêtements de base, logement",
+      "price_volatility": "low",
+      "magic_sensitivity": "low",
+      "items": {
+        "bread": {
+          "base_price": 0.10,
+          "merchant_types": ["baker", "general_store"],
+          "quality_variants": {
+            "stale": 0.05,
+            "fresh": 0.10,
+            "artisanal": 0.25,
+            "magical": 0.50
+          }
+        },
+        "cheese": {
+          "base_price": 0.75,
+          "merchant_types": ["dairy_vendor", "general_store"],
+          "quality_variants": {
+            "basic": 0.75,
+            "aged": 1.50,
+            "imported": 3.00,
+            "magical": 5.00
+          }
+        },
+        "simple_clothing": {
+          "base_price": 2.50,
+          "merchant_types": ["tailor", "general_store"],
+          "variants": {
+            "work_clothes": 2.50,
+            "formal_attire": 8.00,
+            "guild_uniform": 15.00,
+            "magical_robe": 45.00
+          }
+        }
+      }
+    },
+    "crafting_materials": {
+      "description": "Matériaux pour artisanat et enchantement",
+      "price_volatility": "medium",
+      "magic_sensitivity": "high",
+      "items": {
+        "iron_ingot": {
+          "base_price": 1.25,
+          "merchant_types": ["blacksmith", "materials_vendor"],
+          "quality_grades": {
+            "poor": 0.8,
+            "standard": 1.0,
+            "good": 1.5,
+            "exceptional": 2.5,
+            "masterwork": 5.0
+          }
+        },
+        "magical_catalyst": {
+          "base_price": 8.50,
+          "merchant_types": ["alchemist", "university_supplies"],
+          "rarity_levels": {
+            "common": 1.0,
+            "uncommon": 3.0,
+            "rare": 8.0,
+            "epic": 25.0,
+            "legendary": 100.0
+          }
+        },
+        "creature_essence": {
+          "base_price": "dynamic",
+          "calculation": "creature_rarity * evolution_stage * 2.5",
+          "merchant_types": ["specialized_alchemist", "black_market"],
+          "legality": "varies_by_creature"
+        }
+      }
+    },
+    "magical_items": {
+      "description": "Objets enchantés et composants magiques",
+      "price_volatility": "high",
+      "magic_sensitivity": "very_high",
+      "items": {
+        "basic_focus": {
+          "base_price": 15.00,
+          "description": "Aide à la concentration magique",
+          "effects": "+10% mana efficiency"
+        },
+        "observation_lens": {
+          "base_price": 25.00,
+          "description": "Améliore la précision d'observation",
+          "effects": "+15% observation detail",
+          "craftable": true,
+          "recipe": ["glass_lens", "magical_catalyst", "precision_enchantment"]
+        },
+        "evolution_catalyst": {
+          "base_price": 75.00,
+          "description": "Accélère l'évolution des créatures",
+          "effects": "+50% evolution trigger chance",
+          "rarity": "rare",
+          "source": "university_research"
+        }
+      }
+    },
+    "services": {
+      "description": "Services professionnels et spécialisés",
+      "price_volatility": "medium",
+      "magic_sensitivity": "medium",
+      "offerings": {
+        "basic_healing": {
+          "base_price": 3.00,
+          "providers": ["temple", "healer", "igor"],
+          "effectiveness": "restores 50% health"
+        },
+        "magical_identification": {
+          "base_price": 5.00,
+          "providers": ["university", "magical_shop"],
+          "service": "identifies magical items"
+        },
+        "creature_consultation": {
+          "base_price": 8.00,
+          "providers": ["university_expert", "experienced_observer"],
+          "service": "advice on creature behavior and evolution"
+        },
+        "legal_representation": {
+          "base_price": 20.00,
+          "providers": ["guild_lawyer", "patrician_advocate"],
+          "service": "legal defense and documentation"
+        }
+      }
+    },
+    "luxury_goods": {
+      "description": "Objets de luxe et de collection",
+      "price_volatility": "high",
+      "magic_sensitivity": "low",
+      "items": {
+        "fine_wine": {
+          "base_price": 12.00,
+          "quality_tiers": {
+            "house_wine": 3.00,
+            "vintage": 12.00,
+            "rare_vintage": 50.00,
+            "legendary": 200.00
+          }
+        },
+        "art_object": {
+          "base_price": "variable",
+          "price_range": [10.00, 500.00],
+          "factors": ["artist_reputation", "historical_significance", "magical_enhancement"]
+        }
+      }
+    }
+  },
+  "merchant_data": {
+    "merchant_types": {
+      "general_store": {
+        "inventory_size": "large",
+        "price_markup": 1.15,
+        "reputation_discount": "up_to_20%",
+        "stock_categories": ["basic_necessities", "common_tools", "simple_materials"],
+        "haggling_allowed": true,
+        "credit_available": false
+      },
+      "specialized_vendor": {
+        "inventory_size": "medium",
+        "price_markup": 1.25,
+        "reputation_discount": "up_to_15%",
+        "expertise_bonus": "provides_advice",
+        "haggling_allowed": true,
+        "credit_available": "good_reputation_only"
+      },
+      "guild_supplier": {
+        "inventory_size": "medium",
+        "price_markup": 1.10,
+        "reputation_discount": "up_to_50%",
+        "guild_membership_required": true,
+        "exclusive_items": true,
+        "credit_available": true
+      },
+      "black_market": {
+        "inventory_size": "small",
+        "price_markup": 1.80,
+        "reputation_discount": "up_to_25%",
+        "illegal_items": true,
+        "risk_factor": "high",
+        "haggling_allowed": true
+      },
+      "street_vendor": {
+        "inventory_size": "small",
+        "price_markup": 0.95,
+        "quality_variance": "high",
+        "reliability": "questionable",
+        "haggling_allowed": true,
+        "special_deals": "daily_specials"
+      }
+    },
+    "dibbler_special": {
+      "merchant_id": "cmot_dibbler",
+      "unique_mechanics": {
+        "mystery_meals": {
+          "price": 0.50,
+          "effects": "random",
+          "safety": "questionable",
+          "entertainment_value": "high"
+        },
+        "innovative_products": {
+          "generation": "procedural",
+          "creativity": "unlimited",
+          "practicality": "dubious"
+        },
+        "enthusiastic_pricing": {
+          "base_markup": 0.85,
+          "persuasion_attempts": 3,
+          "conviction_bonus": "+20% effectiveness"
+        }
+      }
+    }
+  },
+  "property_system": {
+    "housing_market": {
+      "room_rental": {
+        "dolly_sisters": {
+          "basic_room": 2.00,
+          "comfortable_room": 5.00,
+          "luxury_room": 12.00
+        },
+        "university_district": {
+          "student_housing": 3.00,
+          "faculty_apartment": 8.00,
+          "tower_suite": 20.00
+        },
+        "guilds_quarter": {
+          "guild_housing": 6.00,
+          "professional_suite": 15.00,
+          "guild_master_residence": 40.00
+        }
+      },
+      "property_purchase": {
+        "small_shop": {
+          "price": 500.00,
+          "income_potential": "5-15 AM$/day",
+          "maintenance_cost": "2 AM$/day",
+          "customization": "medium"
+        },
+        "warehouse": {
+          "price": 1200.00,
+          "storage_capacity": "massive",
+          "income_potential": "rental or processing",
+          "maintenance_cost": "5 AM$/day"
+        },
+        "mansion": {
+          "price": 5000.00,
+          "prestige_bonus": "+25 reputation all factions",
+          "maintenance_cost": "20 AM$/day",
+          "customization": "extensive"
+        }
+      }
+    },
+    "business_investments": {
+      "creature_evolution_lab": {
+        "setup_cost": 800.00,
+        "daily_income": "variable",
+        "research_benefits": "+50% evolution research",
+        "requirements": ["university_reputation >= 75"]
+      },
+      "information_network": {
+        "setup_cost": 600.00,
+        "daily_income": "3-8 AM$/day",
+        "information_benefits": "exclusive rumors",
+        "requirements": ["maurice_relationship >= 80"]
+      },
+      "guild_franchise": {
+        "setup_cost": "varies_by_guild",
+        "daily_income": "guild_specific",
+        "reputation_benefits": "faction_bonus",
+        "requirements": ["guild_mastery_level"]
+      }
+    }
+  },
+  "economic_events": {
+    "market_disruptions": {
+      "creature_evolution_boom": {
+        "trigger": "high_evolution_activity",
+        "effects": {
+          "magical_items": "+40% price",
+          "creature_related_services": "+60% demand",
+          "traditional_services": "-20% demand"
+        },
+        "duration": "1-2 weeks",
+        "player_influence": "high"
+      },
+      "guild_strike": {
+        "trigger": "low_guild_reputation",
+        "effects": {
+          "affected_services": "unavailable",
+          "black_market": "+100% activity",
+          "alternative_providers": "emerge"
+        },
+        "resolution": "reputation_improvement or negotiation"
+      },
+      "magical_surge": {
+        "trigger": "story_events",
+        "effects": {
+          "all_prices": "+25-75% variance",
+          "magical_items": "enhanced_effects",
+          "mundane_items": "magical_contamination_risk"
+        },
+        "duration": "3-7 days"
+      }
+    },
+    "seasonal_markets": {
+      "festival_economy": {
+        "frequency": "major_holidays",
+        "effects": {
+          "entertainment_services": "+200%",
+          "food_and_drink": "+50%",
+          "temporary_vendors": "spawn",
+          "special_items": "available"
+        }
+      },
+      "harvest_season": {
+        "frequency": "annual",
+        "effects": {
+          "food_prices": "-30%",
+          "farming_supplies": "+20%",
+          "preservation_services": "+40%"
+        }
+      }
+    }
+  },
+  "pricing_formulas": {
+    "dynamic_calculation": {
+      "base_formula": "base_price * quality_modifier * supply_demand * magic_inflation * reputation_discount",
+      "supply_demand": {
+        "calculation": "1.0 + ((demand - supply) / (demand + supply)) * volatility_factor",
+        "min_value": 0.3,
+        "max_value": 3.0
+      },
+      "reputation_effects": {
+        "excellent": 0.75,
+        "good": 0.85,
+        "neutral": 1.0,
+        "poor": 1.15,
+        "hostile": 1.5
+      }
+    },
+    "haggling_system": {
+      "success_factors": ["charisma", "merchant_savvy_skill", "relationship", "item_rarity"],
+      "max_discount": "30%",
+      "attempts_per_merchant": 3,
+      "cooldown": "24_hours",
+      "critical_success": "extra_discount + relationship_bonus"
+    }
+  },
+  "balancing_parameters": {
+    "money_flow": {
+      "income_sources": {
+        "quests": "primary",
+        "creature_services": "secondary",
+        "trading": "secondary",
+        "property_income": "passive"
+      },
+      "money_sinks": {
+        "equipment": "major",
+        "services": "regular",
+        "property": "major_investment",
+        "luxury": "optional"
+      },
+      "target_progression": {
+        "level_10": "50-100 AM$",
+        "level_25": "200-400 AM$",
+        "level_50": "800-1500 AM$",
+        "level_100": "5000+ AM$"
+      }
+    },
+    "inflation_control": {
+      "base_rate": "2% per game month",
+      "magic_influence": "up_to +8% during high magic periods",
+      "deflation_events": "economic_crashes, oversupply",
+      "player_impact": "moderate to high depending on actions"
+    }
+  }
+}
