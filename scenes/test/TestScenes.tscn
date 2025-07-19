@@ -1,8 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://b8j4qxm7wqr2k"]
+[gd_scene load_steps=7 format=3 uid="uid://b8j4qxm7wqr2k"]
 
-[ext_resource type="Script" path="res://scripts/core/Player.gd" id="1_m8k4n"]
-[ext_resource type="Script" path="res://scripts/core/Creature.gd" id="2_k7x9p"]
-[ext_resource type="Script" path="res://scripts/core/NPC.gd" id="3_p5w8q"]
+[ext_resource type="Script" uid="uid://dwdkypobxgotu" path="res://scripts/core/Player.gd" id="1_m8k4n"]
+[ext_resource type="Script" uid="uid://bfwlhrb7g6kg3" path="res://scripts/core/Creature.gd" id="2_k7x9p"]
+[ext_resource type="Script" uid="uid://bf2uh1wlf6nd5" path="res://scripts/core/NPC.gd" id="3_p5w8q"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
 size = Vector2(32, 48)
@@ -12,9 +12,6 @@ radius = 50.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2"]
 radius = 80.0
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2"]
-size = Vector2(40, 40)
 
 [node name="TestScene" type="Node2D"]
 
@@ -32,7 +29,6 @@ show_interaction_range = true
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
 modulate = Color(0.5, 0.7, 1, 1)
 scale = Vector2(32, 48)
-texture = SubResource("RectangleShape2D_1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("RectangleShape2D_1")
@@ -50,10 +46,8 @@ shape = SubResource("CircleShape2D_2")
 debug_color = Color(0, 1, 0, 0.2)
 
 [node name="InteractionDetector" type="RayCast2D" parent="Player"]
-target_position = Vector2(0, 50)
 
 [node name="ObservationCamera" type="Camera2D" parent="Player"]
-enabled = true
 
 [node name="Audio" type="Node2D" parent="Player"]
 
@@ -76,7 +70,6 @@ debug_mode = true
 [node name="Sprite2D" type="Sprite2D" parent="TestCreature1"]
 modulate = Color(0.8, 0.6, 0.4, 1)
 scale = Vector2(24, 16)
-texture = SubResource("RectangleShape2D_2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestCreature1"]
 scale = Vector2(0.6, 0.4)
@@ -93,7 +86,6 @@ debug_mode = true
 [node name="Sprite2D" type="Sprite2D" parent="TestCreature2"]
 modulate = Color(0.6, 0.6, 0.8, 1)
 scale = Vector2(20, 20)
-texture = SubResource("RectangleShape2D_2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestCreature2"]
 scale = Vector2(0.5, 0.5)
@@ -110,7 +102,6 @@ debug_mode = true
 [node name="Sprite2D" type="Sprite2D" parent="TestNPC"]
 modulate = Color(1, 0.8, 0.6, 1)
 scale = Vector2(28, 44)
-texture = SubResource("RectangleShape2D_1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestNPC"]
 scale = Vector2(0.9, 0.9)
@@ -149,14 +140,14 @@ shape = SubResource("RectangleShape2D_1")
 [node name="DebugLabel" type="Label" parent="UI"]
 offset_right = 300.0
 offset_bottom = 100.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
 text = "CONTROLS:
 WASD - Move
 SHIFT - Run  
 E - Interact
 HOLD MOUSE - Observe
 ESC - Pause"
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 14
 
 [node name="InfoLabel" type="Label" parent="UI"]
 anchors_preset = 1
@@ -164,10 +155,10 @@ anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -250.0
 offset_bottom = 80.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
 text = "TEST SCENE v1.0
 - Blue Player
 - Brown/Blue Creatures  
 - Yellow NPC
 - Interaction zones visible"
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 12

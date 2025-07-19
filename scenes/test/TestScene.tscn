@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://test_scene_sb"]
+[gd_scene load_steps=5 format=3 uid="uid://boxn3d1eu0qh5"]
 
-[ext_resource type="Script" path="res://scripts/core/Player.gd" id="1_player"]
-[ext_resource type="Script" path="res://scripts/core/Creature.gd" id="2_creature"]
-[ext_resource type="Script" path="res://scripts/core/NPC.gd" id="3_npc"]
+[ext_resource type="Script" uid="uid://dwdkypobxgotu" path="res://scripts/core/Player.gd" id="1_player"]
+[ext_resource type="Script" uid="uid://bfwlhrb7g6kg3" path="res://scripts/core/Creature.gd" id="2_creature"]
+[ext_resource type="Script" uid="uid://bf2uh1wlf6nd5" path="res://scripts/core/NPC.gd" id="3_npc"]
 
 [sub_resource type="RectangleShape2D" id="player_shape"]
 size = Vector2(32, 48)
@@ -69,8 +69,10 @@ shape = SubResource("player_shape")
 [node name="Controls" type="Label" parent="UI"]
 offset_right = 350.0
 offset_bottom = 150.0
-text = "WASD - Bouger\nE - Interagir\nSouris - Observer"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "WASD - Bouger
+E - Interagir
+Souris - Observer"
 
 [node name="Info" type="Label" parent="UI"]
 anchors_preset = 1
@@ -78,5 +80,8 @@ anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -300.0
 offset_bottom = 100.0
-text = "TEST SCENE\nJoueur bleu\nCreature brune\nNPC jaune"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "TEST SCENE
+Joueur bleu
+Creature brune
+NPC jaune"

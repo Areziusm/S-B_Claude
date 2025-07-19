@@ -63,11 +63,11 @@ var is_transitioning: bool = false
 var data_manager: DataManager                    # NOUVEAU: Gestionnaire données JSON
 var observation_manager: ObservationManager
 var dialogue_manager: DialogueManager
-var quest_manager: QuestManager
+var quest_manager: QuestManage
 var reputation_manager: ReputationSystem        # NOUVEAU: Système de réputation
 var ui_manager: UIManager
 var audio_manager: AudioManager
-var save_system: SaveSystem
+#var save_system: SaveSystem
 
 # État du jeu persistant
 var story_variables: Dictionary = {}
@@ -248,11 +248,11 @@ func setup_signal_connections() -> void:
 		reputation_manager.relationship_level_changed.connect(_on_relationship_level_changed)
 		reputation_manager.public_reaction_triggered.connect(_on_public_reaction)
 	
-	# Connexions sauvegarde
-	if save_system:
-		save_system.save_completed.connect(func(slot): save_completed.emit(slot))
-		save_system.load_completed.connect(func(slot): load_completed.emit(slot))
-
+	# Connexions sauvegarde TODO Décommenter 
+	#if save_system:
+		#save_system.save_completed.connect(func(slot): save_completed.emit(slot))
+		#save_system.load_completed.connect(func(slot): load_completed.emit(slot))
+	
 # ================================
 # GESTION DES SCÈNES
 # ================================
