@@ -1,0 +1,25 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Claude-Sortilège&Bestiole"
+config/features=PackedStringArray("4.4", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+Game="*res://scripts/managers/GameManager.gd"
+Data="*res://scripts/managers/DataManager.gd"
+Dialogue="*res://scripts/managers/DialogueManager.gd"
+Combat="*res://scripts/managers/CombatSystem.gd"
+Observation="*res://scripts/managers/ObservationManager.gd"
+Quest="*res://scripts/managers/QuestManager.gd"
+Reputation="*res://scripts/managers/ReputationSystem.gd"

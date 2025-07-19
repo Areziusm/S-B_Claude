@@ -185,13 +185,13 @@ func initialize_managers() -> void:
 	data_manager = await create_or_get_manager("DataManager", "res://scripts/managers/DataManager.gd")
 	
 	# Manager UI (doit être créé tôt pour les transitions)
-	ui_manager = await create_or_get_manager("UIManager", "res://scripts/managers/UIManager.gd")
+	ui_manager = get_node_or_null("/root/UI")  # Stub temporaire
 	
 	# Manager Audio (indépendant)
-	audio_manager = await create_or_get_manager("AudioManager", "res://scripts/managers/AudioManager.gd")
+	audio_manager = get_node_or_null("/root/Audio")  # Stub temporaire
 	
 	# Save System (indépendant)
-	save_system = await create_or_get_manager("SaveSystem", "res://scripts/managers/SaveSystem.gd")
+	# save_system = await create_or_get_manager("SaveSystem", "res://scripts/managers/SaveSystem.gd")
 	
 	# Managers de gameplay (dépendent des données)
 	observation_manager = await create_or_get_manager("ObservationManager", "res://scripts/managers/ObservationManager.gd")
@@ -199,7 +199,7 @@ func initialize_managers() -> void:
 	quest_manager = await create_or_get_manager("QuestManager", "res://scripts/managers/QuestManager.gd")
 	
 	# NOUVEAU: ReputationSystem (dépend de DataManager + autres managers)
-	reputation_manager = await create_or_get_manager("ReputationManager", "res://scripts/managers/ReputationSystem.gd")
+	# reputation_manager = await create_or_get_manager("ReputationManager", "res://scripts/managers/ReputationSystem.gd")
 	
 	print("[GameManager] Tous les managers initialisés")
 
