@@ -63,8 +63,8 @@ var is_transitioning: bool = false
 var data_manager: DataManager                    # NOUVEAU: Gestionnaire données JSON
 var observation_manager: ObservationManager
 var dialogue_manager: DialogueManager
-var quest_manager: QuestManage
-var reputation_manager: ReputationSystem        # NOUVEAU: Système de réputation
+var quest_manager: QuestManager
+var reputation_manager: ReputationManager        # NOUVEAU: Système de réputation
 var ui_manager: UIManager
 var audio_manager: AudioManager
 #var save_system: SaveSystem
