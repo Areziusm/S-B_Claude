@@ -4,6 +4,7 @@
 # STATUS: ✅ COMPLET | ROADMAP: Mois 1, Semaine 3-4 - UI Architecture
 # PRIORITY: 🟠 P2 - Interface cohérente Terry Pratchett
 # DEPENDENCIES: GameManager, ObservationManager, DialogueManager, MagicSystem
+#=======
 
 class_name UIManager
 extends CanvasLayer
@@ -116,6 +117,84 @@ enum AccessibilityMode {
 # INITIALISATION SYSTÈME
 # ============================================================================
 
+# ================================
+# ENUMS & CONSTANTS
+# ================================
+enum UIScreen {
+	NONE,
+	MAIN_MENU,
+	GAME_HUD,
+	INVENTORY,
+	JOURNAL,
+	NOTEBOOK,
+	DIALOGUE,
+	SETTINGS,
+	PAUSE_MENU,
+	LOADING,
+	CREDITS
+}
+
+enum NotificationType {
+	INFO,
+	SUCCESS,
+	WARNING,
+	ERROR,
+	MAGICAL
+}
+
+enum UITheme {
+	DEFAULT,
+	NIGHT,
+	AUTUMN,
+	WINTER,
+	SPRING,
+	SUMMER,
+	UNSEEN_UNIVERSITY,
+	PATRICIAN_PALACE
+}
+
+# ================================
+# VARIABLES PRINCIPALES
+# ================================
+@export var default_theme: UITheme = UITheme.DEFAULT
+@export var notification_duration: float = 3.0
+@export var transition_speed: float = 0.3
+@export var accessibility_mode: bool = false
+
+# État du UI
+var current_screen: UIScreen = UIScreen.NONE
+var previous_screen: UIScreen = UIScreen.NONE
+var active_panels: Array[String] = []
+var notification_queue: Array[Dictionary] = []
+var is_transitioning: bool = false
+
+# Références aux composants UI
+var screens: Dictionary = {}
+var panels: Dictionary = {}
+var hud_elements: Dictionary = {}
+var notification_container: Control
+var overlay: ColorRect
+var tooltip_system: Control
+
+# Configuration UI
+var ui_config: Dictionary = {
+	"scale_factor": 1.0,
+	"font_size": 16,
+	"contrast_mode": false,
+	"colorblind_mode": false,
+	"animation_speed": 1.0,
+	"sound_enabled": true,
+	"auto_hide_tooltips": true,
+	"button_hold_time": 0.3
+}
+
+# Thèmes
+var themes: Dictionary = {}
+var current_theme: UITheme = UITheme.DEFAULT
+
+# ================================
+# INITIALISATION
+# ================================
 func _ready() -> void:
 	"""Initialisation complète du système UI"""
 	print("📱 UIManager: Initialisation démarrée...")
