@@ -1041,6 +1041,11 @@ func _input(event: InputEvent) -> void:
 # ============================================================================
 # DEBUG
 # ============================================================================
+func setup_scientific_notebook_style() -> void:
+	pass
+
+func setup_pratchett_notebook_style() -> void:
+	pass
 
 func _on_debug_test_observation() -> void:
 	"""Test observation pour debug"""

@@ -631,17 +631,57 @@ func get_context_help_text(context: String) -> String:
 	
 	return help_texts.get(context, "[i]Aucune aide disponible pour ce contexte.[/i]")
 
-# ============================================================================
-# TYPES SPÉCIALISÉS NOTIFICATIONS
-# ============================================================================
+# ... (tout le reste de ton fichier reste identique)
 
-func show_achievement_notification(achievement_id: String, achievement_name: String) -> String:
-	"""Notification spéciale réussite"""
-	var message = "[b]Réussite débloquée![/b]\n" + achievement_name
-	return show_notification(message, "achievement", 6.0)
+# ============================================================================  
+# TYPES SPÉCIALISÉS NOTIFICATIONS  
+# ============================================================================  
 
-func show_lore_notification(lore_text: String, source: String = "") -> String:
-	"""Notification information Terry Pratchett"""
-	var message = lore_text
-	if source != "":
-		message
+func load_tutorial_data() -> void:
+	# À compléter : charger les tutoriels depuis un fichier ou ressource
+	pass
+
+func animate_notification_appearance(notification_panel: Control) -> void:
+	# Animation d'apparition (fade-in, scale, etc.)
+	# À compléter plus tard si tu veux une animation personnalisée
+	pass
+
+func process_notification_text(message: String, type: String) -> String:
+	# Peut ajouter couleur, bbcode, icônes…  
+	return message
+
+func get_notification_info(notification_data: Dictionary) -> String:
+	# Affiche un timestamp, source, ou info additionnelle pour "achievement"/"lore"
+	if notification_data.has("timestamp"):
+		var time_str = Time.get_datetime_string_from_unix_time(int(notification_data.timestamp / 1000))
+		return "[i]Reçu le %s[/i]" % time_str
+	return ""
+
+func animate_notification_dismissal(notification_panel: Control) -> void:
+	# Animation de disparition (fade-out, scale, etc.)
+	# Tu peux compléter ça plus tard pour l’effet voulu
+	notification_panel.queue_free()
+
+func get_tutorial_data(tutorial_id: String) -> Dictionary:
+	# À remplacer par ta vraie logique de chargement de tutoriels !
+	# Exemple de stub :
+	if tutorial_id == "sample":
+		return {
+			"title": "Tutoriel d'exemple",
+			"steps": [
+				{ "type": TutorialStepType.TEXT_ONLY, "content": "Bienvenue dans le jeu !" }
+			]
+		}
+	return {}
+
+func process_tutorial_text(content: String, context_data: Dictionary) -> String:
+	# Pour appliquer BBCode, remplacer des variables…  
+	return content
+
+func setup_interaction_tutorial(step_data: Dictionary) -> void:
+	# Prépare l’attente d’une interaction utilisateur
+	pass
+
+func setup_overlay_tutorial(step_data: Dictionary) -> void:
+	# Affiche un overlay d’explication  
+	pass

@@ -86,9 +86,6 @@ shape = SubResource("rect_shape")
 [node name="TestNPC" type="CharacterBody2D" parent="." groups=["npcs"]]
 position = Vector2(800, 350)
 script = ExtResource("11_npc")
-npc_id = "madame_simnel"
-display_name = "Madame Simnel"
-debug_mode = true
 
 [node name="Sprite2D" type="Sprite2D" parent="TestNPC"]
 modulate = Color(1, 0.8, 0.6, 1)

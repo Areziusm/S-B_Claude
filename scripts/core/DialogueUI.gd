@@ -757,8 +757,13 @@ func is_dialogue_active() -> bool:
 	return dialogue_panel.visible
 
 # ============================================================================
-# DEBUG
+# DEBUG (pass a suppr)
 # ============================================================================
+func setup_magical_dialogue_style() -> void:
+	pass
+
+func animate_dialogue_transition() -> void:
+	pass
 
 func _on_debug_test_dialogue() -> void:
 	"""Test dialogue pour debug"""

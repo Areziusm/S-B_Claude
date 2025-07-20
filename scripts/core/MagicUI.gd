@@ -1018,6 +1018,14 @@ func is_magic_interface_active() -> bool:
 # ============================================================================
 # DEBUG
 # ============================================================================
+func setup_magic_styling() -> void:
+	pass
+
+func setup_octarine_effects() -> void:
+	pass
+
+func enter_area_target_mode(data) -> void:
+	pass
 
 func _on_debug_test_magic() -> void:
 	"""Test interface magique pour debug"""

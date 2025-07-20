@@ -21,8 +21,6 @@ GameManager="*res://scripts/managers/GameManager.gd"
 Data="*res://scripts/managers/DataManager.gd"
 Observation="*res://scripts/managers/ObservationManager.gd"
 Dialogue="*res://scripts/managers/DialogueManager.gd"
-Quest="res://scripts/managers/QuestManager.gd"
-UI="res://scripts/stubs/UIManager.gd"
 Audio="*res://scripts/stubs/AudioManager.gd"
 
 [input]
