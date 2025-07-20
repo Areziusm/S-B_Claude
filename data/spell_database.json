@@ -1,0 +1,732 @@
+{
+  "database_info": {
+    "name": "Base de Données des Sorts - Disque-Monde",
+    "version": "1.0.0",
+    "last_updated": "2025-01-20",
+    "total_spells": 25,
+    "schools_covered": ["elemental", "headology", "wizardry", "divine", "chaos", "death_magic", "lspace"]
+  },
+  
+  "spells": {
+    "minor_heal": {
+      "name": "Soins Mineurs",
+      "school": 3,
+      "power": 1,
+      "mana_cost": 5,
+      "casting_time": 2.0,
+      "range": 3.0,
+      "duration": 0,
+      "description": "Guérison magique basique qui referme les blessures mineures",
+      "effects": {
+        "heal": 15,
+        "remove_status": ["bleeding", "bruised"]
+      },
+      "chaos_chance": 0.15,
+      "chaos_effects": [
+        "Guérit l'ennemi au lieu de l'allié",
+        "Fait pousser des fleurs sur la blessure",
+        "Transforme temporairement la peau en écailles brillantes"
+      ],
+      "requirements": {
+        "minimum_level": 1,
+        "components": ["herbs", "pure_intention"]
+      },
+      "pratchett_flavor": "Un sort si basique que même les novices de l'Université peuvent le réussir... la plupart du temps."
+    },
+    
+    "octarine_missile": {
+      "name": "Projectile Octarine",
+      "school": 2,
+      "power": 2,
+      "mana_cost": 10,
+      "casting_time": 1.5,
+      "range": 8.0,
+      "duration": 0,
+      "description": "Projectile de magie pure octarine qui frappe avec une force magique brute",
+      "effects": {
+        "damage": 25,
+        "damage_type": "magical",
+        "octarine_exposure": true,
+        "knockback": 2.0
+      },
+      "chaos_chance": 0.25,
+      "chaos_effects": [
+        "Le projectile fait demi-tour et revient vers le lanceur",
+        "Explose en confettis octarine inoffensifs",
+        "Se transforme en pigeon magique qui insulte la cible"
+      ],
+      "requirements": {
+        "minimum_level": 2,
+        "components": ["octarine_crystal", "focused_anger"]
+      },
+      "pratchett_flavor": "Remarquablement efficace, à condition que vous ne visiez pas vos propres pieds."
+    },
+    
+    "headology_convince": {
+      "name": "Conviction Headologique",
+      "school": 1,
+      "power": 3,
+      "mana_cost": 15,
+      "casting_time": 3.0,
+      "range": 5.0,
+      "duration": 30.0,
+      "description": "Convainc la cible qu'une chose est vraie par pure force de conviction",
+      "effects": {
+        "charm": true,
+        "duration": 30.0,
+        "type": "convince",
+        "belief_implantation": true
+      },
+      "chaos_chance": 0.10,
+      "chaos_effects": [
+        "Vous vous convainquez vous-même de la chose opposée",
+        "La cible devient convaincue que vous êtes un pingouin",
+        "Tout le monde dans la zone devient convaincu que c'est jeudi"
+      ],
+      "requirements": {
+        "minimum_level": 3,
+        "components": ["absolute_certainty", "pointed_hat"],
+        "school_restriction": "headology"
+      },
+      "pratchett_flavor": "La magie la plus puissante de toutes : faire croire à quelqu'un que vous avez raison."
+    },
+    
+    "fireball_classic": {
+      "name": "Boule de Feu Classique",
+      "school": 0,
+      "power": 3,
+      "mana_cost": 20,
+      "casting_time": 2.5,
+      "range": 10.0,
+      "duration": 0,
+      "description": "La boule de feu traditionnelle des magiciens, maintenant avec 20% de chances d'effets inattendus",
+      "effects": {
+        "damage": 40,
+        "damage_type": "fire",
+        "area_effect": 3.0,
+        "burn_chance": 0.3
+      },
+      "chaos_chance": 0.20,
+      "chaos_effects": [
+        "Boule de neige au lieu de boule de feu",
+        "Explose en pop-corn magique",
+        "Crée un feu de camp convivial avec guimauves"
+      ],
+      "requirements": {
+        "minimum_level": 3,
+        "components": ["sulfur", "bat_wing", "dramatic_gesture"]
+      },
+      "pratchett_flavor": "Rien ne dit 'je suis un magicien sérieux' comme une bonne boule de feu. Le pop-corn, c'est un bonus."
+    },
+    
+    "teleport_short": {
+      "name": "Téléportation Courte",
+      "school": 2,
+      "power": 2,
+      "mana_cost": 12,
+      "casting_time": 1.0,
+      "range": 0,
+      "duration": 0,
+      "description": "Téléporte le lanceur sur une courte distance",
+      "effects": {
+        "teleport_range": 5.0,
+        "instant_movement": true,
+        "disorientation_chance": 0.2
+      },
+      "chaos_chance": 0.30,
+      "chaos_effects": [
+        "Téléporte vos vêtements mais pas vous",
+        "Apparaît à l'envers avec les pieds en l'air",
+        "Se téléporte dans la dimension du bureau de poste"
+      ],
+      "requirements": {
+        "minimum_level": 2,
+        "components": ["rubber_band", "sense_of_direction"]
+      },
+      "pratchett_flavor": "Très pratique pour éviter les conversations gênantes ou les taxes."
+    },
+    
+    "divine_blessing": {
+      "name": "Bénédiction Divine",
+      "school": 3,
+      "power": 2,
+      "mana_cost": 18,
+      "casting_time": 4.0,
+      "range": 2.0,
+      "duration": 300.0,
+      "description": "Invoque une bénédiction divine sur la cible",
+      "effects": {
+        "luck_bonus": 2,
+        "protection_bonus": 1,
+        "divine_favor": true,
+        "glow_effect": "golden"
+      },
+      "chaos_chance": 0.05,
+      "chaos_effects": [
+        "La divinité répond personnellement pour discuter",
+        "Bénédiction accordée à tout le monde dans la ville",
+        "Transformation temporaire en ange amateur"
+      ],
+      "requirements": {
+        "minimum_level": 2,
+        "components": ["holy_symbol", "pure_faith", "small_donation"]
+      },
+      "pratchett_flavor": "Les dieux apprécient la dévotion. Et les petites pièces. Surtout les petites pièces."
+    },
+    
+    "chaos_wild_surge": {
+      "name": "Surgissement Sauvage",
+      "school": 4,
+      "power": 4,
+      "mana_cost": 30,
+      "casting_time": 2.0,
+      "range": 8.0,
+      "duration": 0,
+      "description": "Déchaîne la magie chaotique pure avec des effets totalement imprévisibles",
+      "effects": {
+        "random_effect": true,
+        "power_variable": true,
+        "unpredictable": true
+      },
+      "chaos_chance": 0.95,
+      "chaos_effects": [
+        "Fait exactement ce que vous vouliez",
+        "Transforme tout en fromage pendant 10 minutes",
+        "Ouvre un portail vers une dimension de chaussettes perdues",
+        "Fait pleuvoir des poissons rouges",
+        "Donne temporairement la parole aux objets inanimés"
+      ],
+      "requirements": {
+        "minimum_level": 4,
+        "components": ["chaos_crystal", "reckless_abandon", "good_insurance"]
+      },
+      "pratchett_flavor": "Pour quand vous voulez vraiment surprendre tout le monde, y compris vous-même."
+    },
+    
+    "death_whisper": {
+      "name": "Murmure de LA MORT",
+      "school": 5,
+      "power": 3,
+      "mana_cost": 25,
+      "casting_time": 3.5,
+      "range": 6.0,
+      "duration": 60.0,
+      "description": "Permet d'entendre les derniers mots des morts ou de communiquer avec LA MORT",
+      "effects": {
+        "speak_with_dead": true,
+        "death_communication": true,
+        "existential_insight": true,
+        "fear_immunity": true
+      },
+      "chaos_chance": 0.15,
+      "chaos_effects": [
+        "LA MORT répond personnellement avec philosophie",
+        "Tous les morts de la zone se mettent à parler en même temps",
+        "Vous entendez vos propres derniers mots futurs"
+      ],
+      "requirements": {
+        "minimum_level": 3,
+        "components": ["skull", "black_candle", "existential_dread"]
+      },
+      "pratchett_flavor": "LA MORT EST TOUJOURS DISPOSÉ À DISCUTER. IL A TOUT SON TEMPS."
+    },
+    
+    "lspace_navigation": {
+      "name": "Navigation L-Space",
+      "school": 6,
+      "power": 4,
+      "mana_cost": 35,
+      "casting_time": 5.0,
+      "range": 0,
+      "duration": 180.0,
+      "description": "Permet de naviguer dans L-Space pour accéder à la connaissance universelle",
+      "effects": {
+        "lspace_access": true,
+        "knowledge_gain": "random",
+        "library_teleport": true,
+        "ook_understanding": true
+      },
+      "chaos_chance": 0.25,
+      "chaos_effects": [
+        "Vous vous perdez dans une dimension de manuels d'instructions",
+        "Tous les livres vous suivent comme des chiens fidèles",
+        "Vous devenez temporairement un livre vous-même"
+      ],
+      "requirements": {
+        "minimum_level": 4,
+        "components": ["library_card", "sense_of_wonder", "banana"],
+        "location_requirement": "library"
+      },
+      "pratchett_flavor": "Ook signifie Ook, mais dans L-Space, Ook peut signifier n'importe quoi."
+    },
+    
+    "transmute_minor": {
+      "name": "Transmutation Mineure",
+      "school": 2,
+      "power": 2,
+      "mana_cost": 14,
+      "casting_time": 3.0,
+      "range": 2.0,
+      "duration": 600.0,
+      "description": "Transforme un petit objet en un autre objet de taille similaire",
+      "effects": {
+        "object_transformation": true,
+        "size_limit": "small",
+        "temporary": true
+      },
+      "chaos_chance": 0.20,
+      "chaos_effects": [
+        "L'objet devient conscient et commence à se plaindre",
+        "Transforme tous les objets similaires dans la zone",
+        "L'objet revient à sa forme originale au pire moment possible"
+      ],
+      "requirements": {
+        "minimum_level": 2,
+        "components": ["philosopher_stone_fragment", "clear_intention"]
+      },
+      "pratchett_flavor": "Très utile pour transformer les légumes en or. Moins utile quand ils redeviennent légumes à l'heure du dîner."
+    },
+    
+    "shield_magical": {
+      "name": "Bouclier Magique",
+      "school": 2,
+      "power": 2,
+      "mana_cost": 16,
+      "casting_time": 2.0,
+      "range": 0,
+      "duration": 120.0,
+      "description": "Crée un bouclier magique protégeant contre les attaques",
+      "effects": {
+        "damage_reduction": 0.4,
+        "magic_resistance": 0.6,
+        "visible_barrier": true
+      },
+      "chaos_chance": 0.12,
+      "chaos_effects": [
+        "Le bouclier protège tout le monde sauf vous",
+        "Devient un bouclier physique que vous devez porter",
+        "Protège parfaitement mais vous rend invisible"
+      ],
+      "requirements": {
+        "minimum_level": 2,
+        "components": ["turtle_shell_essence", "defensive_thoughts"]
+      },
+      "pratchett_flavor": "Un bon bouclier magique est comme un bon parapluie : vous en avez besoin quand il pleut des sorts."
+    },
+    
+    "weather_control": {
+      "name": "Contrôle Météorologique",
+      "school": 0,
+      "power": 4,
+      "mana_cost": 40,
+      "casting_time": 8.0,
+      "range": 50.0,
+      "duration": 1800.0,
+      "description": "Influence la météo locale pour créer des conditions spécifiques",
+      "effects": {
+        "weather_change": true,
+        "area_effect": 50.0,
+        "duration_long": true
+      },
+      "chaos_chance": 0.30,
+      "chaos_effects": [
+        "Il pleut des chats et des chiens littéralement",
+        "Création d'un micro-climat tropical en hiver",
+        "Toute la pluie devient colorée selon votre humeur"
+      ],
+      "requirements": {
+        "minimum_level": 4,
+        "components": ["weather_vane", "barometric_pressure", "stubborn_will"]
+      },
+      "pratchett_flavor": "Contrôler la météo est facile. La faire obéir, c'est une autre histoire."
+    },
+    
+    "summon_familiar": {
+      "name": "Invocation de Familier",
+      "school": 2,
+      "power": 3,
+      "mana_cost": 25,
+      "casting_time": 10.0,
+      "range": 0,
+      "duration": -1,
+      "description": "Invoque un animal familier magique pour vous assister",
+      "effects": {
+        "summon_creature": true,
+        "permanent_bond": true,
+        "intelligence_boost": true,
+        "magical_link": true
+      },
+      "chaos_chance": 0.25,
+      "chaos_effects": [
+        "Familier arrive avec sa propre personnalité difficile",
+        "Vous devenez le familier de l'animal",
+        "Familier parle uniquement en citations de Shakespeare"
+      ],
+      "requirements": {
+        "minimum_level": 3,
+        "components": ["animal_treats", "bonding_ritual", "lifetime_commitment"]
+      },
+      "pratchett_flavor": "Un familier est pour la vie, pas seulement pour les sorts difficiles."
+    },
+    
+    "invisibility_improved": {
+      "name": "Invisibilité Améliorée",
+      "school": 2,
+      "power": 3,
+      "mana_cost": 22,
+      "casting_time": 2.5,
+      "range": 0,
+      "duration": 300.0,
+      "description": "Rend le lanceur invisible à la vue normale et magique",
+      "effects": {
+        "invisibility": true,
+        "magic_detection_resistant": true,
+        "sound_muffling": 0.7
+      },
+      "chaos_chance": 0.18,
+      "chaos_effects": [
+        "Seuls vos vêtements deviennent invisibles",
+        "Vous devenez visible uniquement pour les animaux",
+        "Invisibilité fonctionne parfaitement mais vous brillez dans le noir"
+      ],
+      "requirements": {
+        "minimum_level": 3,
+        "components": ["mirror_shard", "shadow_essence", "quiet_footsteps"]
+      },
+      "pratchett_flavor": "L'invisibilité parfaite, sauf quand vous éternuez."
+    },
+    
+    "mind_read_surface": {
+      "name": "Lecture Mentale Superficielle",
+      "school": 1,
+      "power": 2,
+      "mana_cost": 18,
+      "casting_time": 3.0,
+      "range": 4.0,
+      "duration": 60.0,
+      "description": "Lit les pensées de surface d'une cible consentante ou non préparée",
+      "effects": {
+        "read_surface_thoughts": true,
+        "emotion_detection": true,
+        "intention_sensing": true
+      },
+      "chaos_chance": 0.22,
+      "chaos_effects": [
+        "Vous entendez les pensées de tout le monde dans un rayon de 50 mètres",
+        "La cible peut lire VOS pensées à la place",
+        "Vous ne pouvez plus entendre que les pensées, pas les paroles"
+      ],
+      "requirements": {
+        "minimum_level": 2,
+        "components": ["crystal_ball_fragment", "telepathic_herbs"]
+      },
+      "pratchett_flavor": "Attention : contient souvent des pensées sur ce que les gens ont mangé au petit-déjeuner."
+    },
+    
+    "polymorph_temporary": {
+      "name": "Polymorphisme Temporaire",
+      "school": 4,
+      "power": 4,
+      "mana_cost": 35,
+      "casting_time": 4.0,
+      "range": 3.0,
+      "duration": 600.0,
+      "description": "Transforme la cible en animal pendant une durée limitée",
+      "effects": {
+        "shape_change": true,
+        "animal_form": "random",
+        "consciousness_retained": true,
+        "reversible": true
+      },
+      "chaos_chance": 0.40,
+      "chaos_effects": [
+        "Transformation en animal mythologique inexistant",
+        "Garde la forme humaine mais acquiert des instincts animaux",
+        "Se transforme en version anthropomorphe de l'animal"
+      ],
+      "requirements": {
+        "minimum_level": 4,
+        "components": ["animal_hair", "shapeshifting_potion", "flexible_mindset"]
+      },
+      "pratchett_flavor": "Très amusant jusqu'à ce que vous réalisiez que vous avez oublié comment redevenir humain."
+    },
+    
+    "time_dilation_minor": {
+      "name": "Dilatation Temporelle Mineure",
+      "school": 7,
+      "power": 5,
+      "mana_cost": 50,
+      "casting_time": 6.0,
+      "range": 0,
+      "duration": 30.0,
+      "description": "Ralentit le temps autour du lanceur pendant une courte période",
+      "effects": {
+        "time_slow": 0.5,
+        "personal_acceleration": true,
+        "temporal_awareness": true
+      },
+      "chaos_chance": 0.60,
+      "chaos_effects": [
+        "Le temps ralentit pour tout le monde sauf vous... mais dans le mauvais sens",
+        "Vous vieillissez rapidement pendant que le temps ralentit",
+        "Créé une boucle temporelle de 30 secondes"
+      ],
+      "requirements": {
+        "minimum_level": 5,
+        "components": ["pocket_watch", "temporal_crystals", "perfect_timing"],
+        "restriction": "narrative_magic_only"
+      },
+      "pratchett_flavor": "Le temps est relatif. Surtout quand votre tante Time vient pour le thé."
+    },
+    
+    "light_orb": {
+      "name": "Orbe de Lumière",
+      "school": 0,
+      "power": 1,
+      "mana_cost": 3,
+      "casting_time": 1.0,
+      "range": 0,
+      "duration": 1800.0,
+      "description": "Crée une sphère de lumière magique qui suit le lanceur",
+      "effects": {
+        "light_source": true,
+        "brightness": "torch_equivalent",
+        "follows_caster": true,
+        "dismissible": true
+      },
+      "chaos_chance": 0.08,
+      "chaos_effects": [
+        "L'orbe développe une personnalité et commence à faire des commentaires",
+        "Lumière change de couleur selon votre humeur",
+        "Attire tous les insectes dans un rayon de 100 mètres"
+      ],
+      "requirements": {
+        "minimum_level": 1,
+        "components": ["firefly", "clear_intention"]
+      },
+      "pratchett_flavor": "Parfait pour lire au lit ou explorer des donjons. Moins parfait quand il se met à chanter."
+    },
+    
+    "repair_object": {
+      "name": "Réparation d'Objet",
+      "school": 2,
+      "power": 1,
+      "mana_cost": 8,
+      "casting_time": 4.0,
+      "range": 1.0,
+      "duration": 0,
+      "description": "Répare un objet cassé en restaurant sa forme originale",
+      "effects": {
+        "object_repair": true,
+        "durability_restoration": 0.8,
+        "aesthetic_improvement": "possible"
+      },
+      "chaos_chance": 0.15,
+      "chaos_effects": [
+        "L'objet se répare mais dans une version améliorée bizarre",
+        "Répare l'objet mais casse quelque chose d'autre à proximité",
+        "L'objet devient semi-conscient et refuse de se casser à nouveau"
+      ],
+      "requirements": {
+        "minimum_level": 1,
+        "components": ["glue_essence", "original_purpose_memory"]
+      },
+      "pratchett_flavor": "Comme neuf ! Enfin, comme neuf mais légèrement magique et possiblement conscient."
+    },
+    
+    "detect_magic": {
+      "name": "Détection de Magie",
+      "school": 2,
+      "power": 1,
+      "mana_cost": 6,
+      "casting_time": 2.0,
+      "range": 15.0,
+      "duration": 300.0,
+      "description": "Révèle la présence et l'intensité de la magie dans la zone",
+      "effects": {
+        "magic_detection": true,
+        "intensity_measurement": true,
+        "school_identification": true,
+        "visual_overlay": "magical_aura"
+      },
+      "chaos_chance": 0.05,
+      "chaos_effects": [
+        "Détecte la magie mais aussi toutes les superstitions locales",
+        "Tout apparaît magique, y compris les objets ordinaires",
+        "Vous commencez à détecter les pensées magiques des gens"
+      ],
+      "requirements": {
+        "minimum_level": 1,
+        "components": ["crystal_lens", "magical_sensitivity"]
+      },
+      "pratchett_flavor": "Révèle que votre chaussette gauche est légèrement plus magique que la droite. Comme d'habitude."
+    },
+    
+    "speak_with_animals": {
+      "name": "Communication Animale",
+      "school": 3,
+      "power": 2,
+      "mana_cost": 12,
+      "casting_time": 2.5,
+      "range": 10.0,
+      "duration": 600.0,
+      "description": "Permet de comprendre et de parler avec les animaux",
+      "effects": {
+        "animal_communication": true,
+        "emotional_understanding": true,
+        "basic_negotiation": true
+      },
+      "chaos_chance": 0.20,
+      "chaos_effects": [
+        "Les animaux ne parlent que de philosophie complexe",
+        "Vous ne pouvez plus parler qu'en langage animal",
+        "Tous les animaux de la ville viennent vous raconter leurs problèmes"
+      ],
+      "requirements": {
+        "minimum_level": 2,
+        "components": ["animal_treat", "open_mind", "patience"]
+      },
+      "pratchett_flavor": "Les animaux ont beaucoup à dire. Malheureusement, c'est surtout sur la nourriture et les gratouilles."
+    },
+    
+    "levitation_self": {
+      "name": "Lévitation Personnelle",
+      "school": 0,
+      "power": 2,
+      "mana_cost": 15,
+      "casting_time": 3.0,
+      "range": 0,
+      "duration": 180.0,
+      "description": "Permet au lanceur de léviter et de se déplacer dans les airs",
+      "effects": {
+        "flight": true,
+        "altitude_max": 10.0,
+        "speed": "walking_pace",
+        "maneuverable": true
+      },
+      "chaos_chance": 0.25,
+      "chaos_effects": [
+        "Vous volez mais uniquement à l'envers",
+        "Lévitation fonctionne mais vous tournez lentement comme un poulet rôti",
+        "Vous ne pouvez plus toucher le sol pendant 24 heures"
+      ],
+      "requirements": {
+        "minimum_level": 2,
+        "components": ["feather", "light_thoughts", "defiance_of_gravity"]
+      },
+      "pratchett_flavor": "Le vol magique : 99% de concentration, 1% de ne pas regarder en bas."
+    },
+    
+    "enchant_weapon_temporary": {
+      "name": "Enchantement d'Arme Temporaire",
+      "school": 2,
+      "power": 2,
+      "mana_cost": 16,
+      "casting_time": 4.0,
+      "range": 1.0,
+      "duration": 600.0,
+      "description": "Enchante temporairement une arme avec des propriétés magiques",
+      "effects": {
+        "weapon_enhancement": true,
+        "damage_bonus": 15,
+        "magical_damage": true,
+        "special_effects": "random_minor"
+      },
+      "chaos_chance": 0.18,
+      "chaos_effects": [
+        "L'arme devient pacifiste et refuse de blesser qui que ce soit",
+        "L'arme ne fonctionne que contre les légumes",
+        "L'arme commence à critiquer votre technique de combat"
+      ],
+      "requirements": {
+        "minimum_level": 2,
+        "components": ["weapon_oil", "warrior_spirit", "sharp_focus"]
+      },
+      "pratchett_flavor": "Une épée magique est comme un bon assistant : efficace, loyale, et parfois elle parle trop."
+    },
+    
+    "create_food": {
+      "name": "Création de Nourriture",
+      "school": 3,
+      "power": 1,
+      "mana_cost": 10,
+      "casting_time": 5.0,
+      "range": 0,
+      "duration": 0,
+      "description": "Crée de la nourriture magique simple mais nutritive",
+      "effects": {
+        "food_creation": true,
+        "nutritional_value": "adequate",
+        "quantity": "meal_for_one",
+        "taste": "variable"
+      },
+      "chaos_chance": 0.12,
+      "chaos_effects": [
+        "Crée de la nourriture qui a mauvais goût mais est parfaitement nutritive",
+        "Nourriture délicieuse mais qui change de forme pendant que vous la mangez",
+        "Produit un banquet pour 20 personnes au lieu d'un simple repas"
+      ],
+      "requirements": {
+        "minimum_level": 1,
+        "components": ["cooking_pot", "generosity", "basic_recipes"]
+      },
+      "pratchett_flavor": "Magiquement nutritif ! Maintenant disponible en saveur 'surprise'."
+    },
+    
+    "sleep_spell": {
+      "name": "Sort de Sommeil",
+      "school": 1,
+      "power": 2,
+      "mana_cost": 14,
+      "casting_time": 2.0,
+      "range": 6.0,
+      "duration": 300.0,
+      "description": "Plonge la cible dans un sommeil magique profond",
+      "effects": {
+        "sleep_induction": true,
+        "dream_control": "possible",
+        "peaceful_rest": true,
+        "natural_awakening": true
+      },
+      "chaos_chance": 0.16,
+      "chaos_effects": [
+        "Tout le monde s'endort sauf la cible",
+        "La cible s'endort mais continue de marcher et parler",
+        "Crée des rêves si vifs qu'ils affectent la réalité"
+      ],
+      "requirements": {
+        "minimum_level": 2,
+        "components": ["chamomile", "lullaby", "comfortable_pillow"]
+      },
+      "pratchett_flavor": "Garantit un sommeil paisible. Les rêves éveillés sont en supplément."
+    },
+    
+    "dispel_magic": {
+      "name": "Dissipation de Magie",
+      "school": 2,
+      "power": 3,
+      "mana_cost": 20,
+      "casting_time": 3.0,
+      "range": 5.0,
+      "duration": 0,
+      "description": "Dissipe les effets magiques actifs dans la zone ciblée",
+      "effects": {
+        "magic_dispel": true,
+        "enchantment_removal": true,
+        "curse_breaking": "minor",
+        "area_cleansing": true
+      },
+      "chaos_chance": 0.10,
+      "chaos_effects": [
+        "Dissipe toute la magie dans un rayon de 100 mètres",
+        "Au lieu de dissiper, double tous les effets magiques",
+        "Transforme tous les sorts actifs en effets cosmétiques inoffensifs"
+      ],
+      "requirements": {
+        "minimum_level": 3,
+        "components": ["salt_circle", "clear_intention", "strong_will"]
+      },
+      "pratchett_flavor": "Parfait pour nettoyer les résidus magiques. Comme un aspirateur, mais pour la magie."
+    }
+  }
+}

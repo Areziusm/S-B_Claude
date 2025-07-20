@@ -1,0 +1,469 @@
+{
+  "system_info": {
+    "name": "Système de Magie Octarine Terry Pratchett",
+    "version": "1.0.0",
+    "last_updated": "2025-01-20",
+    "description": "Configuration complète pour la magie chaotique du Disque-Monde"
+  },
+  
+  "chaos_base_chance": 0.20,
+  "octarine_amplification": 1.0,
+  "ambient_magic_decay": 0.01,
+  "cascade_threshold": 3,
+  "max_ambient_level": 10.0,
+  "chaos_escalation": 1.5,
+  "headology_effectiveness": 0.8,
+  "lspace_accessibility": 0.3,
+  "divine_intervention_chance": 0.05,
+  
+  "magic_schools": {
+    "elemental": {
+      "name": "Magie Élémentaire",
+      "description": "Manipulation des éléments classiques",
+      "chaos_modifier": 1.0,
+      "mana_efficiency": 1.0,
+      "difficulty": "normale"
+    },
+    "headology": {
+      "name": "Headologie",
+      "description": "Magie psychologique des sorcières",
+      "chaos_modifier": 0.5,
+      "mana_efficiency": 1.2,
+      "difficulty": "élevée",
+      "special_notes": "Plus stable mais requiert conviction absolue"
+    },
+    "wizardry": {
+      "name": "Sorcellerie Universitaire",
+      "description": "Magie académique et théorique",
+      "chaos_modifier": 0.8,
+      "mana_efficiency": 0.9,
+      "difficulty": "élevée"
+    },
+    "divine": {
+      "name": "Magie Divine",
+      "description": "Magie cléricale et bénédictions",
+      "chaos_modifier": 0.7,
+      "mana_efficiency": 1.1,
+      "difficulty": "normale"
+    },
+    "chaos": {
+      "name": "Magie Chaotique",
+      "description": "Magie pure et imprévisible",
+      "chaos_modifier": 2.0,
+      "mana_efficiency": 0.8,
+      "difficulty": "extrême"
+    },
+    "death_magic": {
+      "name": "Magie de LA MORT",
+      "description": "Magie liée aux concepts de fin et transition",
+      "chaos_modifier": 1.5,
+      "mana_efficiency": 1.0,
+      "difficulty": "extrême",
+      "special_notes": "Peut attirer l'attention de LA MORT personnellement"
+    },
+    "lspace": {
+      "name": "Magie L-Space",
+      "description": "Magie bibliothécaire et dimensionnelle",
+      "chaos_modifier": 0.6,
+      "mana_efficiency": 1.3,
+      "difficulty": "très élevée",
+      "special_notes": "Requiert accès à une bibliothèque magique"
+    },
+    "narrative": {
+      "name": "Magie Narrative",
+      "description": "Manipulation directe de l'histoire et du récit",
+      "chaos_modifier": 3.0,
+      "mana_efficiency": 0.5,
+      "difficulty": "légendaire",
+      "special_notes": "Extrêmement dangereuse, peut briser la quatrième dimension"
+    }
+  },
+  
+  "octarine_properties": {
+    "base_wavelength": "impossible",
+    "visibility_requirement": "magical_affinity",
+    "concentration_effects": {
+      "1.0": {
+        "description": "Concentration normale",
+        "effects": ["Sorts fonctionnent normalement"]
+      },
+      "2.0": {
+        "description": "Légère amplification",
+        "effects": ["Sorts 20% plus puissants", "Objets magiques brillent faiblement"]
+      },
+      "3.0": {
+        "description": "Amplification visible",
+        "effects": ["Sorts 50% plus puissants", "Aura violette visible", "Créatures magiques attirées"]
+      },
+      "5.0": {
+        "description": "Instabilité magique",
+        "effects": ["Sorts imprévisibles", "Téléportations spontanées", "Objets ordinaires deviennent temporairement magiques"]
+      },
+      "8.0": {
+        "description": "Seuil de surgissement",
+        "effects": ["Cascades magiques fréquentes", "Réalité devient malléable", "Événements narratifs forcés"]
+      },
+      "10.0": {
+        "description": "Surgissement critique",
+        "effects": ["Surgissement Octarine majeur", "Amplification globale x3", "Rifts dimensionnels possibles"]
+      }
+    }
+  },
+  
+  "chaos_effect_weights": {
+    "minor_mishap": 0.4,
+    "spell_reversal": 0.2,
+    "wild_magic": 0.2,
+    "reality_hiccup": 0.1,
+    "narrative_twist": 0.07,
+    "octarine_overflow": 0.03
+  },
+  
+  "magic_zones": {
+    "unseen_university": {
+      "name": "Université de l'Invisible",
+      "base_amplification": 2.0,
+      "stability_modifier": 0.8,
+      "chaos_reduction": 0.3,
+      "special_effects": [
+        "Sorts académiques renforcés",
+        "Accès L-Space facilité",
+        "Bibliothécaire magique présent"
+      ]
+    },
+    "ankh_morpork_center": {
+      "name": "Centre d'Ankh-Morpork",
+      "base_amplification": 1.0,
+      "stability_modifier": 1.0,
+      "chaos_reduction": 0.0,
+      "special_effects": [
+        "Magie urbaine standard",
+        "Interactions sociales magiques"
+      ]
+    },
+    "shades": {
+      "name": "Les Ombres",
+      "base_amplification": 0.5,
+      "stability_modifier": 0.3,
+      "chaos_reduction": -0.2,
+      "special_effects": [
+        "Magie affaiblie",
+        "Effets chaotiques plus fréquents",
+        "Magie sombre renforcée"
+      ]
+    },
+    "patrician_palace": {
+      "name": "Palais du Patricien",
+      "base_amplification": 1.2,
+      "stability_modifier": 1.5,
+      "chaos_reduction": 0.4,
+      "special_effects": [
+        "Magie politique renforcée",
+        "Sorts de protection actifs",
+        "Surveillance magique"
+      ]
+    },
+    "river_ankh": {
+      "name": "Rivière Ankh",
+      "base_amplification": 0.8,
+      "stability_modifier": 0.6,
+      "chaos_reduction": -0.1,
+      "special_effects": [
+        "Magie aquatique polluée",
+        "Mutations magiques spontanées",
+        "Créatures amphibies magiques"
+      ]
+    },
+    "ramtops_mountains": {
+      "name": "Montagnes des Ramtops",
+      "base_amplification": 1.8,
+      "stability_modifier": 1.2,
+      "chaos_reduction": 0.1,
+      "special_effects": [
+        "Magie naturelle puissante",
+        "Headologie renforcée",
+        "Connexion aux forces primordiales"
+      ]
+    }
+  },
+  
+  "headology_techniques": {
+    "confidence_trick": {
+      "name": "Truc de Confiance",
+      "description": "Faire croire fermement à quelque chose pour le rendre vrai",
+      "difficulty": 3,
+      "mana_cost": 15,
+      "duration": 300,
+      "success_factors": ["conviction", "charisme", "experience"]
+    },
+    "psychology_reverse": {
+      "name": "Psychologie Inversée",
+      "description": "Obtenir le résultat désiré en demandant l'opposé",
+      "difficulty": 4,
+      "mana_cost": 20,
+      "duration": 180,
+      "success_factors": ["intelligence", "persuasion", "connaissance_cible"]
+    },
+    "narrative_pressure": {
+      "name": "Pression Narrative",
+      "description": "Forcer les événements vers une conclusion logique",
+      "difficulty": 5,
+      "mana_cost": 30,
+      "duration": 600,
+      "success_factors": ["sagesse", "experience", "comprehension_histoire"]
+    },
+    "reality_adjustment": {
+      "name": "Ajustement de Réalité",
+      "description": "Modifier la réalité par conviction absolue",
+      "difficulty": 6,
+      "mana_cost": 50,
+      "duration": 120,
+      "success_factors": ["foi_absolue", "force_volonte", "ancrage_realite"]
+    },
+    "common_sense_magic": {
+      "name": "Magie du Bon Sens",
+      "description": "Utiliser la logique comme force magique",
+      "difficulty": 2,
+      "mana_cost": 10,
+      "duration": 240,
+      "success_factors": ["sagesse", "experience_pratique"]
+    },
+    "stubborn_logic": {
+      "name": "Logique Têtue",
+      "description": "Imposer sa logique à la réalité par pure obstination",
+      "difficulty": 4,
+      "mana_cost": 25,
+      "duration": 180,
+      "success_factors": ["tetu", "conviction", "logique_implacable"]
+    }
+  },
+  
+  "lspace_mechanics": {
+    "base_accessibility": 0.3,
+    "library_bonus": 0.4,
+    "librarian_present_bonus": 0.5,
+    "knowledge_categories": [
+      "ancient_spells",
+      "historical_events",
+      "creature_lore",
+      "hidden_locations",
+      "future_possibilities",
+      "alternative_timelines",
+      "forbidden_knowledge",
+      "practical_wisdom",
+      "narrative_shortcuts",
+      "universal_constants"
+    ],
+    "access_requirements": {
+      "minimum_intelligence": 12,
+      "library_access": true,
+      "magical_affinity": 0.5,
+      "ook_understanding": "recommended"
+    }
+  },
+  
+  "divine_intervention": {
+    "base_chance": 0.05,
+    "deities": {
+      "fate": {
+        "intervention_type": "favorable_coincidence",
+        "trigger": "dire_situation",
+        "frequency": "rare"
+      },
+      "the_lady": {
+        "intervention_type": "impossible_luck",
+        "trigger": "million_to_one_chance",
+        "frequency": "when_needed"
+      },
+      "offler": {
+        "intervention_type": "crocodile_wisdom",
+        "trigger": "sacrifice_offered",
+        "frequency": "regular"
+      },
+      "om": {
+        "intervention_type": "divine_guidance",
+        "trigger": "faith_crisis",
+        "frequency": "occasional"
+      }
+    }
+  },
+  
+  "spell_power_levels": {
+    "cantrip": {
+      "level": 1,
+      "base_mana": 5,
+      "chaos_chance": 0.1,
+      "description": "Sorts mineurs et utilitaires"
+    },
+    "minor": {
+      "level": 2,
+      "base_mana": 15,
+      "chaos_chance": 0.15,
+      "description": "Sorts basiques avec effets modérés"
+    },
+    "moderate": {
+      "level": 3,
+      "base_mana": 30,
+      "chaos_chance": 0.2,
+      "description": "Sorts intermédiaires significatifs"
+    },
+    "major": {
+      "level": 4,
+      "base_mana": 60,
+      "chaos_chance": 0.3,
+      "description": "Sorts puissants avec effets importants"
+    },
+    "legendary": {
+      "level": 5,
+      "base_mana": 100,
+      "chaos_chance": 0.4,
+      "description": "Sorts épiques qui changent tout"
+    },
+    "narrative": {
+      "level": 6,
+      "base_mana": 200,
+      "chaos_chance": 0.8,
+      "description": "Sorts qui affectent l'histoire elle-même"
+    }
+  },
+  
+  "enchantment_types": {
+    "temporary": {
+      "default_duration": 300,
+      "mana_cost_multiplier": 1.0,
+      "description": "Effets magiques temporaires"
+    },
+    "conditional": {
+      "default_duration": -1,
+      "mana_cost_multiplier": 1.5,
+      "description": "Activés sous certaines conditions"
+    },
+    "permanent": {
+      "default_duration": -1,
+      "mana_cost_multiplier": 3.0,
+      "description": "Effets permanents jusqu'à dissipation"
+    },
+    "cursed": {
+      "default_duration": -1,
+      "mana_cost_multiplier": 2.0,
+      "description": "Malédictions difficiles à retirer"
+    },
+    "blessed": {
+      "default_duration": 86400,
+      "mana_cost_multiplier": 1.8,
+      "description": "Bénédictions divines"
+    },
+    "narrative_bound": {
+      "default_duration": -1,
+      "mana_cost_multiplier": 5.0,
+      "description": "Liés au récit, très puissants"
+    }
+  },
+  
+  "ambient_magic_effects": {
+    "very_low": {
+      "range": [0.0, 1.0],
+      "effects": {
+        "spell_power_modifier": 0.7,
+        "chaos_chance_modifier": 0.5,
+        "mana_regeneration": 0.8
+      }
+    },
+    "low": {
+      "range": [1.0, 2.5],
+      "effects": {
+        "spell_power_modifier": 0.9,
+        "chaos_chance_modifier": 0.8,
+        "mana_regeneration": 1.0
+      }
+    },
+    "normal": {
+      "range": [2.5, 4.0],
+      "effects": {
+        "spell_power_modifier": 1.0,
+        "chaos_chance_modifier": 1.0,
+        "mana_regeneration": 1.0
+      }
+    },
+    "high": {
+      "range": [4.0, 6.0],
+      "effects": {
+        "spell_power_modifier": 1.3,
+        "chaos_chance_modifier": 1.2,
+        "mana_regeneration": 1.2,
+        "spontaneous_magic": "possible"
+      }
+    },
+    "very_high": {
+      "range": [6.0, 8.0],
+      "effects": {
+        "spell_power_modifier": 1.6,
+        "chaos_chance_modifier": 1.5,
+        "mana_regeneration": 1.5,
+        "reality_distortion": "minor"
+      }
+    },
+    "critical": {
+      "range": [8.0, 10.0],
+      "effects": {
+        "spell_power_modifier": 2.0,
+        "chaos_chance_modifier": 2.0,
+        "mana_regeneration": 2.0,
+        "octarine_surge_chance": 0.1,
+        "reality_distortion": "major"
+      }
+    }
+  },
+  
+  "balancing": {
+    "mana_regeneration_base": 1.0,
+    "mana_regeneration_per_minute": 5,
+    "max_mana_base": 100,
+    "chaos_cooldown_base": 30.0,
+    "cascade_cooldown": 60.0,
+    "surge_cooldown": 300.0,
+    "enchantment_limit_per_entity": 5,
+    "spell_casting_cooldown": 2.0
+  },
+  
+  "achievement_triggers": {
+    "first_chaos_event": {
+      "description": "Déclencher votre premier événement chaotique",
+      "reward": "Déblocage sorts chaotiques basiques"
+    },
+    "headology_master": {
+      "description": "Maîtriser toutes les techniques de Headologie",
+      "reward": "Techniques avancées Granny Weatherwax"
+    },
+    "lspace_navigator": {
+      "description": "Accéder avec succès au L-Space 10 fois",
+      "reward": "Navigation L-Space améliorée"
+    },
+    "octarine_scholar": {
+      "description": "Survivre à 100 événements chaotiques",
+      "reward": "Résistance au chaos +50%"
+    },
+    "narrative_mage": {
+      "description": "Lancer un sort de niveau Narratif avec succès",
+      "reward": "Déblocage école de Magie Narrative"
+    }
+  },
+  
+  "easter_eggs": {
+    "terry_pratchett_tribute": {
+      "trigger": "cast_spell_with_banana",
+      "effect": "L'esprit de Terry Pratchett approuve vos choix magiques",
+      "rarity": "legendary"
+    },
+    "librarian_ook": {
+      "trigger": "attempt_lspace_while_ook_present",
+      "effect": "Ook! (Traduit : Accès L-Space automatiquement réussi)",
+      "rarity": "common"
+    },
+    "millionth_chaos": {
+      "trigger": "total_chaos_events_reaches_1000000",
+      "effect": "Achievement spécial : Maître du Chaos Incarné",
+      "rarity": "impossible"
+    }
+  }
+}

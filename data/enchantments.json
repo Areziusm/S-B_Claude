@@ -1,0 +1,842 @@
+{
+  "database_info": {
+    "name": "Base de Données des Enchantements - Disque-Monde",
+    "version": "1.0.0",
+    "last_updated": "2025-01-20",
+    "total_enchantments": 30,
+    "categories": ["weapons", "armor", "accessories", "consumables", "environmental", "special"]
+  },
+  
+  "enchantments": {
+    "magic_weapon_basic": {
+      "name": "Arme Magique Basique",
+      "type": 0,
+      "duration": 300.0,
+      "description": "Enchante une arme avec de la magie octarine basique",
+      "effects": {
+        "damage_bonus": 10,
+        "magical_damage": true,
+        "octarine_glow": true,
+        "hit_chance_bonus": 0.1
+      },
+      "application_requirements": {
+        "target_type": "weapon",
+        "mana_cost": 15,
+        "casting_time": 3.0
+      },
+      "visual_effects": {
+        "glow_color": "octarine_purple",
+        "particle_effect": "magical_sparkles",
+        "sound_effect": "enchant_weapon"
+      },
+      "pratchett_flavor": "Votre arme brille maintenant d'une lueur violette suspecte. C'est probablement bon signe."
+    },
+    
+    "protection_ward": {
+      "name": "Protection Magique",
+      "type": 1,
+      "duration": -1,
+      "trigger": "attacked",
+      "uses": 3,
+      "description": "Protection contre les attaques magiques et physiques",
+      "effects": {
+        "damage_reduction": 0.3,
+        "magic_resistance": 0.5,
+        "status_immunity": ["charmed", "feared"]
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 20,
+        "casting_time": 4.0
+      },
+      "visual_effects": {
+        "shield_shimmer": true,
+        "deflection_sparks": true,
+        "protective_aura": "golden"
+      },
+      "pratchett_flavor": "Une barrière magique vous entoure. Très utile contre les sorts ET les commentaires désagréables."
+    },
+    
+    "keen_edge": {
+      "name": "Lame Affûtée",
+      "type": 0,
+      "duration": 600.0,
+      "description": "Affûte magiquement une lame pour augmenter sa précision et ses dégâts critiques",
+      "effects": {
+        "critical_chance": 0.2,
+        "critical_damage": 1.5,
+        "armor_penetration": 0.3,
+        "sharpness": "supernatural"
+      },
+      "application_requirements": {
+        "target_type": "bladed_weapon",
+        "mana_cost": 12,
+        "casting_time": 2.5
+      },
+      "visual_effects": {
+        "blade_gleam": true,
+        "cutting_aura": "silver",
+        "edge_definition": "perfect"
+      },
+      "pratchett_flavor": "Votre lame est maintenant si affûtée qu'elle pourrait couper une idée en deux."
+    },
+    
+    "mage_armor": {
+      "name": "Armure de Mage",
+      "type": 0,
+      "duration": 1800.0,
+      "description": "Crée une armure magique invisible qui protège le lanceur",
+      "effects": {
+        "armor_class_bonus": 4,
+        "spell_resistance": 0.4,
+        "movement_penalty": 0,
+        "magic_conductivity": 1.2
+      },
+      "application_requirements": {
+        "target_type": "self",
+        "mana_cost": 25,
+        "casting_time": 3.5
+      },
+      "visual_effects": {
+        "invisible_armor": true,
+        "deflection_ripples": true,
+        "magical_outline": "faint_blue"
+      },
+      "pratchett_flavor": "Vous portez maintenant une armure invisible. Espérons qu'elle soit mieux que des vêtements invisibles."
+    },
+    
+    "elemental_weapon_fire": {
+      "name": "Arme Élémentaire - Feu",
+      "type": 0,
+      "duration": 480.0,
+      "description": "Imprègne une arme de feu élémentaire",
+      "effects": {
+        "elemental_damage": "fire",
+        "elemental_damage_bonus": 15,
+        "burn_chance": 0.25,
+        "burn_duration": 10.0,
+        "light_source": true
+      },
+      "application_requirements": {
+        "target_type": "weapon",
+        "mana_cost": 18,
+        "casting_time": 3.0,
+        "elemental_affinity": "fire"
+      },
+      "visual_effects": {
+        "flame_wreath": true,
+        "heat_shimmer": true,
+        "fire_trail": "combat_only"
+      },
+      "pratchett_flavor": "Votre arme est maintenant en feu. Dans le bon sens du terme, espérons-nous."
+    },
+    
+    "elemental_weapon_ice": {
+      "name": "Arme Élémentaire - Glace",
+      "type": 0,
+      "duration": 480.0,
+      "description": "Imprègne une arme de froid élémentaire",
+      "effects": {
+        "elemental_damage": "ice",
+        "elemental_damage_bonus": 12,
+        "slow_chance": 0.3,
+        "freeze_chance": 0.1,
+        "frost_aura": 2.0
+      },
+      "application_requirements": {
+        "target_type": "weapon",
+        "mana_cost": 18,
+        "casting_time": 3.0,
+        "elemental_affinity": "ice"
+      },
+      "visual_effects": {
+        "frost_coating": true,
+        "ice_crystals": true,
+        "cold_mist": "continuous"
+      },
+      "pratchett_flavor": "Votre arme est maintenant froide comme l'accueil dans un bureau de poste."
+    },
+    
+    "spell_turning": {
+      "name": "Renvoi de Sorts",
+      "type": 1,
+      "duration": 300.0,
+      "trigger": "targeted_by_spell",
+      "uses": 2,
+      "description": "Renvoie les sorts ciblant le porteur vers leur lanceur",
+      "effects": {
+        "spell_reflection": true,
+        "reflection_accuracy": 0.8,
+        "reflection_power": 0.9
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 35,
+        "casting_time": 4.5,
+        "magic_skill_minimum": 3
+      },
+      "visual_effects": {
+        "mirror_aura": true,
+        "reflection_flash": "on_trigger",
+        "spell_trail_reversal": true
+      },
+      "pratchett_flavor": "Les sorts vous reviennent maintenant comme un boomerang mal lancé."
+    },
+    
+    "invisible_servant": {
+      "name": "Serviteur Invisible",
+      "type": 2,
+      "duration": 3600.0,
+      "description": "Crée un serviteur magique invisible pour effectuer des tâches simples",
+      "effects": {
+        "task_automation": ["carrying", "organizing", "cleaning"],
+        "servant_strength": 2,
+        "servant_intelligence": 1,
+        "visibility": "invisible"
+      },
+      "application_requirements": {
+        "target_type": "area",
+        "mana_cost": 30,
+        "casting_time": 5.0
+      },
+      "visual_effects": {
+        "floating_objects": true,
+        "task_completion": "automatic",
+        "servant_outline": "none"
+      },
+      "pratchett_flavor": "Vous avez maintenant un assistant invisible. J'espère qu'il ne fouille pas dans vos affaires."
+    },
+    
+    "lucky_charm": {
+      "name": "Charme de Chance",
+      "type": 0,
+      "duration": 1200.0,
+      "description": "Augmente la chance du porteur dans toutes ses actions",
+      "effects": {
+        "luck_bonus": 2,
+        "critical_success_chance": 0.15,
+        "failure_mitigation": 0.2,
+        "fortune_favor": true
+      },
+      "application_requirements": {
+        "target_type": "accessory",
+        "mana_cost": 22,
+        "casting_time": 3.5
+      },
+      "visual_effects": {
+        "lucky_sparkles": true,
+        "fortune_aura": "subtle",
+        "success_glow": "on_use"
+      },
+      "pratchett_flavor": "Vous vous sentez chanceux. Mais pas au point de jouer contre le destin."
+    },
+    
+    "mind_shield": {
+      "name": "Bouclier Mental",
+      "type": 0,
+      "duration": 900.0,
+      "description": "Protège l'esprit contre les intrusions magiques et psychiques",
+      "effects": {
+        "mental_resistance": 0.8,
+        "charm_immunity": true,
+        "mind_read_protection": true,
+        "thought_obscurity": true
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 20,
+        "casting_time": 4.0
+      },
+      "visual_effects": {
+        "mental_barrier": "invisible",
+        "thought_static": "on_intrusion",
+        "mind_fortress": "conceptual"
+      },
+      "pratchett_flavor": "Vos pensées sont maintenant protégées. Même vous ne pouvez plus les lire clairement."
+    },
+    
+    "feather_fall": {
+      "name": "Chute de Plume",
+      "type": 1,
+      "duration": 600.0,
+      "trigger": "falling",
+      "description": "Fait tomber le porteur comme une plume en cas de chute",
+      "effects": {
+        "fall_damage_reduction": 1.0,
+        "fall_speed_reduction": 0.9,
+        "graceful_landing": true
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 8,
+        "casting_time": 1.5
+      },
+      "visual_effects": {
+        "feather_trail": "while_falling",
+        "soft_landing": "always",
+        "weightless_appearance": true
+      },
+      "pratchett_flavor": "Vous tombez maintenant avec l'élégance d'une plume. Une plume très lourde, mais quand même."
+    },
+    
+    "water_breathing": {
+      "name": "Respiration Aquatique",
+      "type": 0,
+      "duration": 1800.0,
+      "description": "Permet de respirer sous l'eau comme un poisson",
+      "effects": {
+        "underwater_breathing": true,
+        "swimming_speed_bonus": 0.5,
+        "pressure_resistance": true,
+        "amphibious": true
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 15,
+        "casting_time": 3.0
+      },
+      "visual_effects": {
+        "gill_slits": "temporary",
+        "water_adaptation": "complete",
+        "aquatic_grace": true
+      },
+      "pratchett_flavor": "Vous pouvez maintenant respirer sous l'eau. Très utile dans la rivière Ankh... si on peut appeler ça de l'eau."
+    },
+    
+    "beast_speech": {
+      "name": "Parole des Bêtes",
+      "type": 0,
+      "duration": 1200.0,
+      "description": "Permet de communiquer avec tous les animaux",
+      "effects": {
+        "animal_communication": true,
+        "animal_empathy": true,
+        "beast_friendship": 0.3,
+        "wild_animal_calming": true
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 12,
+        "casting_time": 2.5
+      },
+      "visual_effects": {
+        "animal_magnetism": true,
+        "communication_aura": "natural",
+        "beast_recognition": "mutual"
+      },
+      "pratchett_flavor": "Vous pouvez maintenant parler aux animaux. Préparez-vous à entendre BEAUCOUP de plaintes sur la nourriture."
+    },
+    
+    "night_vision": {
+      "name": "Vision Nocturne",
+      "type": 0,
+      "duration": 2400.0,
+      "description": "Améliore drastiquement la vision dans l'obscurité",
+      "effects": {
+        "darkness_vision": true,
+        "light_sensitivity": 0.2,
+        "detail_enhancement": true,
+        "magical_sight": 0.3
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 10,
+        "casting_time": 2.0
+      },
+      "visual_effects": {
+        "eye_glow": "faint_silver",
+        "enhanced_perception": "darkness_only",
+        "light_adaptation": "automatic"
+      },
+      "pratchett_flavor": "Vous voyez maintenant dans le noir comme un chat. Un chat très intelligent avec des opposables."
+    },
+    
+    "strength_enhancement": {
+      "name": "Force Améliorée",
+      "type": 0,
+      "duration": 600.0,
+      "description": "Augmente considérablement la force physique du porteur",
+      "effects": {
+        "strength_multiplier": 2.0,
+        "carrying_capacity": 3.0,
+        "damage_bonus": 8,
+        "feat_of_strength": true
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 18,
+        "casting_time": 3.0
+      },
+      "visual_effects": {
+        "muscle_definition": "enhanced",
+        "power_aura": "red",
+        "strength_demonstration": "impressive"
+      },
+      "pratchett_flavor": "Vous êtes maintenant fort comme un troll. Essayez de ne pas casser les poignées de porte."
+    },
+    
+    "speed_enhancement": {
+      "name": "Vitesse Améliorée",
+      "type": 0,
+      "duration": 450.0,
+      "description": "Augmente la vitesse de mouvement et de réaction",
+      "effects": {
+        "movement_speed": 1.8,
+        "reaction_time": 0.6,
+        "initiative_bonus": 3,
+        "dodge_bonus": 0.25
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 16,
+        "casting_time": 2.5
+      },
+      "visual_effects": {
+        "speed_blur": "subtle",
+        "quick_movements": "enhanced",
+        "velocity_trail": "faint"
+      },
+      "pratchett_flavor": "Vous bougez maintenant si vite que vous pourriez rattraper vos propres bêtises. Théoriquement."
+    },
+    
+    "perfect_balance": {
+      "name": "Équilibre Parfait",
+      "type": 0,
+      "duration": 1800.0,
+      "description": "Donne un équilibre et une coordination parfaits",
+      "effects": {
+        "fall_immunity": "balance_related",
+        "acrobatics_bonus": 4,
+        "tightrope_walking": true,
+        "grace_enhancement": true
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 14,
+        "casting_time": 3.0
+      },
+      "visual_effects": {
+        "perfect_posture": true,
+        "graceful_movement": "always",
+        "balance_demonstration": "impossible_feats"
+      },
+      "pratchett_flavor": "Vous avez maintenant l'équilibre d'un funambule. Ou d'une bibliothèque bien organisée."
+    },
+    
+    "truth_compulsion": {
+      "name": "Contrainte de Vérité",
+      "type": 0,
+      "duration": 300.0,
+      "description": "Force la cible à dire la vérité pendant une courte période",
+      "effects": {
+        "truth_compulsion": true,
+        "lie_impossibility": 0.9,
+        "honesty_enhancement": true,
+        "deception_resistance": 0.8
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 25,
+        "casting_time": 4.0,
+        "target_consent": "not_required"
+      },
+      "visual_effects": {
+        "truth_aura": "golden_white",
+        "honesty_glow": "around_mouth",
+        "deception_failure": "visible"
+      },
+      "pratchett_flavor": "La cible ne peut maintenant dire que la vérité. Très embarrassant lors des réunions de famille."
+    },
+    
+    "temporal_slow": {
+      "name": "Ralentissement Temporel",
+      "type": 0,
+      "duration": 60.0,
+      "description": "Ralentit le temps autour de la cible, la rendant plus lente",
+      "effects": {
+        "time_dilation": 0.4,
+        "movement_reduction": 0.6,
+        "reaction_penalty": 0.5,
+        "temporal_isolation": "partial"
+      },
+      "application_requirements": {
+        "target_type": "enemy",
+        "mana_cost": 30,
+        "casting_time": 3.5,
+        "temporal_magic_skill": 2
+      },
+      "visual_effects": {
+        "time_distortion": "visible",
+        "slow_motion_aura": true,
+        "temporal_ripples": "around_target"
+      },
+      "pratchett_flavor": "La cible bouge maintenant au ralenti. Parfait pour les longues explications."
+    },
+    
+    "dimensional_pocket": {
+      "name": "Poche Dimensionnelle",
+      "type": 2,
+      "duration": -1,
+      "description": "Crée un espace de stockage extra-dimensionnel",
+      "effects": {
+        "storage_space": "unlimited_small_items",
+        "weight_negation": true,
+        "item_preservation": true,
+        "access_instant": true
+      },
+      "application_requirements": {
+        "target_type": "accessory",
+        "mana_cost": 40,
+        "casting_time": 8.0,
+        "dimensional_magic_skill": 3
+      },
+      "visual_effects": {
+        "dimensional_shimmer": "when_accessed",
+        "space_distortion": "minor",
+        "pocket_portal": "hand_sized"
+      },
+      "pratchett_flavor": "Un espace de stockage magique ! Parfait pour cacher vos affaires des bureaucrates."
+    },
+    
+    "healing_aura": {
+      "name": "Aura de Guérison",
+      "type": 0,
+      "duration": 1200.0,
+      "description": "Crée une aura qui guérit lentement tous les alliés proches",
+      "effects": {
+        "area_healing": 2,
+        "healing_radius": 5.0,
+        "continuous_effect": true,
+        "status_cleansing": "minor"
+      },
+      "application_requirements": {
+        "target_type": "self",
+        "mana_cost": 35,
+        "casting_time": 5.0
+      },
+      "visual_effects": {
+        "healing_glow": "warm_golden",
+        "life_energy": "visible",
+        "restoration_sparkles": "continuous"
+      },
+      "pratchett_flavor": "Vous rayonnez maintenant de santé. Littéralement. C'est un peu gênant dans les endroits sombres."
+    },
+    
+    "death_ward": {
+      "name": "Protection contre LA MORT",
+      "type": 4,
+      "duration": 86400.0,
+      "description": "Protection puissante contre la mort instantanée et les effets nécromantiques",
+      "effects": {
+        "death_immunity": "instant_death",
+        "life_force_protection": 0.8,
+        "soul_anchoring": true,
+        "death_detection": "nearby"
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 50,
+        "casting_time": 10.0,
+        "divine_magic_skill": 4
+      },
+      "visual_effects": {
+        "life_aura": "brilliant_white",
+        "death_resistance": "visible_to_undead",
+        "soul_anchor": "metaphysical"
+      },
+      "pratchett_flavor": "Vous êtes maintenant protégé contre la mort instantanée. LA MORT ne sera pas content, mais Il comprendra."
+    },
+    
+    "chaos_field": {
+      "name": "Champ de Chaos",
+      "type": 0,
+      "duration": 180.0,
+      "description": "Crée un champ de magie chaotique autour du lanceur",
+      "effects": {
+        "chaos_aura": 3.0,
+        "unpredictable_effects": true,
+        "magic_amplification": 1.5,
+        "reality_instability": "minor"
+      },
+      "application_requirements": {
+        "target_type": "area",
+        "mana_cost": 28,
+        "casting_time": 4.0,
+        "chaos_tolerance": 2
+      },
+      "visual_effects": {
+        "chaotic_colors": "swirling",
+        "reality_ripples": "constant",
+        "unpredictable_sparkles": true
+      },
+      "pratchett_flavor": "Vous êtes maintenant entouré de chaos pur. Tout peut arriver. TOUT."
+    },
+    
+    "narrative_protection": {
+      "name": "Protection Narrative",
+      "type": 5,
+      "duration": 3600.0,
+      "description": "Protection basée sur l'importance narrative du personnage",
+      "effects": {
+        "plot_armor": 0.7,
+        "dramatic_timing": true,
+        "story_relevance": "enhanced",
+        "narrative_immunity": "minor_threats"
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 45,
+        "casting_time": 6.0,
+        "narrative_magic_skill": 3
+      },
+      "visual_effects": {
+        "story_aura": "meta_textual",
+        "importance_glow": "varies_by_scene",
+        "plot_relevance": "visible_to_readers"
+      },
+      "pratchett_flavor": "Vous êtes maintenant protégé par votre importance dans l'histoire. Ne le laissez pas monter à la tête."
+    },
+    
+    "ook_translation": {
+      "name": "Traduction Ook",
+      "type": 0,
+      "duration": 1800.0,
+      "description": "Permet de comprendre et parler le langage Ook du Bibliothécaire",
+      "effects": {
+        "ook_comprehension": true,
+        "ook_fluency": 0.8,
+        "librarian_friendship": 0.5,
+        "banana_appreciation": "enhanced"
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 8,
+        "casting_time": 2.0
+      },
+      "visual_effects": {
+        "linguistic_aura": "scholarly",
+        "comprehension_glow": "around_ears",
+        "ook_understanding": "sudden"
+      },
+      "pratchett_flavor": "Vous comprenez maintenant le Ook. Ook ook ook ook! (Traduction : Félicitations, c'est très utile !)"
+    },
+    
+    "ultimate_hangover_cure": {
+      "name": "Remède Anti-Gueule de Bois Ultime",
+      "type": 3,
+      "duration": 0,
+      "description": "Guérit instantanément toute gueule de bois, même magique",
+      "effects": {
+        "hangover_removal": "complete",
+        "alcohol_purging": true,
+        "clarity_restoration": true,
+        "regret_mitigation": 0.3
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 5,
+        "casting_time": 1.0,
+        "requires_hangover": true
+      },
+      "visual_effects": {
+        "clarity_flash": "instant",
+        "toxin_purge": "visible",
+        "relief_aura": "immediate"
+      },
+      "pratchett_flavor": "Ah ! Vous vous sentez comme neuf. Prêt pour la prochaine soirée !"
+    },
+    
+    "administrative_immunity": {
+      "name": "Immunité Administrative",
+      "type": 2,
+      "duration": 7200.0,
+      "description": "Protection contre la bureaucratie et les formulaires magiques",
+      "effects": {
+        "paperwork_avoidance": true,
+        "bureaucracy_resistance": 0.9,
+        "form_filling_immunity": true,
+        "red_tape_cutting": "automatic"
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 20,
+        "casting_time": 3.0,
+        "location_restriction": "ankh_morpork"
+      },
+      "visual_effects": {
+        "bureaucracy_deflection": "subtle",
+        "form_dissolution": "when_presented",
+        "efficiency_aura": "governmental"
+      },
+      "pratchett_flavor": "Vous êtes maintenant immunisé contre la paperasse. Le rêve de tous les citoyens d'Ankh-Morpork !"
+    },
+    
+    "infinite_pockets": {
+      "name": "Poches Infinies",
+      "type": 2,
+      "duration": -1,
+      "description": "Transforme toutes les poches en espaces de stockage quasi-infinis",
+      "effects": {
+        "pocket_expansion": "infinite",
+        "item_organization": "automatic",
+        "weight_distribution": "magical",
+        "lost_item_prevention": true
+      },
+      "application_requirements": {
+        "target_type": "clothing",
+        "mana_cost": 35,
+        "casting_time": 5.0,
+        "requires_pockets": true
+      },
+      "visual_effects": {
+        "pocket_depth": "impossible",
+        "storage_shimmer": "when_accessed",
+        "organization_magic": "automatic"
+      },
+      "pratchett_flavor": "Vos poches peuvent maintenant contenir n'importe quoi. Y compris d'autres poches. C'est très meta."
+    },
+    
+    "dramatic_entrance": {
+      "name": "Entrée Dramatique",
+      "type": 1,
+      "duration": -1,
+      "trigger": "entering_room",
+      "description": "Assure une entrée impressionnante à chaque fois",
+      "effects": {
+        "dramatic_timing": "perfect",
+        "attention_drawing": "automatic",
+        "entrance_effects": "customizable",
+        "memorable_impression": true
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 12,
+        "casting_time": 2.0,
+        "charisma_minimum": 2
+      },
+      "visual_effects": {
+        "entrance_fanfare": "magical",
+        "dramatic_lighting": "appears",
+        "impressive_aura": "on_entry"
+      },
+      "pratchett_flavor": "Vous faites maintenant des entrées dignes d'un héros de roman. Ou d'un villain, selon votre style."
+    },
+    
+    "meeting_avoidance": {
+      "name": "Évitement de Réunions",
+      "type": 1,
+      "duration": 86400.0,
+      "trigger": "meeting_invitation",
+      "description": "Protection magique contre les réunions inutiles",
+      "effects": {
+        "meeting_immunity": 0.8,
+        "excuse_generation": "automatic",
+        "scheduling_conflict": "always",
+        "productivity_protection": true
+      },
+      "application_requirements": {
+        "target_type": "character",
+        "mana_cost": 15,
+        "casting_time": 2.5,
+        "employment_status": "any"
+      },
+      "visual_effects": {
+        "avoidance_aura": "subtle",
+        "calendar_manipulation": "magical",
+        "excuse_plausibility": "enhanced"
+      },
+      "pratchett_flavor": "Vous évitez maintenant magiquement les réunions inutiles. C'est peut-être le sort le plus utile jamais créé."
+    }
+  },
+  
+  "enchantment_combinations": {
+    "warrior_set": {
+      "name": "Ensemble du Guerrier",
+      "enchantments": ["magic_weapon_basic", "protection_ward", "strength_enhancement"],
+      "synergy_bonus": {
+        "combat_effectiveness": 1.3,
+        "durability_bonus": 0.2
+      }
+    },
+    "mage_set": {
+      "name": "Ensemble du Mage",
+      "enchantments": ["mage_armor", "spell_turning", "mind_shield"],
+      "synergy_bonus": {
+        "mana_efficiency": 1.2,
+        "spell_power": 1.15
+      }
+    },
+    "rogue_set": {
+      "name": "Ensemble du Voleur",
+      "enchantments": ["speed_enhancement", "perfect_balance", "night_vision"],
+      "synergy_bonus": {
+        "stealth_bonus": 1.4,
+        "agility_enhancement": 1.25
+      }
+    },
+    "pratchett_special": {
+      "name": "Ensemble Terry Pratchett",
+      "enchantments": ["ook_translation", "administrative_immunity", "meeting_avoidance"],
+      "synergy_bonus": {
+        "narrative_importance": 2.0,
+        "comedy_timing": "perfect"
+      }
+    }
+  },
+  
+  "cursed_enchantments": {
+    "cursed_honesty": {
+      "name": "Malédiction d'Honnêteté",
+      "type": 3,
+      "duration": -1,
+      "description": "Force à dire la vérité en permanence",
+      "effects": {
+        "compulsive_honesty": true,
+        "social_awkwardness": "extreme",
+        "relationship_damage": "potential"
+      },
+      "removal_requirements": {
+        "method": "act_of_kindness",
+        "difficulty": "moderate"
+      },
+      "pratchett_flavor": "Vous ne pouvez plus mentir. Évitez les questions sur l'apparence des gens."
+    },
+    "unlucky_charm": {
+      "name": "Charme de Malchance",
+      "type": 3,
+      "duration": -1,
+      "description": "Attire la malchance comme un aimant",
+      "effects": {
+        "bad_luck": -3,
+        "murphy_law_enhancement": true,
+        "catastrophe_magnetism": 0.3
+      },
+      "removal_requirements": {
+        "method": "good_deed_series",
+        "difficulty": "hard"
+      },
+      "pratchett_flavor": "Vous attirez maintenant la malchance. Même les chats noirs vous évitent."
+    }
+  },
+  
+  "legendary_enchantments": {
+    "narrative_immunity": {
+      "name": "Immunité Narrative",
+      "type": 5,
+      "duration": -1,
+      "description": "Protection contre les événements qui briseraient l'histoire",
+      "effects": {
+        "story_breaking_immunity": true,
+        "plot_hole_avoidance": true,
+        "narrative_consistency": "enforced"
+      },
+      "application_requirements": {
+        "target_type": "main_character",
+        "mana_cost": 100,
+        "casting_time": 30.0,
+        "author_permission": "required"
+      },
+      "pratchett_flavor": "Vous êtes maintenant protégé par les lois de la narration elle-même. Très méta."
+    }
+  }
+}
