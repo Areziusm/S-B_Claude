@@ -601,5 +601,10 @@
       "world_state": "faction relationships permanently changed",
       "npc_memories": "special dialogue acknowledging past relationship"
     }
+  },
+  "faction_test": {
+    "name": "La Guilde des Testeurs",
+    "description": "Faction dédiée à la validation des systèmes.",
+    "reputation": 0
   }
 }

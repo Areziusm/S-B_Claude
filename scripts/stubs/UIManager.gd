@@ -134,13 +134,6 @@ enum UIScreen {
 	CREDITS
 }
 
-enum NotificationType {
-	INFO,
-	SUCCESS,
-	WARNING,
-	ERROR,
-	MAGICAL
-}
 
 enum UITheme {
 	DEFAULT,

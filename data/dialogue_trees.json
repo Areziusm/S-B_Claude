@@ -458,5 +458,36 @@
         "next_node": "granny_headology_practice"
       }
     }
+  },
+  "lettre_intro": {
+    "start": {
+      "text": "La lettre s'ouvre dans un parfum de parchemin neuf. \"Bienvenue, apprenti magicien.ne ! Commence par parler au NPC pour recevoir ta première quête.\"",
+      "choices": [
+        {"text": "Ranger la lettre", "next": "fin"}
+      ]
+    },
+    "fin": {
+      "text": "Tu ranges la lettre dans ta poche. Une aventure commence...",
+      "choices": []
+    }
+  },
+  "npc_test": {
+    "start": {
+      "text": "NPC : \"Bonjour ! Tu peux tester ici les dialogues, les quêtes, la réputation, et plus.\"",
+      "choices": [
+        {"text": "Demander une quête", "next": "quete"},
+        {"text": "Dire au revoir", "next": "fin"}
+      ]
+    },
+    "quete": {
+      "text": "NPC : \"Va toucher la zone verte pour recevoir ta première quête !\"",
+      "choices": [
+        {"text": "Merci", "next": "fin"}
+      ]
+    },
+    "fin": {
+      "text": "Le NPC retourne à ses occupations.",
+      "choices": []
+    }
   }
 }

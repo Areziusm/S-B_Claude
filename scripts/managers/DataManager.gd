@@ -288,7 +288,7 @@ func get_character_dialogue_tree(character_id: String) -> Dictionary:
 # ================================
 # GETTERS POUR QUÊTES
 # ================================
-func get_quest_template(quest_id: String) -> Dictionary:
+static func get_quest_template(quest_id: String) -> Dictionary:
 	"""Récupère un modèle de quête"""
 	return quest_templates.get(quest_id, {})
 
@@ -349,6 +349,12 @@ func get_reputation_threshold(reputation_level: String) -> int:
 # ================================
 # GESTION DLC
 # ================================
+static func get_story_progression():
+\treturn {}
+
+static func get_procedural_quest_config():
+\treturn {}
+
 func register_dlc_data(dlc_id: String, data_type: String, file_path: String) -> void:
 	"""Enregistre un fichier de données DLC"""
 	if not dlc_data_paths.has(dlc_id):

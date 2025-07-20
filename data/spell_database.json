@@ -728,5 +728,11 @@
       },
       "pratchett_flavor": "Parfait pour nettoyer les résidus magiques. Comme un aspirateur, mais pour la magie."
     }
+  },
+  "test_spell": {
+    "name": "Sort Test",
+    "description": "Un sort générique de test.",
+    "power": 10,
+    "type": "magie"
   }
 }

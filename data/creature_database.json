@@ -565,5 +565,14 @@
         }
       }
     }
+  },
+  "test_creature": {
+    "name": "Bestiole-Test",
+    "description": "Une créature destinée aux tests de combat.",
+    "hp": 30,
+    "attack": 5,
+    "defense": 2,
+    "spells": ["test_spell"],
+    "rarity": "test"
   }
 }

@@ -838,5 +838,10 @@
       },
       "pratchett_flavor": "Vous êtes maintenant protégé par les lois de la narration elle-même. Très méta."
     }
+  },
+  "LettreMagique": {
+    "name": "Lettre Magique",
+    "description": "Une lettre qui déclenche l'aventure.",
+    "price": 1
   }
 }

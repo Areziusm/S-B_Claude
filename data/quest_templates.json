@@ -360,5 +360,24 @@
         "faction_reputation": ">= 50"
       }
     }
+  },
+  "test_quest": {
+    "title": "Toucher la zone verte",
+    "description": "Trouve et interagis avec la zone verte dans la salle de test pour prouver ta valeur.",
+    "steps": [
+      {
+        "objective": "Interagir avec la ReputationTrigger",
+        "completed": false
+      }
+    ],
+    "reward": {
+      "exp": 50,
+      "reputation": {
+        "faction_test": 5
+      },
+      "item": "LettreMagique"
+    },
+    "next_quest": null
   }
 }
+

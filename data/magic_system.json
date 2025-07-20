@@ -465,5 +465,10 @@
       "effect": "Achievement spécial : Maître du Chaos Incarné",
       "rarity": "impossible"
     }
+  },
+  "element_test": {
+    "name": "Test-élément",
+    "affinity": ["magie"],
+    "bonus": "+2 attaque contre Bestiole-Test"
   }
 }

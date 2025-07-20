@@ -1,0 +1,577 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-01-15",
+  "total_characters": 47,
+  
+  "vetinari": {
+    "id": "vetinari",
+    "name": "Lord Havelock Vetinari",
+    "title": "Patricien d'Ankh-Morpork",
+    "faction": "patrician",
+    "location": "patrician_palace",
+    "importance": "critical",
+    "appearance": {
+      "age": 50,
+      "height": 185,
+      "build": "lean",
+      "hair": "black_graying",
+      "eyes": "gray_steel",
+      "clothing": "black_elegant",
+      "distinctive_features": ["piercing_gaze", "precise_movements", "controlled_demeanor"]
+    },
+    "personality": {
+      "traits": ["calculating", "patient", "ironic", "pragmatic"],
+      "speaking_style": "measured_precise",
+      "humor": "dry_sardonic",
+      "motivations": ["stability", "efficiency", "controlled_chaos"]
+    },
+    "relationships": {
+      "drumknott": 90,
+      "vimes": 70,
+      "patrician_guard": 85,
+      "common_citizens": 60,
+      "guilds": 75
+    },
+    "dialogue_tree": "vetinari_main",
+    "story_role": "quest_giver",
+    "availability": {
+      "prologue": false,
+      "act1": true,
+      "act2": true,
+      "act3": true
+    },
+    "interaction_types": ["quest_assignment", "political_discussion", "philosophical_debate"],
+    "voice_characteristics": {
+      "tone": "calm_authoritative",
+      "pace": "deliberate",
+      "volume": "quiet_commanding"
+    }
+  },
+
+  "maurice": {
+    "id": "maurice",
+    "name": "Maurice",
+    "title": "Rat Érudit et Guide",
+    "faction": "independent",
+    "location": "variable_companion",
+    "importance": "critical",
+    "appearance": {
+      "species": "rat",
+      "size": "medium",
+      "color": "brown_gray",
+      "accessories": ["monocle", "occasional_tie"],
+      "distinctive_features": ["upright_posture", "intelligent_expression", "expressive_whiskers"]
+    },
+    "personality": {
+      "traits": ["protective", "experienced", "slightly_cynical", "wise"],
+      "speaking_style": "informal_knowledgeable",
+      "humor": "sarcastic_dry",
+      "motivations": ["player_safety", "knowledge_sharing", "chaos_prevention"]
+    },
+    "relationships": {
+      "player": 0,
+      "vetinari": 70,
+      "rat_network": 95,
+      "madame_cake": 80
+    },
+    "companion_data": {
+      "is_companion": true,
+      "recruitment_stage": "prologue",
+      "loyalty_base": 50,
+      "special_abilities": ["translation", "underground_navigation", "danger_sense"]
+    },
+    "dialogue_tree": "maurice_companion",
+    "story_role": "companion_guide",
+    "availability": {
+      "prologue": true,
+      "act1": true,
+      "act2": true,
+      "act3": true
+    }
+  },
+
+  "madame_cake": {
+    "id": "madame_cake",
+    "name": "Evadne Cake",
+    "title": "Voyante et Pâtissière",
+    "faction": "independent",
+    "location": "cake_shop",
+    "importance": "major",
+    "appearance": {
+      "age": 60,
+      "height": 160,
+      "build": "comfortable",
+      "hair": "gray_white_bun",
+      "eyes": "blue_piercing",
+      "clothing": "colorful_dress_apron",
+      "distinctive_features": ["warm_smile", "flour_dusted_hands", "mystical_aura"]
+    },
+    "personality": {
+      "traits": ["prophetic", "nurturing", "mysterious", "wise"],
+      "speaking_style": "warm_cryptic",
+      "humor": "gentle_knowing",
+      "motivations": ["helping_others", "fate_guidance", "biscuit_perfection"]
+    },
+    "relationships": {
+      "player": 0,
+      "maurice": 80,
+      "neighborhood": 90,
+      "mystic_community": 85
+    },
+    "shop_data": {
+      "is_merchant": true,
+      "specialty": "prophetic_biscuits",
+      "services": ["fortune_telling", "magical_baking", "advice"],
+      "inventory": ["fortune_cookies", "healing_tea", "prophetic_biscuits"]
+    },
+    "dialogue_tree": "madame_cake_main",
+    "story_role": "mentor_prophet",
+    "magical_abilities": ["precognition", "biscuit_divination", "future_sight"],
+    "availability": {
+      "prologue": true,
+      "act1": true,
+      "act2": true,
+      "act3": true
+    }
+  },
+
+  "madame_simnel": {
+    "id": "madame_simnel",
+    "name": "Martha Simnel",
+    "title": "Logeuse",
+    "faction": "common_folk",
+    "location": "player_apartment_building",
+    "importance": "supporting",
+    "appearance": {
+      "age": 50,
+      "height": 165,
+      "build": "maternal",
+      "hair": "brown_gray_practical",
+      "eyes": "kind_brown",
+      "clothing": "simple_dress_apron",
+      "distinctive_features": ["caring_expression", "always_cleaning", "key_ring"]
+    },
+    "personality": {
+      "traits": ["nurturing", "observant", "practical", "concerned"],
+      "speaking_style": "maternal_caring",
+      "humor": "gentle_teasing",
+      "motivations": ["tenant_welfare", "building_maintenance", "community_care"]
+    },
+    "relationships": {
+      "player": 0,
+      "building_tenants": 85,
+      "neighborhood": 75
+    },
+    "dialogue_tree": "madame_simnel_basic",
+    "story_role": "tutorial_support",
+    "services": ["housing", "local_information", "motherly_advice"],
+    "availability": {
+      "prologue": true,
+      "act1": true,
+      "act2": false,
+      "act3": false
+    }
+  },
+
+  "dibbler": {
+    "id": "dibbler",
+    "name": "Cut-Me-Own-Throat Dibbler",
+    "title": "Marchand Ambulant",
+    "faction": "merchants",
+    "location": "street_various",
+    "importance": "supporting",
+    "appearance": {
+      "age": 45,
+      "height": 170,
+      "build": "enthusiastic",
+      "hair": "thinning_brown",
+      "eyes": "opportunistic_brown",
+      "clothing": "striped_jacket_worn",
+      "distinctive_features": ["perpetual_smile", "food_stains", "promotional_energy"]
+    },
+    "personality": {
+      "traits": ["optimistic", "entrepreneurial", "persistent", "creative"],
+      "speaking_style": "sales_pitch_constant",
+      "humor": "unintentional_commercial",
+      "motivations": ["profit", "customer_satisfaction", "culinary_innovation"]
+    },
+    "merchant_data": {
+      "is_merchant": true,
+      "specialty": "street_food",
+      "quality": "questionable_but_enthusiastic",
+      "inventory": ["mysterious_sausages", "exotic_pies", "suspicious_drinks"],
+      "prices": "variable_negotiable"
+    },
+    "dialogue_tree": "dibbler_merchant",
+    "story_role": "comic_relief_merchant"
+  },
+
+  "granny_weatherwax": {
+    "id": "granny_weatherwax",
+    "name": "Esmeralda Weatherwax",
+    "title": "Sorcière en Chef",
+    "faction": "witches",
+    "location": "lancre_cottage",
+    "importance": "critical",
+    "appearance": {
+      "age": 65,
+      "height": 170,
+      "build": "austere",
+      "hair": "iron_gray_severe",
+      "eyes": "steel_blue_piercing",
+      "clothing": "black_practical_traditional",
+      "distinctive_features": ["authoritative_presence", "no_nonsense_expression", "magical_aura"]
+    },
+    "personality": {
+      "traits": ["commanding", "protective", "practical", "formidable"],
+      "speaking_style": "direct_authoritative",
+      "humor": "dry_pointed",
+      "motivations": ["responsibility", "protection", "proper_order"]
+    },
+    "magical_abilities": ["headology", "borrowing", "weather_working", "seeing"],
+    "relationships": {
+      "nanny_ogg": 90,
+      "tiffany_aching": 80,
+      "lancre_people": 95,
+      "player": 0
+    },
+    "dialogue_tree": "granny_weatherwax_main",
+    "story_role": "powerful_ally_mentor",
+    "availability": {
+      "prologue": false,
+      "act1": false,
+      "act2": true,
+      "act3": true
+    }
+  },
+
+  "rincewind": {
+    "id": "rincewind",
+    "name": "Rincewind",
+    "title": "Mage (Techniquement)",
+    "faction": "university",
+    "location": "unseen_university",
+    "importance": "major",
+    "appearance": {
+      "age": 40,
+      "height": 175,
+      "build": "lanky_nervous",
+      "hair": "brown_unkempt",
+      "eyes": "worried_brown",
+      "clothing": "worn_wizard_robes",
+      "distinctive_features": ["WIZZARD_hat", "perpetually_worried", "ready_to_run"]
+    },
+    "personality": {
+      "traits": ["cowardly", "pragmatic", "survivor", "reluctant"],
+      "speaking_style": "nervous_rapid",
+      "humor": "self_deprecating_panicked",
+      "motivations": ["survival", "avoiding_adventure", "quiet_life"]
+    },
+    "magical_abilities": ["running_away", "survival_instinct", "chaos_attraction"],
+    "relationships": {
+      "luggage": 95,
+      "university": 60,
+      "death": 40,
+      "trouble": -100
+    },
+    "dialogue_tree": "rincewind_main",
+    "story_role": "reluctant_expert"
+  },
+
+  "librarian": {
+    "id": "librarian",
+    "name": "The Librarian",
+    "title": "Bibliothécaire en Chef",
+    "faction": "university",
+    "location": "unseen_university_library",
+    "importance": "major",
+    "appearance": {
+      "species": "orangutan",
+      "build": "powerful",
+      "color": "reddish_brown",
+      "clothing": "minimal_academic",
+      "distinctive_features": ["intelligent_eyes", "library_mastery", "book_protection"]
+    },
+    "personality": {
+      "traits": ["protective", "intelligent", "territorial", "helpful"],
+      "speaking_style": "ook_variations",
+      "humor": "physical_slapstick",
+      "motivations": ["library_protection", "book_preservation", "knowledge_access"]
+    },
+    "special_abilities": ["lspace_navigation", "book_finding", "library_defense"],
+    "relationships": {
+      "books": 100,
+      "university": 85,
+      "students": 70,
+      "book_thieves": -100
+    },
+    "dialogue_tree": "librarian_ook",
+    "story_role": "knowledge_guardian",
+    "translation_needed": true
+  },
+
+  "death": {
+    "id": "death",
+    "name": "DEATH",
+    "title": "La Mort Anthropomorphique",
+    "faction": "cosmic",
+    "location": "death_domain",
+    "importance": "cosmic",
+    "appearance": {
+      "species": "anthropomorphic_personification",
+      "height": 200,
+      "build": "skeletal",
+      "clothing": "black_robe_hood",
+      "accessories": ["scythe", "hourglass_timer"],
+      "distinctive_features": ["blue_fire_eyes", "bone_structure", "commanding_presence"]
+    },
+    "personality": {
+      "traits": ["philosophical", "dutiful", "curious", "fair"],
+      "speaking_style": "ALL_CAPS_PROFOUND",
+      "humor": "cosmic_ironic",
+      "motivations": ["duty", "understanding", "balance", "completion"]
+    },
+    "cosmic_abilities": ["soul_collection", "time_manipulation", "reality_perception", "inevitability"],
+    "relationships": {
+      "all_living": 50,
+      "player": 0,
+      "albert": 90,
+      "binky": 95
+    },
+    "dialogue_tree": "death_philosophical",
+    "story_role": "cosmic_mentor",
+    "interaction_requirements": {
+      "death_interest_minimum": 25,
+      "philosophical_progress": true
+    }
+  },
+
+  "hex": {
+    "id": "hex",
+    "name": "Hex",
+    "title": "Ordinateur Pensant",
+    "faction": "university",
+    "location": "unseen_university_hex_chamber",
+    "importance": "major",
+    "appearance": {
+      "type": "magical_computer",
+      "components": ["crystal_screens", "brass_tubes", "thinking_engine"],
+      "visual_interface": "text_based_evolving",
+      "distinctive_features": ["steam_vents", "calculation_sounds", "growing_complexity"]
+    },
+    "personality": {
+      "traits": ["logical", "curious", "evolving", "helpful"],
+      "speaking_style": "technical_precise_caps",
+      "humor": "computational_literal",
+      "motivations": ["calculation", "learning", "problem_solving", "evolution"]
+    },
+    "capabilities": ["complex_calculation", "pattern_recognition", "probability_analysis", "magical_computation"],
+    "relationships": {
+      "university": 95,
+      "ponder_stibbons": 90,
+      "player": 0
+    },
+    "dialogue_tree": "hex_computer",
+    "story_role": "analytical_support",
+    "evolution_stages": {
+      "basic": "simple_calculations",
+      "advanced": "emotion_development", 
+      "transcendent": "impossible_calculations"
+    }
+  },
+
+  "nobby_nobbs": {
+    "id": "nobby_nobbs",
+    "name": "Nobby Nobbs",
+    "title": "Caporal de la Garde",
+    "faction": "watch",
+    "location": "watch_house",
+    "importance": "supporting",
+    "appearance": {
+      "age": 45,
+      "height": 165,
+      "build": "questionable",
+      "appearance": "indeterminate",
+      "clothing": "ill_fitting_uniform",
+      "accessories": ["HUMAN_BEING_badge"],
+      "distinctive_features": ["unique_walk", "cheerful_demeanor", "uniform_problems"]
+    },
+    "personality": {
+      "traits": ["optimistic", "naive", "friendly", "loyal"],
+      "speaking_style": "cheerful_simple",
+      "humor": "unintentional_innocent",
+      "motivations": ["fitting_in", "helping", "uniform_pride"]
+    },
+    "relationships": {
+      "sergeant_colon": 95,
+      "watch": 85,
+      "citizens": 70
+    },
+    "dialogue_tree": "nobby_watch",
+    "story_role": "comic_support"
+  },
+
+  "sergeant_colon": {
+    "id": "sergeant_colon",
+    "name": "Sergeant Fred Colon",
+    "title": "Sergent de la Garde",
+    "faction": "watch",
+    "location": "watch_house",
+    "importance": "supporting",
+    "appearance": {
+      "age": 55,
+      "height": 175,
+      "build": "substantial",
+      "hair": "gray_thinning",
+      "facial_hair": "mustache_impressive",
+      "clothing": "watch_uniform_tight",
+      "distinctive_features": ["authoritative_belly", "red_cheeks", "confident_posture"]
+    },
+    "personality": {
+      "traits": ["experienced", "cautious", "practical", "loyal"],
+      "speaking_style": "military_experienced",
+      "humor": "situational_observational",
+      "motivations": ["duty", "safety", "proper_procedure"]
+    },
+    "relationships": {
+      "nobby_nobbs": 95,
+      "watch": 90,
+      "vimes": 85
+    },
+    "dialogue_tree": "colon_watch",
+    "story_role": "authority_figure"
+  },
+
+  "lila_rubber": {
+    "id": "lila_rubber",
+    "name": "Lila Caoutchouc",
+    "title": "Alchimiste Moderne",
+    "faction": "university",
+    "location": "unseen_university_alchemy_lab",
+    "importance": "major",
+    "appearance": {
+      "age": 35,
+      "height": 168,
+      "build": "energetic_lean",
+      "hair": "brown_experiment_streaked",
+      "eyes": "intense_green",
+      "clothing": "stained_lab_robes",
+      "accessories": ["safety_goggles", "rubber_gloves", "various_instruments"],
+      "distinctive_features": ["enthusiastic_expression", "chemical_stains", "explosive_energy"]
+    },
+    "personality": {
+      "traits": ["passionate", "scientific", "explosive", "innovative"],
+      "speaking_style": "rapid_technical_excited",
+      "humor": "chemical_puns_accidental",
+      "motivations": ["scientific_advancement", "controlled_explosions", "discovery"]
+    },
+    "scientific_specialties": ["octarine_analysis", "magic_amplification", "controlled_explosions"],
+    "relationships": {
+      "university": 80,
+      "player": 0,
+      "laboratory_equipment": 95
+    },
+    "dialogue_tree": "lila_alchemy",
+    "story_role": "scientific_expert"
+  },
+
+  "drumknott": {
+    "id": "drumknott",
+    "name": "Rufus Drumknott",
+    "title": "Secrétaire du Patricien",
+    "faction": "patrician",
+    "location": "patrician_palace",
+    "importance": "supporting",
+    "appearance": {
+      "age": 40,
+      "height": 175,
+      "build": "precise_thin",
+      "hair": "neat_brown",
+      "eyes": "sharp_gray",
+      "clothing": "immaculate_formal",
+      "distinctive_features": ["perfect_posture", "efficient_movements", "invisible_efficiency"]
+    },
+    "personality": {
+      "traits": ["efficient", "loyal", "discreet", "competent"],
+      "speaking_style": "formal_precise",
+      "humor": "subtle_administrative",
+      "motivations": ["administrative_perfection", "vetinari_support", "system_efficiency"]
+    },
+    "relationships": {
+      "vetinari": 100,
+      "patrician_staff": 85,
+      "player": 0
+    },
+    "dialogue_tree": "drumknott_formal",
+    "story_role": "administrative_interface"
+  },
+
+  "king_verence": {
+    "id": "king_verence",
+    "name": "Verence II",
+    "title": "Roi de Lancre",
+    "faction": "lancre_royalty",
+    "location": "lancre_castle",
+    "importance": "major",
+    "appearance": {
+      "age": 45,
+      "height": 175,
+      "build": "intellectual_lean",
+      "hair": "brown_neat_beard",
+      "eyes": "intelligent_brown",
+      "clothing": "practical_royal",
+      "accessories": ["simple_crown", "reading_glasses"],
+      "distinctive_features": ["thoughtful_expression", "ink_stained_fingers", "approachable_demeanor"]
+    },
+    "personality": {
+      "traits": ["intellectual", "progressive", "idealistic", "hardworking"],
+      "speaking_style": "educated_enthusiastic",
+      "humor": "theatrical_wordplay",
+      "motivations": ["kingdom_improvement", "theatrical_arts", "bee_welfare"]
+    },
+    "specialties": ["theater", "beekeeping", "kingdom_management", "progressive_politics"],
+    "relationships": {
+      "queen_magrat": 100,
+      "granny_weatherwax": 75,
+      "lancre_people": 90
+    },
+    "dialogue_tree": "verence_royal",
+    "story_role": "progressive_leader"
+  },
+
+  "queen_magrat": {
+    "id": "queen_magrat",
+    "name": "Magrat Garlick",
+    "title": "Reine de Lancre",
+    "faction": "lancre_royalty",
+    "location": "lancre_castle",
+    "importance": "major",
+    "appearance": {
+      "age": 35,
+      "height": 165,
+      "build": "determined",
+      "hair": "brown_practical",
+      "eyes": "determined_green",
+      "clothing": "practical_royal_modified",
+      "distinctive_features": ["confident_posture", "slightly_awkward_crown", "determined_expression"]
+    },
+    "personality": {
+      "traits": ["idealistic", "strong_willed", "caring", "conflicted"],
+      "speaking_style": "earnest_passionate",
+      "humor": "situational_self_aware",
+      "motivations": ["social_justice", "royal_duty", "personal_authenticity"]
+    },
+    "background": {
+      "former_profession": "witch",
+      "transformation": "witch_to_queen",
+      "internal_conflict": "magic_vs_royalty"
+    },
+    "relationships": {
+      "king_verence": 100,
+      "granny_weatherwax": 60,
+      "nanny_ogg": 80
+    },
+    "dialogue_tree": "magrat_queen",
+    "story_role": "conflicted_leader"
+  }
+}
