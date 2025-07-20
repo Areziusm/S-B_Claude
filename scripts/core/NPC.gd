@@ -175,7 +175,7 @@ var return_to_position_timer: float = 0.0
 
 ## Références aux managers
 var dialogue_manager: DialogueManager
-var quest_manager: QuestManager
+var quest_manager: Quest
 var reputation_manager: ReputationSystem
 var ui_manager: UIManager
 

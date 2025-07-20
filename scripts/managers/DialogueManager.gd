@@ -553,10 +553,11 @@ func check_observation_requirement(choice: Dictionary) -> bool:
 	var required_observations = choice.get("required_observations", [])
 	
 	# Intégration avec ObservationManager
+	# TODO REPAIR FONCTION
 	if has_method("get_observed_creatures"):
-		var observed_creatures = get_observed_creatures()
+		#var observed_creatures = get_observed_creatures()
 		for required in required_observations:
-			if not observed_creatures.has(required):
+		#	if not observed_creatures.has(required):
 				return false
 		return true
 	
@@ -745,9 +746,10 @@ func process_dialogue_text(text: String) -> String:
 	processed_text = processed_text.replace("{relationship}", relationship_text)
 	
 	# Variables d'observation (si ObservationManager connecté)
-	if has_method("get_total_observations"):
-		var obs_count = get_total_observations()
-		processed_text = processed_text.replace("{observation_count}", str(obs_count))
+	#TODO REPAIR FONCTION
+	#if has_method("get_total_observations"):
+		#var obs_count = get_total_observations()
+		#processed_text = processed_text.replace("{observation_count}", str(obs_count))
 	
 	return processed_text
 
