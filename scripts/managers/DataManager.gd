@@ -1,5 +1,5 @@
 # ============================================================================
-# 📊 DataManager.gd - GESTIONNAIRE CENTRALISÉ DES DONNÉES (VERSION CORRIGÉE)
+# 📊 DataManager.gd - GESTIONNAIRE CENTRALISÉ DES DONNÉES (VERSION CORRIGÉE ET COMPLÈTE)
 # ============================================================================
 # STATUS: ✅ FIXED | ROADMAP: Mois 1, Semaine 1 - Core Architecture
 # PRIORITY: 🔴 CRITICAL - Gestion centralisée des données JSON avec fallbacks
@@ -24,9 +24,9 @@ signal manager_initialized()
 # CONFIGURATION CHEMINS
 # ============================================================================
 
-const DATA_PATHS = {
+const DATA_PATHS: Dictionary = {
 	"creatures": "res://data/creature_database.json",
-	"dialogues": "res://data/dialogue_trees.json", 
+	"dialogues": "res://data/dialogue_trees.json",
 	"quests": "res://data/quest_templates.json",
 	"characters": "res://data/character_data.json",
 	"progression": "res://data/progression_tables.json",
@@ -64,96 +64,86 @@ var cached_lookups: Dictionary = {}
 func _ready() -> void:
 	print("📊 [DataManager] Démarrage sécurisé du chargement...")
 	await get_tree().process_frame
-	await load_all_data_safe()
+	load_all_data_safe()
 	print("📊 [DataManager] Initialisation terminée")
 	manager_initialized.emit()
 
 func load_all_data_safe() -> void:
-	"""Charge toutes les données avec gestion d'erreurs sécurisée"""
-	var load_order = ["config", "creatures", "characters", "dialogues", "quests", "progression", "economy", "factions"]
-	var loaded_count = 0
-	var fallback_count = 0
-	
-	for data_type in load_order:
-		var success = load_data_file_safe(data_type)
+	var load_order: Array[String] = ["config", "creatures", "characters", "dialogues", "quests", "progression", "economy", "factions"]
+	var loaded_count: int = 0
+	var fallback_count: int = 0
+
+	for data_type: String in load_order:
+		var success: bool = load_data_file_safe(data_type)
 		if success:
 			loaded_count += 1
 			data_loaded.emit(data_type)
 		else:
 			fallback_count += 1
 			create_fallback_data(data_type)
-	
+
 	# Charger la localisation (optionnel)
 	load_localization_safe("fr")
-	
+
 	# Post-processing sécurisé
 	post_process_all_data_safe()
-	
+
 	loading_complete = true
 	has_fallback_data = fallback_count > 0
-	
+
 	if has_fallback_data:
 		print("⚠️ [DataManager] ", fallback_count, " fichier(s) manquant(s), fallbacks utilisés")
-	
+
 	print("✅ [DataManager] Chargement terminé:", loaded_count, "fichiers,", fallback_count, "fallbacks")
 	all_data_loaded.emit()
 
 func load_data_file_safe(data_type: String) -> bool:
-	"""Charge un fichier de données avec gestion d'erreurs complète"""
 	if not DATA_PATHS.has(data_type):
 		push_warning("[DataManager] Type de données inconnu: " + data_type)
 		return false
-	
-	var file_path = DATA_PATHS[data_type]
-	
-	# Vérifier existence du fichier
+
+	var file_path: String = DATA_PATHS[data_type]
+
 	if not FileAccess.file_exists(file_path):
 		print("⚠️ [DataManager] Fichier manquant: " + file_path)
 		return false
-	
-	# Tentative d'ouverture
-	var file = FileAccess.open(file_path, FileAccess.READ)
+
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.READ)
 	if file == null:
 		push_error("[DataManager] Impossible d'ouvrir: " + file_path)
 		return false
-	
-	# Lecture du contenu
-	var json_string = file.get_as_text()
+
+	var json_string: String = file.get_as_text()
 	file.close()
-	
+
 	if json_string.is_empty():
 		push_warning("[DataManager] Fichier vide: " + file_path)
 		return false
-	
-	# Parsing JSON sécurisé
-	var json = JSON.new()
+
+	var json = JSON.new
 	var parse_result = json.parse(json_string)
-	
-	if parse_result != OK:
-		push_error("[DataManager] Erreur JSON dans " + file_path + ": " + json.error_string)
-		data_load_error.emit(data_type, "JSON parse error: " + json.error_string)
+	if parse_result.error != OK:
+		push_error("[DataManager] Erreur JSON dans " + file_path + " : code " + str(parse_result.error))
+		data_load_error.emit(data_type, "JSON parse error code: " + str(parse_result.error))
 		return false
-	
-	var data = json.data
+
+	var data = parse_result.result
 	if data == null or (data is Dictionary and data.is_empty()):
 		push_warning("[DataManager] Données vides dans: " + file_path)
 		return false
-	
-	# Stockage sécurisé des données
+
 	if not store_data_safe(data_type, data):
 		return false
-	
+
 	data_loaded_flags[data_type] = true
 	print("✅ [DataManager] Chargé: " + data_type + " (" + str(get_data_size(data)) + " entrées)")
 	return true
 
-func store_data_safe(data_type: String, data) -> bool:
-	"""Stock les données de manière sécurisée selon le type"""
-	# Validation de base
+func store_data_safe(data_type: String, data: Variant) -> bool:
 	if data == null:
 		push_error("[DataManager] Données nulles pour: " + data_type)
 		return false
-	
+
 	match data_type:
 		"creatures":
 			creatures_db = data if data is Dictionary else {}
@@ -174,14 +164,11 @@ func store_data_safe(data_type: String, data) -> bool:
 		_:
 			push_warning("[DataManager] Type de données non géré: " + data_type)
 			return false
-	
+
 	return true
 
-func get_data_size(data) -> int:
-	"""Retourne la taille des données selon le type"""
-	if data is Dictionary:
-		return data.size()
-	elif data is Array:
+func get_data_size(data: Variant) -> int:
+	if data is Dictionary or data is Array:
 		return data.size()
 	else:
 		return 1
@@ -191,9 +178,8 @@ func get_data_size(data) -> int:
 # ============================================================================
 
 func create_fallback_data(data_type: String) -> void:
-	"""Crée des données de test si les fichiers JSON sont manquants"""
 	print("🔄 [DataManager] Création fallback pour: " + data_type)
-	
+
 	match data_type:
 		"creatures":
 			creatures_db = create_fallback_creatures()
@@ -211,11 +197,10 @@ func create_fallback_data(data_type: String) -> void:
 			faction_relationships = create_fallback_factions()
 		"config":
 			game_config = create_fallback_config()
-	
+
 	data_loaded_flags[data_type] = true
 
 func create_fallback_creatures() -> Dictionary:
-	"""Données de test pour les créatures"""
 	return {
 		"rat_maurice": {
 			"name": "Maurice le Rat Parlant",
@@ -232,7 +217,7 @@ func create_fallback_creatures() -> Dictionary:
 					"requirements": {"observation_count": 0}
 				},
 				"stage_2": {
-					"name": "Rat Conscient", 
+					"name": "Rat Conscient",
 					"requirements": {"observation_count": 5}
 				},
 				"stage_3": {
@@ -280,7 +265,6 @@ func create_fallback_creatures() -> Dictionary:
 	}
 
 func create_fallback_dialogues() -> Dictionary:
-	"""Données de test pour les dialogues"""
 	return {
 		"test_dialogue": {
 			"speaker": "npc_test",
@@ -309,7 +293,6 @@ func create_fallback_dialogues() -> Dictionary:
 	}
 
 func create_fallback_characters() -> Dictionary:
-	"""Données de test pour les personnages"""
 	return {
 		"npc_test": {
 			"name": "Testeur Bienveillant",
@@ -325,7 +308,6 @@ func create_fallback_characters() -> Dictionary:
 	}
 
 func create_fallback_quests() -> Dictionary:
-	"""Données de test pour les quêtes"""
 	return {
 		"first_observation": {
 			"title": "Première Observation",
@@ -342,7 +324,6 @@ func create_fallback_quests() -> Dictionary:
 	}
 
 func create_fallback_progression() -> Dictionary:
-	"""Données de test pour la progression"""
 	return {
 		"experience_table": {
 			"1": 0,
@@ -360,7 +341,6 @@ func create_fallback_progression() -> Dictionary:
 	}
 
 func create_fallback_economy() -> Dictionary:
-	"""Données de test pour l'économie"""
 	return {
 		"base_prices": {
 			"common_item": 10,
@@ -374,7 +354,6 @@ func create_fallback_economy() -> Dictionary:
 	}
 
 func create_fallback_factions() -> Dictionary:
-	"""Données de test pour les factions"""
 	return {
 		"wizards": {
 			"name": "Université de l'Invisible",
@@ -401,7 +380,6 @@ func create_fallback_factions() -> Dictionary:
 	}
 
 func create_fallback_config() -> Dictionary:
-	"""Configuration par défaut du jeu"""
 	return {
 		"game_version": "0.1.0-dev",
 		"debug_mode": true,
@@ -422,90 +400,65 @@ func create_fallback_config() -> Dictionary:
 # ============================================================================
 
 func post_process_all_data_safe() -> void:
-	"""Post-traitement sécurisé de toutes les données"""
 	if not creatures_db.is_empty():
 		post_process_creatures_data_safe()
-	
 	if not characters_data.is_empty():
 		post_process_characters_data_safe()
-	
 	build_lookup_caches_safe()
-	
 	print("✅ [DataManager] Post-processing terminé")
 
 func post_process_creatures_data_safe() -> void:
-	"""Post-traitement sécurisé des données créatures"""
-	for creature_id in creatures_db.keys():
-		var creature = creatures_db[creature_id]
-		
+	for creature_id: String in creatures_db.keys():
+		var creature: Dictionary = creatures_db[creature_id]
 		if not creature is Dictionary:
 			continue
-			
 		if creature.has("base_stats") and creature["base_stats"] is Dictionary:
 			calculate_derived_stats_safe(creature)
-		
 		if creature.has("evolutions") and creature["evolutions"] is Dictionary:
 			validate_evolution_chain_safe(creature_id, creature)
 
 func post_process_characters_data_safe() -> void:
-	"""Post-traitement sécurisé des données personnages"""
-	for char_id in characters_data.keys():
-		var character = characters_data[char_id]
-		
+	for char_id: String in characters_data.keys():
+		var character: Dictionary = characters_data[char_id]
 		if not character is Dictionary:
 			continue
-		
-		# Validation des références dialogue
 		if character.has("dialogue_tree"):
-			var dialogue_id = character["dialogue_tree"]
+			var dialogue_id: String = character["dialogue_tree"]
 			if not dialogue_trees.has(dialogue_id):
 				push_warning("[DataManager] Dialogue manquant pour " + char_id + ": " + dialogue_id)
 
 func calculate_derived_stats_safe(creature: Dictionary) -> void:
-	"""Calcul sécurisé des stats dérivées"""
-	var base_stats = creature["base_stats"]
-	
+	var base_stats: Dictionary = creature["base_stats"]
 	if base_stats.has("constitution") and base_stats["constitution"] is int:
 		creature["derived_hp"] = base_stats["constitution"] * 10 + 50
-	
 	if base_stats.has("agility") and base_stats["agility"] is int:
 		creature["movement_speed"] = base_stats["agility"] * 2 + 100
 
 func validate_evolution_chain_safe(creature_id: String, creature: Dictionary) -> void:
-	"""Validation sécurisée des chaînes d'évolution"""
-	var evolutions = creature["evolutions"]
-	
-	for stage_key in evolutions.keys():
-		var evolution = evolutions[stage_key]
+	var evolutions: Dictionary = creature["evolutions"]
+	for stage_key: String in evolutions.keys():
+		var evolution: Dictionary = evolutions[stage_key]
 		if not evolution is Dictionary:
 			continue
-			
 		if evolution.has("requirements") and evolution["requirements"] is Dictionary:
-			var reqs = evolution["requirements"]
+			var reqs: Dictionary = evolution["requirements"]
 			if reqs.has("observation_count"):
-				var count = reqs["observation_count"]
+				var count: int = reqs["observation_count"]
 				if not count is int or count < 0:
 					push_warning("[DataManager] Prérequis observation invalide pour " + creature_id + ":" + stage_key)
 
 func build_lookup_caches_safe() -> void:
-	"""Construction sécurisée des caches de recherche"""
 	cached_lookups["characters_by_location"] = {}
 	cached_lookups["characters_by_faction"] = {}
-	
-	for char_id in characters_data.keys():
-		var character = characters_data[char_id]
-		
+	for char_id: String in characters_data.keys():
+		var character: Dictionary = characters_data[char_id]
 		if not character is Dictionary:
 			continue
-		
-		# Cache par localisation
-		var location = character.get("location", "unknown")
+		var location: String = character.get("location", "unknown")
 		if not cached_lookups["characters_by_location"].has(location):
 			cached_lookups["characters_by_location"][location] = []
 		cached_lookups["characters_by_location"][location].append(char_id)
-		
-		# Cache par faction
-		var faction = character.get("faction", "none")
+		var faction: String = character.get("faction", "none")
 		if not cached_lookups["characters_by_faction"].has(faction):
 			cached_lookups["characters_by_faction"][faction] = []
 		cached_lookups["characters_by_faction"][faction].append(char_id)
@@ -515,21 +468,17 @@ func build_lookup_caches_safe() -> void:
 # ============================================================================
 
 func load_localization_safe(language: String) -> void:
-	"""Charge la localisation avec fallback"""
-	var loc_path = "res://data/localization/" + language + ".json"
-	
+	var loc_path: String = "res://data/localization/" + language + ".json"
 	if FileAccess.file_exists(loc_path):
-		var file = FileAccess.open(loc_path, FileAccess.READ)
+		var file: FileAccess = FileAccess.open(loc_path, FileAccess.READ)
 		if file:
-			var json = JSON.new()
+			var json = JSON.new
 			var parse_result = json.parse(file.get_as_text())
 			file.close()
-			
-			if parse_result == OK:
-				localization_data = json.data
+			if parse_result.error == OK and parse_result.result is Dictionary:
+				localization_data = parse_result.result as Dictionary
 				print("✅ [DataManager] Localisation chargée: " + language)
 				return
-	
 	# Fallback localisation
 	localization_data = {
 		"welcome": "Bienvenue dans Sortilèges & Bestioles !",
@@ -539,7 +488,6 @@ func load_localization_safe(language: String) -> void:
 	print("⚠️ [DataManager] Localisation fallback utilisée")
 
 func get_localized_text(key: String, default_text: String = "") -> String:
-	"""Récupère un texte localisé avec fallback"""
 	if localization_data.has(key):
 		return localization_data[key]
 	return default_text if not default_text.is_empty() else key
@@ -549,27 +497,21 @@ func get_localized_text(key: String, default_text: String = "") -> String:
 # ============================================================================
 
 func get_creature_data(creature_id: String) -> Dictionary:
-	"""Récupère les données d'une créature"""
 	return creatures_db.get(creature_id, {})
 
 func get_character_data(character_id: String) -> Dictionary:
-	"""Récupère les données d'un personnage"""
 	return characters_data.get(character_id, {})
 
 func get_dialogue_tree(dialogue_id: String) -> Dictionary:
-	"""Récupère un arbre de dialogue"""
 	return dialogue_trees.get(dialogue_id, {})
 
 func get_quest_template(quest_id: String) -> Dictionary:
-	"""Récupère un modèle de quête"""
 	return quest_templates.get(quest_id, {})
 
 func is_data_loaded(data_type: String) -> bool:
-	"""Vérifie si un type de données est chargé"""
 	return data_loaded_flags.get(data_type, false)
 
 func get_data_summary() -> Dictionary:
-	"""Retourne un résumé des données chargées"""
 	return {
 		"creatures_count": creatures_db.size(),
 		"characters_count": characters_data.size(),

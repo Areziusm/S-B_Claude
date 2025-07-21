@@ -34,10 +34,6 @@ signal notebook_entry_added(creature_id: String, entry_data: Dictionary)
 ## Signal pour communication avec autres managers
 signal manager_initialized()
 
-# DialogueManager.gd
-signal dialogue_choice_made
-signal conversation_ended
-
 # ============================================================================
 # CONFIGURATION & DONNÉES
 # ============================================================================

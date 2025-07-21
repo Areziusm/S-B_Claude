@@ -1,65 +1,75 @@
 extends Node2D
 
-@onready var player = $Player
-@onready var npc = $NPC
-@onready var miroir = $Miroir
-@onready var lettre = $Lettre
-@onready var combat_trigger = $CombatTrigger
-@onready var reputation_trigger = $ReputationTrigger
-@onready var notification_ui = $NotificationUI
+@onready var obs_manager = get_node_or_null("/root/ObservationManager")
+@onready var combat_manager = get_node_or_null("/root/CombatSystem")
+@onready var data_manager = get_node_or_null("/root/DataManager")
+@onready var quest_manager = get_node_or_null("/root/QuestManager")
+@onready var dialogue_manager = get_node_or_null("/root/DialogueManager")
 
 func _ready():
-    # Connecter tous les objets interactifs
-    miroir.body_entered.connect(_on_miroir_interact)
-    lettre.body_entered.connect(_on_lettre_interact)
-    combat_trigger.body_entered.connect(_on_combat_trigger)
-    reputation_trigger.body_entered.connect(_on_reputation_trigger)
+    # Observation test
+    if $TestCreatureArea and obs_manager:
+        $TestCreatureArea.body_entered.connect(_on_test_creature_observed)
+        obs_manager.creature_observed.connect(_on_creature_observed)
+        obs_manager.creature_evolved.connect(_on_creature_evolved)
+        print("ObservationManager branché pour test.")
 
-    # Connecter le NPC pour test de dialogue
-    npc.connect("interacted", _on_npc_interacted)
-    notification_ui.show_notification("Bienvenue dans la Sandbox : testez tous vos systèmes !")
-    
-    # Test automatique des managers (optionnel)
-    if Engine.has_singleton("GameManager"):
-        Engine.get_singleton("GameManager").start_game()
+    # Combat test
+    if $TestCombatTrigger and combat_manager:
+        $TestCombatTrigger.pressed.connect(_on_combat_button_pressed)
+        combat_manager.combat_started.connect(_on_combat_started)
+        combat_manager.combat_ended.connect(_on_combat_ended)
+        print("CombatSystem branché pour test.")
 
-func _on_miroir_interact(body):
-    if body == player:
-        notification_ui.show_notification("Miroir : customisation de personnage à tester ici !")
-        # Tu peux ouvrir une UI ou déclencher le MagicSystem
+    # Dialogue test
+    if $TestNPC and dialogue_manager:
+        $TestNPC.connect("gui_input", _on_test_npc_clicked)
+        dialogue_manager.dialogue_choice_made.connect(_on_dialogue_choice)
+        dialogue_manager.conversation_ended.connect(_on_dialogue_end)
+        print("DialogueManager branché pour test.")
 
-func _on_lettre_interact(body):
-    if body == player:
-        notification_ui.show_notification("Lettre : lancement d’un dialogue test !")
-        if Engine.has_singleton("DialogueManager"):
-            Engine.get_singleton("DialogueManager").start_dialogue("lettre_intro")
+    # Quest test (si voulu)
+    if quest_manager:
+        quest_manager.quest_completed.connect(_on_quest_completed)
+        print("QuestManager branché pour test.")
 
-func _on_combat_trigger(body):
-    if body == player:
-        notification_ui.show_notification("Combat lancé !")
-        if Engine.has_singleton("CombatSystem"):
-            Engine.get_singleton("CombatSystem").start_combat("combat_test")
+    # Vérif DataManager
+    if data_manager:
+        print("DataManager summary : ", data_manager.get_data_summary())
 
-func _on_reputation_trigger(body):
-    if body == player:
-        notification_ui.show_notification("Réputation augmentée !")
-        if Engine.has_singleton("ReputationSystem"):
-            Engine.get_singleton("ReputationSystem").add_reputation("faction_test", 5)
+func _on_test_creature_observed(body):
+    if obs_manager and body.name == "Player":
+        print("[TEST] Player a observé la créature !")
+        obs_manager.observe_creature("rat_maurice", obs_manager.ObservationType.DETAILED, $Player.position)
 
-func _on_npc_interacted():
-    notification_ui.show_notification("Dialogue NPC lancé !")
-    if Engine.has_singleton("DialogueManager"):
-        Engine.get_singleton("DialogueManager").start_dialogue("npc_test")
+func _on_creature_observed(creature_id, obs_data):
+    print("[TEST] Signal creature_observed reçu : ", creature_id, obs_data)
 
-# Touches pour save/load/menu rapide
-func _input(event):
-    if event.is_action_pressed("ui_save"):
-        if Engine.has_singleton("SaveSystem"):
-            Engine.get_singleton("SaveSystem").save_game()
-        notification_ui.show_notification("Jeu sauvegardé !")
-    elif event.is_action_pressed("ui_load"):
-        if Engine.has_singleton("SaveSystem"):
-            Engine.get_singleton("SaveSystem").load_game()
-        notification_ui.show_notification("Jeu chargé !")
-    elif event.is_action_pressed("ui_cancel"):
-        $MenuUI.visible = !$MenuUI.visible
+func _on_creature_evolved(creature_id, old_stage, new_stage):
+    print("[TEST] Signal creature_evolved : ", creature_id, old_stage, new_stage)
+
+func _on_combat_button_pressed():
+    if combat_manager:
+        print("[TEST] Déclenchement combat test...")
+        combat_manager.start_test_combat()
+
+func _on_combat_started(combat_id, participants):
+    print("[TEST] Combat démarré ! ID :", combat_id, "Participants :", participants)
+
+func _on_combat_ended(combat_id, resolution_type, results):
+    print("[TEST] Combat terminé :", combat_id, resolution_type, results)
+
+func _on_test_npc_clicked(event):
+    if event is InputEventMouseButton and event.pressed:
+        if dialogue_manager:
+            print("[TEST] Début dialogue test avec NPC.")
+            dialogue_manager.start_dialogue("test_dialogue") # doit exister dans DataManager fallback/dialogues
+
+func _on_dialogue_choice(choice_id):
+    print("[TEST] Dialogue : choix sélectionné : ", choice_id)
+
+func _on_dialogue_end():
+    print("[TEST] Dialogue terminé.")
+
+func _on_quest_completed(quest_id):
+    print("[TEST] Quête complétée : ", quest_id)

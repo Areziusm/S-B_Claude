@@ -1,53 +1,134 @@
 # ============================================================================
-# ⚔️ CombatSystem.gd - Combat Tactique au Tour par Tour
+# ⚔️ CombatSystem.gd - Combat Tactique au Tour par Tour (Godot 4.x - version patchée)
 # ============================================================================
-# STATUS: ✅ NOUVEAU SYSTÈME | ROADMAP: Mois 1, Semaine 4 - Gameplay Avancé
-# PRIORITY: 🔴 CRITICAL - Résolutions multiples et cohérence Terry Pratchett
-# DEPENDENCIES: GameManager, DataManager, ReputationSystem, QuestManager
 
 class_name CombatSystem
 extends Node
 
-## Gestionnaire du combat tactique au tour par tour
-## Système Terry Pratchett avec résolutions multiples et magie chaotique
-## Architecture extensible pour boss spéciaux et événements narratifs
+# --- CLASSES INTERNES ---
 
-# ============================================================================
-# SIGNAUX - Communication Event-Driven
-# ============================================================================
+class CombatGrid:
+	var grid_size: Vector2i
+	var hex_cells = {}
+	var occupied_positions = {}
+	var environmental_objects = {}
 
-## Émis quand un combat commence
-signal combat_started(combat_id: String, participants: Array)
+	func _init(size: Vector2i):
+		grid_size = size
+		initialize_grid()
 
-## Émis quand un tour commence/finit
-signal turn_started(combatant_id: String, turn_number: int)
-signal turn_ended(combatant_id: String, actions_taken: Array)
+	func initialize_grid():
+		for x in range(grid_size.x):
+			for y in range(grid_size.y):
+				var hex_coord = Vector2i(x, y)
+				hex_cells[hex_coord] = {
+					"type": "normal",
+					"elevation": 0,
+					"cover": 0.0,
+					"special_effects": []
+				}
 
-## Émis pour les actions de combat
-signal action_performed(actor_id: String, action_type: String, action_data: Dictionary)
-signal damage_dealt(attacker_id: String, target_id: String, damage: int, damage_type: String)
+	func get_neighbors(pos: Vector2i) -> Array:
+		var neighbors = []
+		var offsets = [
+			Vector2i(1, 0), Vector2i(-1, 0),
+			Vector2i(0, 1), Vector2i(0, -1),
+			Vector2i(1, -1), Vector2i(-1, 1)
+		]
+		for offset in offsets:
+			var neighbor = pos + offset
+			if is_valid_position(neighbor):
+				neighbors.append(neighbor)
+		return neighbors
 
-## Émis quand un combattant change d'état
-signal combatant_status_changed(combatant_id: String, status: String, duration: int)
-signal combatant_defeated(combatant_id: String, defeat_type: String)
+	func is_valid_position(pos: Vector2i) -> bool:
+		return pos.x >= 0 and pos.x < grid_size.x and pos.y >= 0 and pos.y < grid_size.y
 
-## Émis quand le combat se termine
-signal combat_ended(combat_id: String, resolution_type: String, results: Dictionary)
+	func is_position_occupied(pos: Vector2i) -> bool:
+		return occupied_positions.has(pos)
 
-## Émis pour effets magiques spéciaux
-signal magic_chaos_triggered(caster_id: String, chaos_effect: String, targets: Array)
-signal octarine_surge(epicenter: Vector2, intensity: float)
+	func get_distance(pos1: Vector2i, pos2: Vector2i) -> int:
+		return abs(pos1.x - pos2.x) + abs(pos1.y - pos2.y)
 
-## Émis pour résolutions non-violentes
-signal negotiation_started(participants: Array)
-signal creative_solution_attempted(actor_id: String, solution_type: String)
+class Combatant:
+	var id: String
+	var name: String
+	var type
+	var position: Vector2i
 
-## Signal pour communication avec autres managers
-signal manager_initialized()
+	var max_health: int
+	var current_health: int
+	var max_mana: int
+	var current_mana: int
+	var initiative: int
+	var armor_class: int
 
-# ============================================================================
-# ENUMS ET CONSTANTES
-# ============================================================================
+	var strength: int
+	var dexterity: int
+	var constitution: int
+	var intelligence: int
+	var wisdom: int
+	var charisma: int
+
+	var status_effects = {}
+	var action_points: int
+	var movement_points: int
+	var reactions_available: int
+
+	var spells_known = []
+	var special_abilities = []
+	var inventory = []
+	var ai_data = {}
+	var faction_allegiance: String = ""
+	var negotiation_willingness: float = 0.5
+
+	func _init(combatant_data: Dictionary):
+		_setup_from_data(combatant_data)
+
+	func _setup_from_data(data: Dictionary):
+		id = data.get("id", "unknown")
+		name = data.get("name", "Combattant")
+		type = data.get("type", CombatantType.ENEMY)
+		max_health = data.get("max_health", 100)
+		current_health = max_health
+		max_mana = data.get("max_mana", 50)
+		current_mana = max_mana
+		strength = data.get("strength", 10)
+		dexterity = data.get("dexterity", 10)
+		constitution = data.get("constitution", 10)
+		intelligence = data.get("intelligence", 10)
+		wisdom = data.get("wisdom", 10)
+		charisma = data.get("charisma", 10)
+		initiative = dexterity + data.get("initiative_bonus", 0)
+		armor_class = 10 + int((dexterity - 10) / 2) + data.get("armor_bonus", 0)
+
+	func reset_turn_resources():
+		action_points = 3
+		movement_points = 4
+		reactions_available = 1
+
+	func is_alive() -> bool:
+		return current_health > 0
+
+	func apply_damage(damage: int, damage_type) -> int:
+		var actual_damage = calculate_damage_reduction(damage, damage_type)
+		current_health = max(0, current_health - actual_damage)
+		return actual_damage
+
+	func calculate_damage_reduction(damage: int, damage_type) -> int:
+		match damage_type:
+			DamageType.PHYSICAL:
+				return max(1, damage - int(armor_class / 2))
+			DamageType.MAGICAL:
+				return int(damage * (1.0 - wisdom * 0.02))
+			DamageType.OCTARINE:
+				return damage
+			DamageType.PSYCHOLOGICAL:
+				return int(damage * (1.0 - charisma * 0.03))
+			_:
+				return damage
+
+# --- ENUMS ---
 
 enum CombatState {
 	INACTIVE,
@@ -71,13 +152,13 @@ enum ActionType {
 }
 
 enum ResolutionType {
-	VICTORY_COMBAT,      # Victoire par combat traditionnel
-	VICTORY_NEGOTIATION, # Résolution par négociation
-	VICTORY_CREATIVE,    # Solution créative/inattendue
-	DEFEAT_COMBAT,       # Défaite au combat
-	DEFEAT_FLED,         # Fuite réussie
-	STALEMATE,          # Match nul / situation complexe
-	TRANSCENDENCE       # Résolution métaphysique (LA MORT, etc.)
+	VICTORY_COMBAT,
+	VICTORY_NEGOTIATION,
+	VICTORY_CREATIVE,
+	DEFEAT_COMBAT,
+	DEFEAT_FLED,
+	STALEMATE,
+	TRANSCENDENCE
 }
 
 enum DamageType {
@@ -98,12 +179,25 @@ enum CombatantType {
 	ENVIRONMENTAL
 }
 
-# ============================================================================
-# CONFIGURATION SYSTÈME
-# ============================================================================
+# --- SIGNAUX ---
 
-## Configuration combat chargée depuis DataManager
-var combat_config: Dictionary = {
+signal combat_started(combat_id: String, participants: Array)
+signal turn_started(combatant_id: String, turn_number: int)
+signal turn_ended(combatant_id: String, actions_taken: Array)
+signal action_performed(actor_id: String, action_type: String, action_data: Dictionary)
+signal damage_dealt(attacker_id: String, target_id: String, damage: int, damage_type: String)
+signal combatant_status_changed(combatant_id: String, status: String, duration: int)
+signal combatant_defeated(combatant_id: String, defeat_type: String)
+signal combat_ended(combat_id: String, resolution_type: String, results: Dictionary)
+signal magic_chaos_triggered(caster_id: String, chaos_effect: String, targets: Array)
+signal octarine_surge(epicenter: Vector2, intensity: float)
+signal negotiation_started(participants: Array)
+signal creative_solution_attempted(actor_id: String, solution_type: String)
+signal manager_initialized()
+
+# --- CONFIGURATION ---
+
+var combat_config = {
 	"max_turns": 50,
 	"initiative_bonus_dex": 2,
 	"action_points_per_turn": 3,
@@ -115,219 +209,53 @@ var combat_config: Dictionary = {
 	"combo_damage_bonus": 0.3,
 	"flee_difficulty": 10
 }
+var spell_effects_cache = {}
+var action_templates = {}
+var boss_patterns = {}
 
-## Cache pour optimisation
-var spell_effects_cache: Dictionary = {}
-var action_templates: Dictionary = {}
-var boss_patterns: Dictionary = {}
-
-# ============================================================================
-# ÉTAT COMBAT ACTUEL
-# ============================================================================
+# --- ÉTAT COMBAT ACTUEL ---
 
 var current_combat_id: String = ""
-var combat_state: CombatState = CombatState.INACTIVE
-var current_turn_order: Array[Dictionary] = []
+var combat_state = CombatState.INACTIVE
+var current_turn_order = []
 var active_combatant_index: int = 0
 var turn_number: int = 0
-var combat_grid: CombatGrid
-var combat_participants: Dictionary = {}
+var combat_grid = null
+var combat_participants = {}
 
-## Résolutions alternatives
-var negotiation_progress: Dictionary = {}
-var creative_solutions_attempted: Array[String] = []
-var environmental_factors: Dictionary = {}
-
-## Statistiques combat
-var combat_statistics: Dictionary = {}
-var actions_history: Array[Dictionary] = []
-
-## Flags système
+var negotiation_progress = {}
+var creative_solutions_attempted = []
+var environmental_factors = {}
+var combat_statistics = {}
+var actions_history = []
 var system_initialized: bool = false
 var debug_mode: bool = false
 
-# ============================================================================
-# GRILLE DE COMBAT HEXAGONALE
-# ============================================================================
-
-class CombatGrid:
-	var grid_size: Vector2i
-	var hex_cells: Dictionary = {}
-	var occupied_positions: Dictionary = {}
-	var environmental_objects: Dictionary = {}
-	
-	func _init(size: Vector2i):
-		grid_size = size
-		initialize_grid()
-	
-	func initialize_grid():
-		for x in range(grid_size.x):
-			for y in range(grid_size.y):
-				var hex_coord = Vector2i(x, y)
-				hex_cells[hex_coord] = {
-					"type": "normal",
-					"elevation": 0,
-					"cover": 0.0,
-					"special_effects": []
-				}
-	
-	func get_neighbors(pos: Vector2i) -> Array[Vector2i]:
-		var neighbors = []
-		var offsets = [
-			Vector2i(1, 0), Vector2i(-1, 0),
-			Vector2i(0, 1), Vector2i(0, -1),
-			Vector2i(1, -1), Vector2i(-1, 1)
-		]
-		
-		for offset in offsets:
-			var neighbor = pos + offset
-			if is_valid_position(neighbor):
-				neighbors.append(neighbor)
-		
-		return neighbors
-	
-	func is_valid_position(pos: Vector2i) -> bool:
-		return pos.x >= 0 and pos.x < grid_size.x and pos.y >= 0 and pos.y < grid_size.y
-	
-	func is_position_occupied(pos: Vector2i) -> bool:
-		return occupied_positions.has(pos)
-	
-	func get_distance(pos1: Vector2i, pos2: Vector2i) -> int:
-		return abs(pos1.x - pos2.x) + abs(pos1.y - pos2.y)
-
-# ============================================================================
-# STRUCTURE COMBATTANT
-# ============================================================================
-
-class Combatant:
-	var id: String
-	var name: String
-	var type: CombatantType
-	var position: Vector2i
-	
-	# Statistiques base
-	var max_health: int
-	var current_health: int
-	var max_mana: int
-	var current_mana: int
-	var initiative: int
-	var armor_class: int
-	
-	# Attributs
-	var strength: int
-	var dexterity: int
-	var constitution: int
-	var intelligence: int
-	var wisdom: int
-	var charisma: int
-	
-	# États temporaires
-	var status_effects: Dictionary = {}
-	var action_points: int
-	var movement_points: int
-	var reactions_available: int
-	
-	# Capacités spéciales
-	var spells_known: Array[String] = []
-	var special_abilities: Array[String] = []
-	var inventory: Array[String] = []
-	
-	# IA et comportement
-	var ai_data: Dictionary = {}
-	var faction_allegiance: String = ""
-	var negotiation_willingness: float = 0.5
-	
-	func _init(combatant_data: Dictionary):
-		_setup_from_data(combatant_data)
-	
-	func _setup_from_data(data: Dictionary):
-		id = data.get("id", "unknown")
-		name = data.get("name", "Combattant")
-		type = data.get("type", CombatantType.ENEMY)
-		
-		max_health = data.get("max_health", 100)
-		current_health = max_health
-		max_mana = data.get("max_mana", 50)
-		current_mana = max_mana
-		
-		strength = data.get("strength", 10)
-		dexterity = data.get("dexterity", 10)
-		constitution = data.get("constitution", 10)
-		intelligence = data.get("intelligence", 10)
-		wisdom = data.get("wisdom", 10)
-		charisma = data.get("charisma", 10)
-		
-		initiative = dexterity + data.get("initiative_bonus", 0)
-		armor_class = 10 + (dexterity - 10) / 2 + data.get("armor_bonus", 0)
-	
-	func reset_turn_resources():
-		action_points = 3
-		movement_points = 4
-		reactions_available = 1
-	
-	func is_alive() -> bool:
-		return current_health > 0
-	
-	func apply_damage(damage: int, damage_type: DamageType) -> int:
-		var actual_damage = calculate_damage_reduction(damage, damage_type)
-		current_health = max(0, current_health - actual_damage)
-		return actual_damage
-	
-	func calculate_damage_reduction(damage: int, damage_type: DamageType) -> int:
-		# Logique de réduction des dégâts selon le type
-		match damage_type:
-			DamageType.PHYSICAL:
-				return max(1, damage - armor_class / 2)
-			DamageType.MAGICAL:
-				return int(damage * (1.0 - wisdom * 0.02))
-			DamageType.OCTARINE:
-				return damage  # Pas de résistance à l'Octarine
-			DamageType.PSYCHOLOGICAL:
-				return int(damage * (1.0 - charisma * 0.03))
-			_:
-				return damage
-
-# ============================================================================
-# INITIALISATION SYSTÈME
-# ============================================================================
+# --- INITIALISATION ---
 
 func _ready() -> void:
-	"""Initialisation du système de combat"""
 	if debug_mode:
 		print("⚔️ CombatSystem: Démarrage initialisation...")
-	
-	# Attendre DataManager
 	await ensure_datamanager_ready()
-	
-	# Charger configuration
 	load_combat_configuration()
 	setup_action_templates()
-	
-	# Connexions système
 	connect_to_game_systems()
-	
-	# Finalisation
 	system_initialized = true
 	manager_initialized.emit()
-	
 	if debug_mode:
 		print("⚔️ CombatSystem: Système initialisé avec succès")
 
 func ensure_datamanager_ready() -> void:
-	"""S'assure que DataManager est prêt"""
 	var data_manager = get_node_or_null("/root/DataManager")
 	if data_manager and not data_manager.loading_complete:
 		await data_manager.all_data_loaded
 
 func load_combat_configuration() -> void:
-	"""Charge la configuration de combat"""
 	var data_manager = get_node_or_null("/root/DataManager")
-	
 	if data_manager and data_manager.game_config.has("combat_system"):
 		var config = data_manager.game_config["combat_system"]
 		for key in config:
 			combat_config[key] = config[key]
-		
 		if debug_mode:
 			print("✅ Configuration combat chargée depuis DataManager")
 	else:
@@ -335,7 +263,6 @@ func load_combat_configuration() -> void:
 			print("⚠️ Configuration combat par défaut utilisée")
 
 func setup_action_templates() -> void:
-	"""Configure les templates d'actions de combat"""
 	action_templates = {
 		"attack_melee": {
 			"name": "Attaque au corps à corps",
@@ -377,79 +304,47 @@ func setup_action_templates() -> void:
 	}
 
 func connect_to_game_systems() -> void:
-	"""Connecte le système aux autres managers"""
-	# Connexion avec ReputationSystem pour conséquences
 	var reputation_manager = get_node_or_null("/root/ReputationManager")
 	if reputation_manager:
 		combat_ended.connect(_on_combat_ended_reputation_effects)
-	
-	# Connexion avec QuestManager pour progression
 	var quest_manager = get_node_or_null("/root/QuestManager")
 	if quest_manager:
 		combat_ended.connect(_on_combat_ended_quest_effects)
 
-# ============================================================================
-# API PRINCIPALE - GESTION COMBAT
-# ============================================================================
+# --- LOGIQUE PRINCIPALE DU COMBAT ---
 
 func start_combat(combat_data: Dictionary) -> bool:
-	"""
-	Démarre un nouveau combat
-	combat_data: { participants: Array, environment: String, special_rules: Dictionary }
-	"""
 	if not system_initialized:
 		push_error("⚔️ CombatSystem: Système non initialisé!")
 		return false
-	
 	if combat_state != CombatState.INACTIVE:
 		push_warning("⚔️ Combat déjà en cours!")
 		return false
-	
-	# Initialisation du combat
 	current_combat_id = generate_combat_id()
 	setup_combat_participants(combat_data.get("participants", []))
 	setup_combat_environment(combat_data.get("environment", "default"))
-	
-	# Configuration grille
 	var grid_size = combat_data.get("grid_size", Vector2i(10, 8))
 	combat_grid = CombatGrid.new(grid_size)
-	
-	# Placement initial des combattants
 	place_combatants_initial()
-	
-	# Calcul ordre d'initiative
 	calculate_initiative_order()
-	
-	# Démarrage
 	combat_state = CombatState.INITIATIVE_ROLL
 	turn_number = 0
-	
-	# Émission signal
 	combat_started.emit(current_combat_id, get_participant_ids())
-	
-	# Début premier tour
 	start_next_turn()
-	
 	if debug_mode:
 		print("⚔️ Combat démarré: ", current_combat_id)
-	
 	return true
 
 func setup_combat_participants(participants_data: Array) -> void:
-	"""Configure les participants au combat"""
 	combat_participants.clear()
-	
 	for participant_data in participants_data:
 		var combatant = Combatant.new(participant_data)
 		combat_participants[combatant.id] = combatant
-		
 		if debug_mode:
 			print("⚔️ Participant ajouté: ", combatant.name, " (", combatant.type, ")")
 
 func setup_combat_environment(environment_id: String) -> void:
-	"""Configure l'environnement de combat"""
 	environmental_factors.clear()
-	
 	match environment_id:
 		"urban_street":
 			environmental_factors = {
@@ -473,32 +368,30 @@ func setup_combat_environment(environment_id: String) -> void:
 				"diplomatic_immunity": 0.6
 			}
 		_:
-			environmental_factors = {
-				"neutral_ground": true
-			}
+			environmental_factors = { "neutral_ground": true }
 
 func calculate_initiative_order() -> void:
-	"""Calcule l'ordre d'initiative pour le combat"""
 	current_turn_order.clear()
-	
 	for combatant_id in combat_participants:
 		var combatant = combat_participants[combatant_id]
 		var initiative_roll = randi() % 20 + 1 + combatant.initiative
-		
 		current_turn_order.append({
 			"combatant_id": combatant_id,
 			"initiative": initiative_roll
 		})
-	
-	# Tri par initiative décroissante
-	current_turn_order.sort_custom(func(a, b): return a.initiative > b.initiative)
-	
+	# Utilisation de sort avec lambda (Godot 4)
+	current_turn_order.sort_custom(_sort_initiative_desc)
 	if debug_mode:
 		print("⚔️ Ordre d'initiative calculé:")
 		for entry in current_turn_order:
-			var combatant = combat_participants[entry.combatant_id]
-			print("  - ", combatant.name, ": ", entry.initiative)
+			var combatant = combat_participants[entry["combatant_id"]]
+			print("  - ", combatant.name, ": ", entry["initiative"])
 
+# ... (le reste de ton code est inchangé) ...
+# ... Toutes les méthodes placeholder sont inchangées ...
+func _sort_initiative_desc(a, b):
+	return a["initiative"] > b["initiative"]
+	
 func start_next_turn() -> void:
 	"""Démarre le tour suivant"""
 	if active_combatant_index >= current_turn_order.size():
