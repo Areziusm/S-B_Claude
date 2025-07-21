@@ -29,7 +29,7 @@ Dialogue="*res://scripts/managers/DialogueManager.gd"
 Quest="*res://scripts/managers/QuestManager.gd"
 Reputation="*res://scripts/managers/ReputationSystem.gd"
 Combat="*res://scripts/managers/CombatSystem.gd"
-UI="*res://scripts/managers/UIManager.gd"
+UI="*res://scripts/ui/UIManager.gd"
 Audio="*res://scripts/managers/AudioManager.gd"
 
 [debug]

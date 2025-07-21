@@ -125,6 +125,11 @@ func _connect_to_managers() -> void:
 # CHARGEMENT DES DONNÉES
 #============================================================================
 func _load_quest_data() -> void:
+	# Vérification de la disponibilité du DataManager
+	if not Engine.has_singleton("DataManager"):
+		push_error("❌ QuestManager: DataManager non disponible!")
+		return
+
 	var data_manager = get_node_or_null("/root/DataManager")
 	if not data_manager:
 		push_error("🎯 QuestManager: DataManager non disponible!")

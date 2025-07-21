@@ -1,0 +1,11 @@
+[gd_scene load_steps=1 format=3]
+
+[node name="UI" type="CanvasLayer"]
+
+[node name="MainContainer" type="Control" parent="."]
+
+[node name="HUDContainer" type="Control" parent="MainContainer"]
+[node name="DialogueContainer" type="Control" parent="MainContainer"]
+[node name="MenuContainer" type="Control" parent="MainContainer"]
+[node name="NotificationContainer" type="Control" parent="MainContainer"]
+[node name="OverlayContainer" type="Control" parent="MainContainer"]
