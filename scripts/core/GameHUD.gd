@@ -214,7 +214,7 @@ func setup_progress_bars() -> void:
 	"""Configure toutes les barres de progression"""
 	var bars_config = [
 		[health_bar, Color.CRIMSON, Color.DARK_RED],
-		[mana_bar, Color.ROYAL_BLUE, Color.NAVY],
+		[mana_bar, Color.ROYAL_BLUE, Color.NAVY_BLUE],
 		[experience_bar, Color.GOLDENROD, Color.DARK_GOLDENROD],
 		[evolution_progress, Color.FOREST_GREEN, Color.DARK_GREEN],
 		[magic_disruption_meter, Color.MAGENTA, Color.PURPLE]
